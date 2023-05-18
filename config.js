@@ -8,26 +8,6 @@ class Config {
       (this.SENDGRID_API_KEY = SENDGRID_API_KEY),
       (this.TOKEN_SECRET = TOKEN_SECRET);
   }
-  async startEngine(db) {
-    const serverErrorMessage = 'Error! Server launch failed. ';
-    const databaseErrorMessage = 'Error! Database launch failed.';
-    try {
-      console.log('Connecting to database..');
-      await db();
-      console.log('Starting the server..');
-      app.listen(PORT, e => {
-        if (!e) {
-          return;
-        }
-        return console.error(serverErrorMessage, e);
-      });
-      console.log(
-        `Successful! Server is running. Use our API on port: ${PORT}. Base URL is: "${BASE_URL}"`
-      );
-    } catch (e) {
-      console.error(databaseErrorMessage, e);
-      process.exit(1);
-    }
-  }
 }
+
 module.exports = new Config();
