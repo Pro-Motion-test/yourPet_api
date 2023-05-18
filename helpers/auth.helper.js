@@ -1,5 +1,3 @@
-class AuthHelper {
-    constructor() {
-        
-    }
+class Auth {
+  constructor() {}
 }
