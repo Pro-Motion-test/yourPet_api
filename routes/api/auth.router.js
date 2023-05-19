@@ -1,4 +1,5 @@
 const express = require('express');
+const controllers = require('../../controllers');
 const router = express.Router();
 // -------------------------------------------------------
 // Base endpoint
@@ -6,18 +7,20 @@ const router = express.Router();
 // -------------------------------------------------------
 // ROUTES
 // ---REGISTRATION---
-router.post('/register');
+router.post('/register', controllers.Auth.register);
 // ---LOGIN---
-router.post('/login');
+router.post('/login', controllers.Auth.login);
 
 // ---LOGOUT---
-router.post('/logout');
+router.post('/logout', controllers.Auth.logout);
 
 // ---CURRENT---
-router.get('/current');
+router.get('/current', controllers.Auth.current);
 
 // ---REFRESHING---
-router.post('/refresh');
+router.post('/refresh', controllers.Auth.refreshing);
 
 // ---VERIFICATION---
 router.post('/verify');
+
+module.exports = router;

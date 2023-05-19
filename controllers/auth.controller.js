@@ -1,9 +1,12 @@
+const services = require('../services');
+
 class Auth {
   constructor() {}
   static async register(req, res, next) {
     try {
+      const createdUser = await services.Auth.registration(req.body);
       //  --RESPONSE--
-      res.status(201).json();
+      res.status(201).json(createdUser);
     } catch (e) {
       next(e);
     }

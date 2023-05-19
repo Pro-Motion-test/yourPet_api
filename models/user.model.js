@@ -16,19 +16,35 @@ const userSchema = new Schema({
   },
   name: {
     type: String,
+    default: '',
   },
   birthday: {
     type: Date,
-    required: true,
+    default: '',
+  },
+  token: {
+    type: String,
+    default: null,
+  },
+  accessToken: {
+    type: String,
+    default: null,
+  },
+  refreshToken: {
+    type: String,
+    default: null,
   },
   phone: {
     type: String,
+    default: '',
   },
   city: {
     type: String,
+    default: '',
   },
   avatarURL: {
     type: String,
+    default: null,
   },
 });
 
@@ -37,17 +53,16 @@ const registerSchema = Joi.object({
   password: Joi.string()
     .min(6)
     .max(16)
-    .num(1)
-    .toUpperCase(1)
-    .toLowerCase(1)
+    // .uppercase()
+    // .lowercase(1)
     .required(),
 });
 
 const formSchema = Joi.object({
   email: Joi.string().pattern(emailRegex).required(),
   name: Joi.string(),
-  birthday: Joi.date().format('DD-MM-YYYY').max('now').required(),
-  city: Joi.string().str[0].toUpperCase(),
+  // birthday: Joi.date().format('DD-MM-YYYY').max('now').required(),
+  // city: Joi.string().str[0].toUpperCase(),
   phone: Joi.string()
     .min(13)
     .max(13)

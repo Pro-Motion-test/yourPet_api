@@ -12,7 +12,7 @@ class HttpException extends Error {
   ) {
     super();
     const { message, contextFn = this.constructor } = payload;
-    this.name = 'Http Exception';
+    this.name = 'HttpException';
     this.status = status;
     this.statusCode = statusCode;
     this.message = message || status;
