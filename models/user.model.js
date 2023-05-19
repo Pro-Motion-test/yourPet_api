@@ -3,50 +3,53 @@ const Joi = require('joi');
 
 const emailRegex = /[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
-const userSchema = new Schema({
-  email: {
-    type: String,
-    match: emailRegex,
-    unique: true,
-    required: true,
+const userSchema = new Schema(
+  {
+    email: {
+      type: String,
+      match: emailRegex,
+      unique: true,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    name: {
+      type: String,
+      default: '',
+    },
+    birthday: {
+      type: Date,
+      default: '',
+    },
+    token: {
+      type: String,
+      default: null,
+    },
+    accessToken: {
+      type: String,
+      default: null,
+    },
+    refreshToken: {
+      type: String,
+      default: null,
+    },
+    phone: {
+      type: String,
+      default: '',
+    },
+    city: {
+      type: String,
+      default: '',
+    },
+    avatarURL: {
+      type: String,
+      default: null,
+    },
   },
-  password: {
-    type: String,
-    required: true,
-  },
-  name: {
-    type: String,
-    default: '',
-  },
-  birthday: {
-    type: Date,
-    default: '',
-  },
-  token: {
-    type: String,
-    default: null,
-  },
-  accessToken: {
-    type: String,
-    default: null,
-  },
-  refreshToken: {
-    type: String,
-    default: null,
-  },
-  phone: {
-    type: String,
-    default: '',
-  },
-  city: {
-    type: String,
-    default: '',
-  },
-  avatarURL: {
-    type: String,
-    default: null,
-  },
-});
+  { versionKey: false }
+);
 
 const registerSchema = Joi.object({
   email: Joi.string().pattern(emailRegex).required(),
