@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const { HttpException, AuthHelper } = require('../helpers');
-const { providers } = require('../providers/index');
+const { providers } = require('../providers');
 class Auth {
   constructor() {}
 
@@ -19,6 +19,7 @@ class Auth {
       if (!createdUser) {
         throw HttpException.INTERNAL_SERVER_ERROR();
       }
+
       const token = await AuthHelper.createToken({
         id: createdUser._id,
         email,

@@ -1,4 +1,5 @@
 const Auth = require('./auth.provider');
+const NoticesProvider = require('./notices.provider');
 
-const providers = { Auth };
+const providers = { Auth, NoticesProvider };
 module.exports = { providers };

@@ -5,8 +5,8 @@ class Authorization {
     const { headers } = req;
     try {
       const token = headers.Authorization || headers.authorization;
-      const { _id, email } = await AuthHelper.validateToken(token);
-      req.user = { id: _id, email };
+      const { id, email } = await AuthHelper.validateToken(token);
+      req.user = { id, email };
       return next();
     } catch (e) {
       next(e);
