@@ -40,9 +40,10 @@ const registerSchema = Joi.object({
 const formSchema = Joi.object({
     email: Joi.string().pattern(emailRegex).required(),
     name: Joi.string(),
-    birthday: Joi.date().required(),
+    birthday: Joi.date().format('DD-MM-YYYY').max('now').required(),
     city: Joi.string().str[0].toUpperCase(),
     phone: Joi.string().min(13).max(13).regex(/^[0-9]{13}$/),
+    avatarURL: Joi.string().required(),
 });
 
 const User = model('user', userSchema);
