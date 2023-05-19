@@ -2,6 +2,8 @@ const { Schema, model } = require('mongoose');
 const Joi = require('joi');
 
 const emailRegex = /[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
+const phoneRegex = /(?=.*\+[0-9]{3}\s?[0-9]{2}\s?[0-9]{3}\s?[0-9]{4,5}$)/;
+const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,16}$/;
 
 const userSchema = new Schema({
   email: {
@@ -46,6 +48,10 @@ const userSchema = new Schema({
     type: String,
     default: null,
   },
+  newUser: {
+      type: Boolean,
+      default: true,
+    },
 });
 
 const registerSchema = Joi.object({
@@ -53,20 +59,20 @@ const registerSchema = Joi.object({
   password: Joi.string()
     .min(6)
     .max(16)
-    // .uppercase()
-    // .lowercase(1)
+    .pattern(passwordRegex)
     .required(),
+  newUser: Joi.boolean(),
 });
 
 const formSchema = Joi.object({
   email: Joi.string().pattern(emailRegex).required(),
   name: Joi.string(),
-  // birthday: Joi.date().format('DD-MM-YYYY').max('now').required(),
-  // city: Joi.string().str[0].toUpperCase(),
+  birthday: Joi.date().required(),
+  city: Joi.string(),
   phone: Joi.string()
     .min(13)
     .max(13)
-    .regex(/^[0-9]{13}$/),
+    .pattern(phoneRegex),
   avatarURL: Joi.string().required(),
 });
 
