@@ -12,12 +12,12 @@ class Notice {
 
       const skip = (page - 1) * limit;
 
-      const totalPages = await providers.NoticesProvider.getTotalPages({
+      const totalPages = await providers.Notices.getTotalPages({
         limit,
         category,
       });
 
-      const notices = await providers.NoticesProvider.getAllNotices({
+      const notices = await providers.Notices.getAllNotices({
         skip,
         limit,
         category,
@@ -32,7 +32,7 @@ class Notice {
     try {
       const { notId } = req.params;
 
-      const notice = await providers.NoticesProvider.getOneNotice(notId);
+      const notice = await providers.Notices.getOneNotice(notId);
 
       if (!notice) {
         throw HttpException.NOT_FOUND('Cannot find notice with this id');
@@ -45,12 +45,6 @@ class Notice {
   }
   static async createNotice(req, res, next) {
     try {
-      const { error } = NoticeHelper.checkCategory(req.body);
-
-      if (error) {
-        throw error;
-      }
-
       await providers.NoticesProvider.createNew({
         ...req.body,
         owner: req.user.id,
@@ -66,9 +60,7 @@ class Notice {
     try {
       const { notId } = req.params;
 
-      const notice = await providers.NoticesProvider.getOneNotice(notId);
-
-      if (!notice) {
+      if (!(await providers.NoticesProvider.getOneNotice(notId))) {
         throw HttpException.NOT_FOUND('Cannot find notice with this id');
       }
 
@@ -78,7 +70,7 @@ class Notice {
         );
       }
 
-      await providers.NoticesProvider.deleteNotice(notId);
+      await providers.Notices.deleteNotice(notId);
 
       res.status(204).send();
     } catch (error) {
@@ -91,16 +83,13 @@ class Notice {
       const { id: owner } = req.user;
       const skip = (page - 1) * limit;
 
-      const totalPages =
-        await providers.NoticesProvider.getTotalPagesForMyNotices({
-          owner,
-          limit,
-        });
-
-      console.log(totalPages);
+      const totalPages = providers.NoticesProvider.getTotalPages({
+        limit,
+        category,
+      });
 
       const notices = await providers.NoticesProvider.getMyNotices({
-        owner,
+        owner: req.user.id,
         skip,
         limit,
       });

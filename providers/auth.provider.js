@@ -1,14 +1,8 @@
-const {
-  user: { User },
-} = require('../models');
-// const { Provider } = require('./super');
+const { Provider } = require('./super');
 // extends Provider
-console.log(User);
-class Auth {
-  model;
-  constructor(model) {
-    // super(modelCategory, modelName);
-    this.model = model;
+class Auth extends Provider {
+  constructor(modelCategory = 'user', modelName = 'User') {
+    super(modelCategory, modelName);
   }
   async getAllUsers({ skip, limit }) {
     const users = await this.model.find({}, '', { skip, limit });
@@ -35,4 +29,4 @@ class Auth {
     return updatedUser;
   }
 }
-module.exports = new Auth(User);
+module.exports = new Auth('user', 'User');

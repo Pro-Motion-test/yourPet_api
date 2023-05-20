@@ -25,9 +25,10 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(err.code || 500).json({
+  console.log(err.statusCode);
+  res.status(err.statusCode || 500).json({
     status: 'Failed',
-    code: err.code || 500,
+    code: err.statusCode || 500,
     message: err.message || 'Internal Server Error',
   });
 });
