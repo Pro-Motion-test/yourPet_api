@@ -83,8 +83,8 @@ const createNoticeSchema = Joi.object({
     .max(validation.maxComments),
 });
 
-const noticeSchemas = { createNoticeSchema };
+const schemas = { createNoticeSchema };
 
 const Notice = model('Notice', NoticeSchema);
 
-module.exports = { Notice, noticeSchemas };
+module.exports = { Notice, schemas };
