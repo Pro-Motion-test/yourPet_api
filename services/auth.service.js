@@ -25,5 +25,35 @@ class Auth {
     await createdUser.save();
     return createdUser;
   }
+
+  async login({ email, password }) {
+    const user = await providers.Auth.getUser({ email });
+    if (!user) {
+    throw HttpException.UNAUTHORIZED('Failed! Unauthorized, you are not a user, please log in or create an account');
+  }
+const comparedPassword = await bcrypt.compare(password, user.password);
+  if (!comparedPassword) {
+    throw HttpException.UNAUTHORIZED;
+    }
+    const token = await AuthHelper.createToken({
+      id: user._id,
+      email,
+    });
+    user.token = token;
+    await user.save();
+    return user;
+  }
+
+  async logout(id) {
+  const user = await providers.Auth.removeUser(id);
+  user.token = null;
+  await user.save();
+  return user;
+  }
+
+  async current(id) {
+  const user = await providers.Auth.getUserById(id);
+  return user;
+  }
 }
 module.exports = new Auth();
