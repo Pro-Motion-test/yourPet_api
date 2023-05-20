@@ -1,5 +1,7 @@
 const express = require('express');
 const controllers = require('../../controllers');
+const { bodyValidation } = require('../../middlewares');
+const { schemas } = require('../../models');
 const router = express.Router();
 // -------------------------------------------------------
 // Base endpoint
@@ -7,7 +9,11 @@ const router = express.Router();
 // -------------------------------------------------------
 // ROUTES
 // ---ADD PET---
-router.post('/', controllers.Pets.addPets);
+router.post(
+  '/',
+  bodyValidation(schemas.petSchemas.addPetSchema),
+  controllers.Pets.addPets
+);
 // ---DELETE PET---
 router.delete('/:petId');
 // ---GET PETS---

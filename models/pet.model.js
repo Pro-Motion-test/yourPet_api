@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose');
 const Joi = require('joi');
-const PetSchema = new Schema({ {
+const PetSchema = new Schema(
+  {
     name: {
       type: String,
       minlength: 2,
@@ -34,7 +35,8 @@ const PetSchema = new Schema({ {
       required: true,
     },
   },
-  { versionKey: false }});
+  { versionKey: false }
+);
 
 const addPetSchema = Joi.object({
   name: Joi.string().alphanum().min(2).max(16).required(),
@@ -52,5 +54,5 @@ const Pet = model('Pet', PetSchema);
 
 module.exports = {
   Pet,
-  schemas
+  schemas,
 };

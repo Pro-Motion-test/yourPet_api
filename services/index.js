@@ -1,5 +1,4 @@
 const Auth = require('./auth.service');
-const Pets = require('./pets.service');
 
-const services = { Auth, Pets };
+const services = { Auth };
 module.exports = services;

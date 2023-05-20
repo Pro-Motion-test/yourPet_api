@@ -1,4 +1,4 @@
-const services = require('../services');
+const { providers } = require('../providers');
 
 class Pets {
   constructor() {}
@@ -13,9 +13,14 @@ class Pets {
   }
   static async addPets(req, res, next) {
     try {
-      const newPet = await services.Pets.addOnePet(req.body);
+      const { id: owner } = req.user;
+      const newPet = await providers.Pets.createPet({
+        ...req.body,
+        owner,
+        petavatarURL: '',
+      });
       //  --RESPONSE--
-      res.status(201).json(newPet);
+      res.status(201).json({ message: 'Created pet' });
     } catch (e) {
       next(e);
     }
