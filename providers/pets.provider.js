@@ -10,11 +10,21 @@ class Pets extends Provider {
   }
   async createPet(data) {
     const newPet = await this.model.create(data);
-    console.log(newPet);
+
     return newPet;
   }
-  async removePet(id) {
-    const result = await this.model.findByIdAndRemove(id);
+  async removePet(petId) {
+    const result = await this.model.findByIdAndRemove(petId);
+    return result;
+  }
+  async getTotalPages({ limit, owner }) {
+    return Math.ceil(
+      (
+        await this.model.find({
+          owner,
+        })
+      ).length / limit
+    );
   }
 }
 
