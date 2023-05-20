@@ -18,11 +18,10 @@ const PetSchema = new Schema(
       maxlength: 16,
       required: [true, 'Breed is required'],
     },
-    petavatarURL: {
+    petURL: {
       type: String,
-      default: null,
+      required: true,
     },
-
     comments: {
       type: String,
       minlength: 8,
@@ -39,10 +38,9 @@ const PetSchema = new Schema(
 );
 
 const addPetSchema = Joi.object({
-  name: Joi.string().alphanum().min(2).max(16).required(),
+  name: Joi.string().min(2).max(16).required(),
   date: Joi.date().less('now').required(),
   breed: Joi.string().alphanum().min(2).max(16).required(),
-  petavatarURL: Joi.string().required(),
   comments: Joi.string().min(8).max(120),
 });
 

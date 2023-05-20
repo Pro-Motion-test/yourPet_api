@@ -1,22 +1,27 @@
 const express = require('express');
 const controllers = require('../../controllers');
-const { bodyValidation } = require('../../middlewares');
+const {
+  Authorization,
+  bodyValidation,
+  paginationValidate,
+} = require('../../middlewares');
 const { schemas } = require('../../models');
 const router = express.Router();
-// -------------------------------------------------------
-// Base endpoint
-// /api/v1/pet
-// -------------------------------------------------------
-// ROUTES
-// ---ADD PET---
+
 router.post(
   '/',
+  Authorization.baseAuth,
   bodyValidation(schemas.petSchemas.addPetSchema),
   controllers.Pets.addPets
 );
 // ---DELETE PET---
-router.delete('/:petId');
+router.delete('/:petId', Authorization.baseAuth, controllers.Pets.removePet);
 // ---GET PETS---
-router.get('/');
+router.get(
+  '/',
+  Authorization.baseAuth,
+  paginationValidate,
+  controllers.Pets.getAllPets
+);
 
 module.exports = router;
