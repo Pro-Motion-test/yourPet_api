@@ -4,6 +4,7 @@ const cors = require('cors');
 const app = express();
 
 const { authRouter } = require('./routes/index');
+const { petsRouter } = require('./routes/index');
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
 app.use(logger(formatsLogger));
@@ -13,7 +14,7 @@ app.use(express.json());
 // ROUTER MIDDLEWARE
 app.use('/api/v1/auth', authRouter);
 // app.use("/api/v1/notice",noticesRouter);
-// app.use("/api/v1/pet",petRouter);
+app.use('/api/v1/pets', petsRouter);
 //
 app.use((req, res) => {
   res.status(404).json({
