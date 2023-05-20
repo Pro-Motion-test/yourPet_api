@@ -1,10 +1,7 @@
-const { User, schemas } = require('./user.model');
-const { Notice } = require('./notice.model');
-const { Pet } = require('./pet.model');
+const { User, schemas: userSchemas } = require('./user.model');
+const { Notice, schemas: noticeSchemas } = require('./notice.model');
+const { Pet, schemas: petSchemas } = require('./pet.model');
 
-const user = { User, schemas };
-const notice = { Notice, schemas };
-const pet = { Pet, schemas };
-
-const models = { user, notice, pet };
-module.exports = models;
+const models = { User, Notice, Pet };
+const schemas = { userSchemas, noticeSchemas, petSchemas };
+module.exports = { models, schemas };

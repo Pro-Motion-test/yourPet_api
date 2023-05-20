@@ -1,8 +1,8 @@
 const { Provider } = require('./super');
 // extends Provider
 class Auth extends Provider {
-  constructor(modelCategory = 'user', modelName = 'User') {
-    super(modelCategory, modelName);
+  constructor(modelName = 'User') {
+    super(modelName);
   }
   async getAllUsers({ skip, limit }) {
     const users = await this.model.find({}, '', { skip, limit });
@@ -29,4 +29,4 @@ class Auth extends Provider {
     return updatedUser;
   }
 }
-module.exports = new Auth('user', 'User');
+module.exports = new Auth('User');
