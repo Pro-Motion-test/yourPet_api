@@ -10,12 +10,12 @@ class Notice {
 
       const skip = (page - 1) * limit;
 
-      const totalPages = await providers.NoticesProvider.getTotalPages({
+      const totalPages = await providers.Notices.getTotalPages({
         limit,
         category,
       });
 
-      const notices = await providers.NoticesProvider.getAllNotices({
+      const notices = await providers.Notices.getAllNotices({
         skip,
         limit,
         category,
@@ -30,7 +30,7 @@ class Notice {
     try {
       const { notId } = req.params;
 
-      const notice = await providers.NoticesProvider.getOneNotice(notId);
+      const notice = await providers.Notices.getOneNotice(notId);
 
       if (!notice) {
         throw HttpException.NOT_FOUND('Cannot find notice with this id');
@@ -43,7 +43,7 @@ class Notice {
   }
   static async createNotice(req, res, next) {
     try {
-      await providers.NoticesProvider.createNew({
+      await providers.Notices.createNew({
         ...req.body,
         owner: req.user.id,
         imgUrl: 'Заглушка',
@@ -58,11 +58,11 @@ class Notice {
     try {
       const { notId } = req.params;
 
-      if (!(await providers.NoticesProvider.getOneNotice(notId))) {
+      if (!(await providers.Notices.getOneNotice(notId))) {
         throw HttpException.NOT_FOUND('Cannot find notice with this id');
       }
 
-      await providers.NoticesProvider.deleteNotice(notId);
+      await providers.Notices.deleteNotice(notId);
 
       res.status(204).send();
     } catch (error) {
@@ -75,12 +75,12 @@ class Notice {
       const { filter } = req.body;
       const skip = (page - 1) * limit;
 
-      const totalPages = providers.NoticesProvider.getTotalPages({
+      const totalPages = providers.Notices.getTotalPages({
         limit,
         category,
       });
 
-      const notices = await providers.NoticesProvider.getMyNotices({
+      const notices = await providers.Notices.getMyNotices({
         owner: req.user.id,
         skip,
         limit,

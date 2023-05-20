@@ -1,11 +1,8 @@
-const {
-  notice: { Notice },
-} = require('../models');
+const { Provider } = require('./super');
 
-class NoticesProvider {
-  model;
-  constructor(model) {
-    this.model = model;
+class Notices extends Provider {
+  constructor(modelCategory = 'notice', modelName = 'Notice') {
+    super(modelCategory, modelName);
   }
   async getAllNotices({ skip, limit, category }) {
     return await this.model.find({ category }, '', { skip, limit });
@@ -28,4 +25,4 @@ class NoticesProvider {
     return await this.model.find({ owner }).skip(skip).limit(limit);
   }
 }
-module.exports = new NoticesProvider(Notice);
+module.exports = new Notices('notice', 'Notice');
