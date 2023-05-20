@@ -21,9 +21,104 @@ class Auth {
       id: createdUser._id,
       email,
     });
+    const newAccessToken = await AuthHelper.createAccessToken({
+      id: createdUser._id,
+      email,
+    });
+    const newRefreshToken = await AuthHelper.createRefreshToken({
+      id: createdUser._id,
+      email,
+    });
     createdUser.token = token;
-    await createdUser.save();
-    return createdUser;
+    (createdUser.accessToken = newAccessToken),
+      (createdUser.refreshToken = newRefreshToken),
+      await createdUser.save();
+    const {
+      _id,
+      accessToken,
+      refreshToken,
+      avatarURL,
+      newUser,
+      name,
+      birthday,
+      phone,
+      city,
+    } = createdUser;
+    const dataToSend = {
+      _id,
+      email,
+      token,
+      accessToken,
+      refreshToken,
+      avatarURL,
+      newUser,
+      name,
+      birthday,
+      phone,
+      city,
+    };
+    return dataToSend;
   }
+  async login({ email, password }) {
+    const user = await providers.Auth.getUser({ email });
+    if (!user) {
+      throw HttpException.UNAUTHORIZED('Failed! Invalid email or password');
+    }
+
+    const correctPassword = await bcrypt.compare(password, user.password);
+    if (!correctPassword) {
+      throw HttpException.UNAUTHORIZED('Failed! Invalid email or password ');
+    }
+
+    const newToken = await AuthHelper.createToken({ id: user._id, email });
+    const newAccessToken = await AuthHelper.createAccessToken({
+      id: user._id,
+      email,
+    });
+    const newRefreshToken = await AuthHelper.createRefreshToken({
+      id: user._id,
+      email,
+    });
+
+    (user.token = newToken),
+      (user.newUser = false),
+      (user.accessToken = newAccessToken),
+      (user.refreshToken = newRefreshToken),
+      await user.save();
+    const {
+      _id,
+      token,
+      accessToken,
+      refreshToken,
+      avatarURL,
+      newUser,
+      name,
+      birthday,
+      phone,
+      city,
+    } = user;
+    const dataToSend = {
+      _id,
+      email,
+      token,
+      accessToken,
+      refreshToken,
+      avatarURL,
+      newUser,
+      name,
+      birthday,
+      phone,
+      city,
+    };
+    return dataToSend;
+  }
+  async logout(id) {
+    const body = { token: null, accessToken: null, refreshToken: null };
+    const { _id, email } = await providers.Auth.updateUser(id, body);
+    const dataToSend = { _id, email };
+    return dataToSend;
+  }
+  async current({ id }) {}
+  async refreshing({ refreshToken }) {}
 }
 module.exports = new Auth();

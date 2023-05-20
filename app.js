@@ -25,7 +25,7 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  console.log(err.statusCode);
+  console.log('statusCode', err);
   res.status(err.statusCode || 500).json({
     status: 'Failed',
     code: err.statusCode || 500,
