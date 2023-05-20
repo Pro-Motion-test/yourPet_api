@@ -13,58 +13,53 @@ const userSchema = new Schema(
       unique: true,
       required: true,
     },
-  password: {
-    type: String,
-    required: true,
-  },
-  name: {
-    type: String,
-    default: '',
-  },
-  birthday: {
-    type: Date,
-    default: '',
-  },
-  token: {
-    type: String,
-    default: null,
-  },
-  accessToken: {
-    type: String,
-    default: null,
-  },
-  refreshToken: {
-    type: String,
-    default: null,
-  },
-  phone: {
-    type: String,
-    default: '',
-  },
-  city: {
-    type: String,
-    default: '',
-  },
-  avatarURL: {
-    type: String,
-    default: null,
-  },
-  newUser: {
+    password: {
+      type: String,
+      required: true,
+    },
+    name: {
+      type: String,
+      default: '',
+    },
+    birthday: {
+      type: Date,
+      default: '',
+    },
+    token: {
+      type: String,
+      default: null,
+    },
+    accessToken: {
+      type: String,
+      default: null,
+    },
+    refreshToken: {
+      type: String,
+      default: null,
+    },
+    phone: {
+      type: String,
+      default: '',
+    },
+    city: {
+      type: String,
+      default: '',
+    },
+    avatarURL: {
+      type: String,
+      default: null,
+    },
+    newUser: {
       type: Boolean,
       default: true,
     },
-}),
-
+  },
   { versionKey: false }
 );
 
 const registerSchema = Joi.object({
   email: Joi.string().pattern(emailRegex).required(),
-  password: Joi.string()
-    .min(6)
-    .max(16)
-    .pattern(passwordRegex)
-    .required(),
+  password: Joi.string().min(6).max(16).pattern(passwordRegex).required(),
   newUser: Joi.boolean(),
 });
 
@@ -73,10 +68,7 @@ const formSchema = Joi.object({
   name: Joi.string(),
   birthday: Joi.date().required(),
   city: Joi.string(),
-  phone: Joi.string()
-    .min(13)
-    .max(13)
-    .pattern(phoneRegex),
+  phone: Joi.string().min(13).max(13).pattern(phoneRegex),
   avatarURL: Joi.string().required(),
 });
 
