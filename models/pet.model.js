@@ -1,8 +1,6 @@
 const { Schema, model } = require('mongoose');
 const Joi = require('joi');
-
-const PetSchema = new Schema(
-  {
+const PetSchema = new Schema({ {
     name: {
       type: String,
       minlength: 2,
@@ -36,23 +34,23 @@ const PetSchema = new Schema(
       required: true,
     },
   },
-  { versionKey: false }
-);
+  { versionKey: false }});
+
 const addPetSchema = Joi.object({
   name: Joi.string().alphanum().min(2).max(16).required(),
-  date: Joi.date().max('now').required(),
+  date: Joi.date().less('now').required(),
   breed: Joi.string().alphanum().min(2).max(16).required(),
   petavatarURL: Joi.string().required(),
   comments: Joi.string().min(8).max(120),
 });
 
-// const schemas = {
-//   addPetSchema,
-// };
+const schemas = {
+  addPetSchema,
+};
 
-const Pet = model('pet', PetSchema);
+const Pet = model('Pet', PetSchema);
 
 module.exports = {
   Pet,
-  addPetSchema,
+  schemas
 };

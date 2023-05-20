@@ -3,8 +3,8 @@ const logger = require('morgan');
 const cors = require('cors');
 const app = express();
 
-const { authRouter } = require('./routes/index');
-const { petsRouter } = require('./routes/index');
+const { authRouter, noticesRouter, petsRouter } = require('./routes');
+
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
 app.use(logger(formatsLogger));
@@ -13,9 +13,9 @@ app.use(express.json());
 
 // ROUTER MIDDLEWARE
 app.use('/api/v1/auth', authRouter);
-// app.use("/api/v1/notice",noticesRouter);
+app.use('/api/v1/notices', noticesRouter);
 app.use('/api/v1/pets', petsRouter);
-//
+
 app.use((req, res) => {
   res.status(404).json({
     status: 'Failed',
@@ -25,9 +25,10 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(err.code || 500).json({
+  console.log(err.statusCode);
+  res.status(err.statusCode || 500).json({
     status: 'Failed',
-    code: err.code || 500,
+    code: err.statusCode || 500,
     message: err.message || 'Internal Server Error',
   });
 });

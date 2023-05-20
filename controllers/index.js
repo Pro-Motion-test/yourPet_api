@@ -1,5 +1,5 @@
 const Auth = require('./auth.controller');
-const Pets = require('./pets.controller')
-
-const controllers = { Auth, Pets };
+const Notice = require('./notices.controller');
+const Pets = require('./pets.controller');
+const controllers = { Auth, Notice, Pets };
 module.exports = controllers;
