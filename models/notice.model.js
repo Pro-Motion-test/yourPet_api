@@ -1,5 +1,8 @@
 const { Schema, model } = require('mongoose');
 const Joi = require('joi');
+const {
+  requestConstants: { validation },
+} = require('../constants');
 
 const NoticeSchema = new Schema(
   {
@@ -35,6 +38,10 @@ const NoticeSchema = new Schema(
       type: String,
       required: true,
     },
+    likedByUsers: {
+      type: [{ type: Schema.Types.ObjectId, ref: 'user' }],
+      default: [],
+    },
     price: Number,
     comments: String,
     owner: {
@@ -45,29 +52,39 @@ const NoticeSchema = new Schema(
   { versionKey: false }
 );
 
-const objSchema = {
-  title: Joi.string().min(2).max(50).required(),
-  name: Joi.string().min(2).max(16).required(),
-  category: Joi.string().valid('sell', 'for-free', 'lost-found').required(),
-  breed: Joi.string().min(2).max(16).required(),
-  sex: Joi.string().valid('male', 'female').required(),
-  location: Joi.string().min(2).max(25).required(),
+const createNoticeSchema = Joi.object({
+  title: Joi.string()
+    .min(validation.minTitle)
+    .max(validation.maxTitle)
+    .required(),
+  name: Joi.string().min(validation.minName).max(validation.maxName).required(),
+  category: Joi.string()
+    .valid(
+      validation.categoryValues.sell,
+      validation.categoryValues.forFree,
+      validation.categoryValues.lostFound
+    )
+    .required(),
+  breed: Joi.string()
+    .min(validation.minBreed)
+    .max(validation.maxBreed)
+    .required(),
+  sex: Joi.string()
+    .valid(validation.sexValues.male, validation.sexValues.female)
+    .required(),
+  location: Joi.string()
+    .min(validation.minLocation)
+    .max(validation.maxLocation)
+    .required(),
   date: Joi.date().less('now').required(),
-  comments: Joi.string().min(8).max(120),
-};
-
-const createNoticeForSellSchema = Joi.object({
-  ...objSchema,
-  price: Joi.number().min(0).required(),
+  price: Joi.number().positive(),
+  comments: Joi.string()
+    .min(validation.minComments)
+    .max(validation.maxComments),
 });
 
-const createNoticeForOtherSchema = Joi.object().keys({
-  ...objSchema,
-  price: Joi.number().min(0),
-});
-
-const schemas = { createNoticeForSellSchema, createNoticeForOtherSchema };
+const noticeSchemas = { createNoticeSchema };
 
 const Notice = model('Notice', NoticeSchema);
 
-module.exports = { Notice, schemas };
+module.exports = { Notice, noticeSchemas };
