@@ -17,7 +17,7 @@ class Auth {
   }
   async createToken({ id, email }) {
     const payload = { id, email };
-    console.log(this.#TOKEN_SECRET);
+    console.log('tokenSecret', this.#TOKEN_SECRET);
     const newToken = new Promise((resolve, reject) => {
       jwt.sign(
         payload,
