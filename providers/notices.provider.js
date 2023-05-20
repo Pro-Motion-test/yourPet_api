@@ -1,8 +1,8 @@
 const { Provider } = require('./super');
 
 class Notices extends Provider {
-  constructor(modelCategory = 'notice', modelName = 'Notice') {
-    super(modelCategory, modelName);
+  constructor(modelName = 'Notice') {
+    super(modelName);
   }
   async getAllNotices({ skip, limit, category, search }) {
     return await this.model.find(
@@ -68,4 +68,4 @@ class Notices extends Provider {
     );
   }
 }
-module.exports = new Notices('notice', 'Notice');
+module.exports = new Notices('Notice');

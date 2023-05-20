@@ -1,8 +1,7 @@
-const models = require('../models');
-// console.log(models['user']['User']);
+const { models } = require('../models');
 class Provider {
-  constructor(modelCategory, modelName) {
-    this.model = models[modelCategory][modelName];
+  constructor(modelName) {
+    this.model = models[modelName];
   }
 }
 // console.log(Provider.model);
