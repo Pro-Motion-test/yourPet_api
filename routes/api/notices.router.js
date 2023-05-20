@@ -1,11 +1,36 @@
 const express = require('express');
 const controllers = require('../../controllers');
-const { Authorization } = require('../../middlewares');
+const {
+  Authorization,
+  bodyValidation,
+  paginationValidate,
+} = require('../../middlewares');
+const { notice } = require('../../models');
 const router = express.Router();
 
-router.get('/', controllers.Notice.getAll);
+router.get('/', paginationValidate, controllers.Notice.getAll);
+
+router.get(
+  '/own',
+  Authorization.baseAuth,
+  paginationValidate,
+  controllers.Notice.getMy
+);
 
 router.get('/:notId', controllers.Notice.getById);
+
+router.post(
+  '/',
+  Authorization.baseAuth,
+  bodyValidation(notice.noticeSchemas.createNoticeSchema),
+  controllers.Notice.createNotice
+);
+
+router.delete(
+  '/:notId',
+  Authorization.baseAuth,
+  controllers.Notice.removeNotice
+);
 
 router.patch(
   '/:notId/favourite',
@@ -16,17 +41,8 @@ router.patch(
 router.get(
   '/favorite',
   Authorization.baseAuth,
+  paginationValidate,
   controllers.Notice.getFavourite
 );
-
-router.post('/', Authorization.baseAuth, controllers.Notice.createNotice);
-
-router.delete(
-  '/:notId',
-  Authorization.baseAuth,
-  controllers.Notice.removeNotice
-);
-
-router.get('/own', Authorization.baseAuth, controllers.Notice.getMy);
 
 module.exports = router;

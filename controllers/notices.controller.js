@@ -1,12 +1,14 @@
 const { providers } = require('../providers');
-const { HttpException } = require('../helpers');
+const { HttpException, NoticeHelper } = require('../helpers');
+const {
+  requestConstants: { defParams },
+} = require('../constants');
 
 class Notice {
   constructor() {}
   static async getAll(req, res, next) {
     try {
-      const { search, category, page = '1', limit = '12' } = req.query;
-      const { filter } = req.body;
+      const { category = defParams.category, page, limit } = req.query;
 
       const skip = (page - 1) * limit;
 
@@ -43,6 +45,12 @@ class Notice {
   }
   static async createNotice(req, res, next) {
     try {
+      const { error } = NoticeHelper.checkCategory(req.body);
+
+      if (error) {
+        throw error;
+      }
+
       await providers.NoticesProvider.createNew({
         ...req.body,
         owner: req.user.id,
@@ -58,8 +66,16 @@ class Notice {
     try {
       const { notId } = req.params;
 
-      if (!(await providers.NoticesProvider.getOneNotice(notId))) {
+      const notice = await providers.NoticesProvider.getOneNotice(notId);
+
+      if (!notice) {
         throw HttpException.NOT_FOUND('Cannot find notice with this id');
+      }
+
+      if (notice.owner.toString() !== req.user.id) {
+        throw HttpException.FORBIDDEN(
+          `You cannot delete this notice, because it's not yours!`
+        );
       }
 
       await providers.NoticesProvider.deleteNotice(notId);
@@ -71,17 +87,20 @@ class Notice {
   }
   static async getMy(req, res, next) {
     try {
-      const { search, category, page = '1', limit = '12' } = req.query;
-      const { filter } = req.body;
+      const { page, limit } = req.query;
+      const { id: owner } = req.user;
       const skip = (page - 1) * limit;
 
-      const totalPages = providers.NoticesProvider.getTotalPages({
-        limit,
-        category,
-      });
+      const totalPages =
+        await providers.NoticesProvider.getTotalPagesForMyNotices({
+          owner,
+          limit,
+        });
+
+      console.log(totalPages);
 
       const notices = await providers.NoticesProvider.getMyNotices({
-        owner: req.user.id,
+        owner,
         skip,
         limit,
       });
@@ -93,14 +112,53 @@ class Notice {
   }
   static async changeFavourite(req, res, next) {
     try {
+      const { notId } = req.params;
+      const { id: userId } = req.user;
+
+      const notice = await providers.NoticesProvider.getOneNotice(notId);
+
+      if (!notice) {
+        throw HttpException.NOT_FOUND('Cannot find notice with this id');
+      }
+
+      const isLiked = await providers.NoticesProvider.getOneLikedNotice({
+        notId,
+        userId,
+      });
+
+      if (isLiked) {
+        await providers.NoticesProvider.dislike({ notId, userId });
+      } else {
+        await providers.NoticesProvider.like({ notId, userId });
+      }
+
+      res.json({ message: 'Ok' });
     } catch (error) {
-      next();
+      next(error);
     }
   }
   static async getFavourite(req, res, next) {
     try {
+      const { id: userId } = req.user;
+      const { page, limit } = req.query;
+
+      const skip = (page - 1) * limit;
+
+      const totalPages =
+        await providers.NoticesProvider.getTotalPagesForLikedNotices({
+          limit,
+          userId,
+        });
+
+      const likedNotices = await providers.NoticesProvider.getAllNotices({
+        skip,
+        limit,
+        userId,
+      });
+
+      res.json({ page, limit, totalPages, data: likedNotices });
     } catch (error) {
-      next();
+      next(error);
     }
   }
 }
