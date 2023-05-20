@@ -4,11 +4,25 @@ class Notices extends Provider {
   constructor(modelCategory = 'notice', modelName = 'Notice') {
     super(modelCategory, modelName);
   }
-  async getAllNotices({ skip, limit, category }) {
-    return await this.model.find({ category }, '', { skip, limit });
+  async getAllNotices({ skip, limit, category, search }) {
+    return await this.model.find(
+      { category, title: { $regex: search, $options: 'i' } },
+      '',
+      {
+        skip,
+        limit,
+      }
+    );
   }
-  async getTotalPages({ limit, category }) {
-    return Math.ceil((await this.model.find({ category })).length / limit);
+  async getTotalPages({ limit, category, search }) {
+    return Math.ceil(
+      (
+        await this.model.find({
+          category,
+          title: { $regex: search, $options: 'i' },
+        })
+      ).length / limit
+    );
   }
   async getOneNotice(notId) {
     return await this.model.findById(notId);

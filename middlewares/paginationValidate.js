@@ -15,8 +15,6 @@ const paginationValidate = (req, res, next) => {
     const pageNum = Number(page);
     const limitNum = Number(limit);
 
-    console.log('pagination');
-
     const { error } = pagSchema.validate({ page: pageNum, limit: limitNum });
 
     if (error) {
