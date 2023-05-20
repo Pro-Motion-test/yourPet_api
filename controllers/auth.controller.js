@@ -29,7 +29,7 @@ class Auth {
   }
   static async logout(req, res, next) {
     try {
-      console.log('userid', req.user);
+      console.log('userid', req.user.id);
       const logoutUser = await services.Auth.logout(req.user.id);
       //  --RESPONSE--
       res.status(201).json({

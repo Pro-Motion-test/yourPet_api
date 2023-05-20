@@ -112,8 +112,7 @@ class Auth {
     };
     return dataToSend;
   }
-  async logout({ id }) {
-    console.log('id', id);
+  async logout(id) {
     const body = { token: null, accessToken: null, refreshToken: null };
     const { _id, email } = await providers.Auth.updateUser(id, body);
     const dataToSend = { _id, email };
