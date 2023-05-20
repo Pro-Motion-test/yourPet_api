@@ -9,6 +9,9 @@ const {
   SUCCESS_GET_RESPONSE,
   SUCCESS_PUT_RESPONSE,
 } = require('./responseTemplate.constants');
+
+const requestConstants = require('./request.constants');
+
 const responseTemplates = {
   SUCCESS_DELETE_RESPONSE,
   SUCCESS_POST_RESPONSE,
@@ -20,4 +23,5 @@ const errorHandlerConstants = {
   HTTP_STATUS_CODES,
   HTTP_STATUS,
 };
-module.exports = { errorHandlerConstants, responseTemplates };
+
+module.exports = { errorHandlerConstants, requestConstants, responseTemplates };

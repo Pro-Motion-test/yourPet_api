@@ -4,4 +4,5 @@ const { Pet, schemas: petSchemas } = require('./pet.model');
 
 const models = { User, Notice, Pet };
 const schemas = { userSchemas, noticeSchemas, petSchemas };
+
 module.exports = { models, schemas };
