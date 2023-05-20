@@ -5,7 +5,7 @@ const {
   bodyValidation,
   paginationValidate,
 } = require('../../middlewares');
-const { notice } = require('../../models');
+const { schemas } = require('../../models');
 const router = express.Router();
 
 router.get('/', paginationValidate, controllers.Notice.getAll);
@@ -22,7 +22,7 @@ router.get('/:notId', controllers.Notice.getById);
 router.post(
   '/',
   Authorization.baseAuth,
-  bodyValidation(notice.noticeSchemas.createNoticeSchema),
+  bodyValidation(schemas.noticeSchemas.createNoticeSchema),
   controllers.Notice.createNotice
 );
 
