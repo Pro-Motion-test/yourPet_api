@@ -35,16 +35,20 @@ class Authorization {
   static async checkTokenForPublicRoute(req, res, next) {
     const { headers } = req;
     try {
+      if (!headers.Authorization && !headers.authorization) {
+        console.log('sss');
+
+        req.user = { isUserLoggedIn: false };
+        return next();
+      }
+
       const token = await AuthHelper.getTokenWithHeader(headers);
       //  tokenType could be 'access' or 'refresh' and  'token' by default
       const { id, email } = await AuthHelper.verifyToken({
         tokenType: 'token',
         token,
       });
-      if (!id) {
-        req.user = { isUserLoggedIn: false };
-        return next();
-      }
+
       req.user = { isUserLoggedIn: true, id, email };
       return next();
     } catch (e) {
