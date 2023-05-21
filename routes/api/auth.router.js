@@ -1,5 +1,6 @@
 const express = require('express');
 const controllers = require('../../controllers');
+const middlewares = require('../../middlewares');
 const router = express.Router();
 // -------------------------------------------------------
 // Base endpoint
@@ -12,10 +13,14 @@ router.post('/register', controllers.Auth.register);
 router.post('/login', controllers.Auth.login);
 
 // ---LOGOUT---
-router.post('/logout', controllers.Auth.logout);
+router.post(
+  '/logout',
+  middlewares.Authorization.baseAuth,
+  controllers.Auth.logout
+);
 
 // ---CURRENT---
-router.get('/current', controllers.Auth.current);
+router.get('/current', middlewares.Authorization, controllers.Auth.current);
 
 // ---REFRESHING---
 router.post('/refresh', controllers.Auth.refreshing);
