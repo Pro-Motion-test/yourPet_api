@@ -99,7 +99,7 @@ class Auth {
       );
     }
     try {
-      const data = await this.decodeToken(token);
+      const data = await this.verifyToken(token);
       if (!data) {
         throw HttpException.UNAUTHORIZED();
       }
