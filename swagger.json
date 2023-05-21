@@ -26,14 +26,6 @@
       "post": {
         "tags": ["Auth"],
         "summary": "User registration",
-        "parameters": [
-          {
-            "in": "path || query",
-            "name": "name",
-            "required": true,
-            "description": "desc"
-          }
-        ],
         "requestBody": {
           "description": "Registration's object",
           "required": true,

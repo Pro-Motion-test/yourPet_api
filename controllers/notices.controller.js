@@ -41,7 +41,7 @@ class Notice {
 
       const notice = await providers.Notices.getOneNotice({ noticeId });
 
-      if (!notice) {
+      if (notice.length === 0) {
         throw HttpException.NOT_FOUND('Cannot find notice with this id');
       }
 
