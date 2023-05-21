@@ -45,6 +45,8 @@ class Auth {
   }
   static async current(req, res, next) {
     try {
+      const { id } = req.user;
+      await services.Auth.current(id);
       //  --RESPONSE--
       res.status(200).json();
     } catch (e) {
