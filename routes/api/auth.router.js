@@ -20,7 +20,7 @@ router.post(
 );
 
 // ---CURRENT---
-router.get('/current', middlewares.Authorization, controllers.Auth.current);
+router.get('/current', middlewares.Authorization.baseAuth, controllers.Auth.current);
 
 // ---REFRESHING---
 router.post('/refresh', controllers.Auth.refreshing);

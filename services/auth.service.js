@@ -119,9 +119,10 @@ class Auth {
     const dataToSend = { _id, email };
     return dataToSend;
   }
-  async current({ id }) {
-  const user = await providers.Auth.getUserById(id);
-  return user;
+  async current(id) {
+  const { _id, email } = await providers.Auth.getUserById(id);
+  const dataToSend = { _id, email };
+  return dataToSend;
   }
   async refreshing({ refreshToken }) {}
 
