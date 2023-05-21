@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
 const Joi = require('joi');
+const { handleMongooseError } = require('../helpers');
 
 const emailRegex = /[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
 const phoneRegex = /(?=.*\+[0-9]{3}\s?[0-9]{2}\s?[0-9]{3}\s?[0-9]{4,5}$)/;
@@ -56,7 +57,9 @@ const userSchema = new Schema(
   },
   { versionKey: false }
 );
+userSchema.post('save', handleMongooseError.mongooseServerError);
 
+//
 const registerSchema = Joi.object({
   email: Joi.string().pattern(emailRegex).required(),
   password: Joi.string().min(6).max(16).pattern(passwordRegex).required(),
