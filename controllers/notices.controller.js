@@ -52,11 +52,11 @@ class Notice {
   }
   static async createNotice(req, res, next) {
     try {
-      const { error } = NoticeHelper.checkCategory(req.body);
+      // const { error } = NoticeHelper.checkCategory(req.body);
 
-      if (error) {
-        throw error;
-      }
+      // if (error) {
+      //   throw error;
+      // }
 
       await providers.Notices.createNew({
         ...req.body,

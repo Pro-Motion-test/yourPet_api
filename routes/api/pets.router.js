@@ -12,7 +12,7 @@ router.post(
   '/',
   Authorization.baseAuth,
   bodyValidation(schemas.petSchemas.addPetSchema),
-  controllers.Pets.addPets
+  controllers.Pets.addPet
 );
 // ---DELETE PET---
 router.delete('/:petId', Authorization.baseAuth, controllers.Pets.removePet);
