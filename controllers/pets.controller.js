@@ -1,5 +1,7 @@
 const { providers } = require('../providers');
-const { HttpException } = require('../helpers');
+// const { HttpException } = require('../helpers');
+const { responseTemplates } = require('../constants');
+const services = require('../services');
 
 class Pets {
   constructor() {}
@@ -9,13 +11,12 @@ class Pets {
       const { page, limit } = req.query;
       const { id: owner } = req.user;
       const skip = (page - 1) * limit;
-
       const totalPages = await providers.Pets.getTotalPages({
         owner,
         limit,
       });
 
-      const pets = await providers.Pets.getAllPets({
+      const pets = await services.Pets.getPets({
         owner,
         skip,
         limit,
@@ -26,17 +27,21 @@ class Pets {
       next(e);
     }
   }
-  static async addPets(req, res, next) {
+  static async addPet(req, res, next) {
     try {
       const { id: owner } = req.user;
 
-      const newPet = await providers.Pets.createPet({
+      await services.Pets.addOnePet({
         ...req.body,
         owner,
         petURL: 'dddd',
       });
+
       //  --RESPONSE--
-      res.status(201).json({ message: 'Created pet' });
+      res.status(201).json({
+        ...responseTemplates.SUCCESS_POST_RESPONSE,
+        message: 'Created pet',
+      });
     } catch (e) {
       next(e);
     }
@@ -44,14 +49,13 @@ class Pets {
   static async removePet(req, res, next) {
     try {
       const { petId } = req.params;
-      const result = await providers.Pets.removePet(petId);
-
-      if (!result) {
-        throw HttpException.NOT_FOUND();
-      }
+      await services.Pets.deletePet(petId);
 
       //  --RESPONSE--
-      res.status(201).json({ message: 'Pet deleted successfully' });
+      res.status(201).json({
+        ...responseTemplates.SUCCESS_POST_RESPONSE,
+        message: 'Pet deleted successfully',
+      });
     } catch (e) {
       next(e);
     }

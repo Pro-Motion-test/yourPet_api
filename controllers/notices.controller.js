@@ -14,17 +14,16 @@ class Notice {
         page,
         limit,
       } = req.query;
-
       const skip = (page - 1) * limit;
 
-      const totalPages = await providers.Notices.getTotalPages({
+      const notices = await providers.Notices.getAllNotices({
+        skip,
         limit,
         category,
         search,
       });
 
-      const notices = await providers.Notices.getAllNotices({
-        skip,
+      const totalPages = await providers.Notices.getTotalPages({
         limit,
         category,
         search,
@@ -45,18 +44,14 @@ class Notice {
         throw HttpException.NOT_FOUND('Cannot find notice with this id');
       }
 
-      res.json(notice);
+      res.json(...notice);
     } catch (error) {
       next(error);
     }
   }
   static async createNotice(req, res, next) {
     try {
-      const { error } = NoticeHelper.checkCategory(req.body);
-
-      if (error) {
-        throw error;
-      }
+      NoticeHelper.checkCategory(req.body);
 
       await providers.Notices.createNew({
         ...req.body,
@@ -71,9 +66,9 @@ class Notice {
   }
   static async removeNotice(req, res, next) {
     try {
-      const { notId } = req.params;
+      const { id } = req.params;
 
-      const notice = await providers.Notices.getOneNotice(notId);
+      const notice = await providers.Notices.getOneNotice(id);
 
       if (!notice) {
         throw HttpException.NOT_FOUND('Cannot find notice with this id');

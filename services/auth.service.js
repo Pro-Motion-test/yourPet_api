@@ -59,6 +59,7 @@ class Auth {
     };
     return dataToSend;
   }
+
   async login({ email, password }) {
     const user = await providers.Auth.getUser({ email });
     if (!user) {
@@ -118,7 +119,11 @@ class Auth {
     const dataToSend = { _id, email };
     return dataToSend;
   }
-  async current({ id }) {}
+  async current({ id }) {
+  const user = await providers.Auth.getUserById(id);
+  return user;
+  }
   async refreshing({ refreshToken }) {}
+
 }
 module.exports = new Auth();

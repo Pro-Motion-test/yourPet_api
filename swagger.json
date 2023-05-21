@@ -67,25 +67,21 @@
           {
             "in": "query",
             "name": "search",
-            "required": true,
             "description": "Search by title"
           },
           {
             "in": "query",
             "name": "category",
-            "required": true,
             "description": "Notices's category"
           },
           {
             "in": "query",
             "name": "page",
-            "required": true,
             "description": "Page"
           },
           {
             "in": "query",
             "name": "limit",
-            "required": true,
             "description": "Limit"
           }
         ],
@@ -100,12 +96,50 @@
             }
           }
         }
+      },
+      "post": {
+        "tags": ["Notice"],
+        "summary": "Create notice",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "requestBody": {
+          "description": "Notice's object",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateNoticeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {}
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {}
+          }
+        }
       }
     },
     "/notices/:id": {
       "get": {
         "tags": ["Notice"],
         "summary": "Get one notice by id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Notice's id"
+          }
+        ],
         "responses": {
           "200": {
             "content": {
@@ -115,6 +149,41 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Cannot find notice with this id",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Notice"],
+        "summary": "Delete notice by id",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Notice's id"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted",
+            "content": {}
+          },
+          "403": {
+            "description": "You cannot delete this notice, because it's not yours!",
+            "content": {}
+          },
+          "404": {
+            "description": "Cannot find notice with this id",
+            "content": {}
           }
         }
       }
@@ -193,7 +262,8 @@
                   "type": "string"
                 },
                 "birthday": {
-                  "type": "date"
+                  "type": "string",
+                  "format": "date"
                 },
                 "imgUrl": {
                   "type": "string"
@@ -234,7 +304,8 @@
             "type": "string"
           },
           "birthday": {
-            "type": "date"
+            "type": "string",
+            "format": "date"
           },
           "imgUrl": {
             "type": "string"
@@ -250,6 +321,58 @@
           },
           "isLiked": {
             "type": "boolean"
+          },
+          "user": {
+            "type": "object",
+            "description": "User contacts info",
+            "properties": {
+              "email": { "type": "string", "format": "email" },
+              "phone": { "type": "string" }
+            }
+          }
+        }
+      },
+      "CreateNoticeRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "category": {
+            "type": "string",
+            "required": true
+          },
+          "breed": {
+            "type": "string",
+            "required": true
+          },
+          "sex": {
+            "type": "string",
+            "required": true
+          },
+          "location": {
+            "type": "string",
+            "required": true
+          },
+          "birthday": {
+            "type": "string",
+            "required": true,
+            "format": "date"
+          },
+          "file": {
+            "type": "file",
+            "required": true
+          },
+          "price": {
+            "type": "number"
+          },
+          "comments": {
+            "type": "string"
           }
         }
       }

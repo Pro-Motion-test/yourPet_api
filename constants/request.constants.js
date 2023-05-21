@@ -10,20 +10,20 @@ const validation = Object.freeze({
   minComments: 8,
   maxComments: 120,
   sexValues: {
-    male: 'male',
-    female: 'female',
+    MALE: 'male',
+    FEMALE: 'female',
   },
   categoryValues: {
-    sell: 'sell',
-    forFree: 'for-free',
-    lostFound: 'lost-found',
+    SELL: 'sell',
+    FOR_FREE: 'for-free',
+    LOST_FOUND: 'lost-found',
   },
 });
 
 const defParams = Object.freeze({
   limit: 2,
   page: 1,
-  category: validation.categoryValues.sell,
+  category: validation.categoryValues.SELL,
 });
 
 module.exports = { validation, defParams };

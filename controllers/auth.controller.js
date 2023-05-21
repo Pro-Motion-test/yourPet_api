@@ -29,7 +29,6 @@ class Auth {
   }
   static async logout(req, res, next) {
     try {
-      console.log('userid', req.user.id);
       const logoutUser = await services.Auth.logout(req.user.id);
       //  --RESPONSE--
       res.status(201).json({
@@ -37,7 +36,7 @@ class Auth {
           ...responseTemplates.SUCCESS_POST_RESPONSE,
           message: 'Logout is successfully completed',
         },
-        // body: logoutUser,
+        body: logoutUser,
       });
     } catch (e) {
       next(e);

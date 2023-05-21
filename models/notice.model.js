@@ -3,8 +3,9 @@ const Joi = require('joi');
 const {
   requestConstants: { validation },
 } = require('../constants');
+const { handleMongooseError } = require('../helpers');
 
-const NoticeSchema = new Schema(
+const noticeSchema = new Schema(
   {
     title: {
       type: String,
@@ -51,7 +52,8 @@ const NoticeSchema = new Schema(
   },
   { versionKey: false }
 );
-
+noticeSchema.post('save', handleMongooseError.mongooseServerError);
+// ----------------------------------------------------------
 const createNoticeSchema = Joi.object({
   title: Joi.string()
     .min(validation.minTitle)
@@ -60,9 +62,9 @@ const createNoticeSchema = Joi.object({
   name: Joi.string().min(validation.minName).max(validation.maxName).required(),
   category: Joi.string()
     .valid(
-      validation.categoryValues.sell,
-      validation.categoryValues.forFree,
-      validation.categoryValues.lostFound
+      validation.categoryValues.SELL,
+      validation.categoryValues.FOR_FREE,
+      validation.categoryValues.LOST_FOUND
     )
     .required(),
   breed: Joi.string()
@@ -70,7 +72,7 @@ const createNoticeSchema = Joi.object({
     .max(validation.maxBreed)
     .required(),
   sex: Joi.string()
-    .valid(validation.sexValues.male, validation.sexValues.female)
+    .valid(validation.sexValues.MALE, validation.sexValues.FEMALE)
     .required(),
   location: Joi.string()
     .min(validation.minLocation)
@@ -85,6 +87,6 @@ const createNoticeSchema = Joi.object({
 
 const schemas = { createNoticeSchema };
 
-const Notice = model('Notice', NoticeSchema);
+const Notice = model('Notice', noticeSchema);
 
 module.exports = { Notice, schemas };

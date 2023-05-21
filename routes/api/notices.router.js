@@ -26,11 +26,7 @@ router.post(
   controllers.Notice.createNotice
 );
 
-router.delete(
-  '/:notId',
-  Authorization.baseAuth,
-  controllers.Notice.removeNotice
-);
+router.delete('/:id', Authorization.baseAuth, controllers.Notice.removeNotice);
 
 router.patch(
   '/:notId/favourite',

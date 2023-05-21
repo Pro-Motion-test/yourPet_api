@@ -27,16 +27,6 @@ class Notices extends Provider {
       { $project: { owner: 0, likedByUsers: 0 } },
     ]);
   }
-  async getTotalPages({ limit, category, search }) {
-    return Math.ceil(
-      (
-        await this.model.find({
-          category,
-          title: { $regex: search, $options: 'i' },
-        })
-      ).length / limit
-    );
-  }
   async getOneNotice({ noticeId }) {
     const { _id } = await models.User.findById('6469b5679228478140b035e8');
 
@@ -52,20 +42,45 @@ class Notices extends Provider {
           },
         },
       },
-      { $project: { owner: 0, likedByUsers: 0 } },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'owner',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: '$user',
+      },
+      {
+        $project: {
+          title: 1,
+          name: 1,
+          category: 1,
+          breed: 1,
+          sex: 1,
+          location: 1,
+          date: 1,
+          imgUrl: 1,
+          price: 1,
+          comments: 1,
+          isOwner: 1,
+          isLiked: 1,
+          'user.phone': 1,
+          'user.email': 1,
+        },
+      },
     ]);
   }
   async createNew(data) {
     return await this.model.create(data);
   }
-  async deleteNotice(notId) {
-    return await this.model.findByIdAndDelete(notId);
+  async deleteNotice(id) {
+    return await this.model.findByIdAndDelete(id);
   }
   async getMyNotices({ owner, skip, limit }) {
     return await this.model.find({ owner }).skip(skip).limit(limit);
-  }
-  async getTotalPagesForMyNotices({ limit, owner }) {
-    return Math.ceil((await this.model.find({ owner })).length / limit);
   }
   async like({ notId, userId }) {
     return await this.model.findByIdAndUpdate(
@@ -89,6 +104,19 @@ class Notices extends Provider {
       .find({ likedByUsers: userId })
       .skip(skip)
       .limit(limit);
+  }
+  async getTotalPages({ limit, category, search }) {
+    return Math.ceil(
+      (
+        await this.model.find({
+          category,
+          title: { $regex: search, $options: 'i' },
+        })
+      ).length / limit
+    );
+  }
+  async getTotalPagesForMyNotices({ limit, owner }) {
+    return Math.ceil((await this.model.find({ owner })).length / limit);
   }
   async getTotalPagesForLikedNotices({ limit, userId }) {
     return Math.ceil(
