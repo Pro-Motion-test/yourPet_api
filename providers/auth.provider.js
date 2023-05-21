@@ -14,10 +14,12 @@ class Auth extends Provider {
   }
   async getUser(searchParams) {
     const user = await this.model.findOne(searchParams);
+
     return user;
   }
   async createUser(userData) {
     const newUser = await this.model.create(userData);
+
     return newUser;
   }
   async updateUser(id, userData) {

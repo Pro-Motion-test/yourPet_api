@@ -1,42 +1,56 @@
 const { Schema, model } = require('mongoose');
 const Joi = require('joi');
-
 const PetSchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
-    },
-    breed: {
-      type: String,
-      required: true,
+      minlength: 2,
+      maxlength: 16,
+      required: [true, 'Name is required'],
     },
     date: {
       type: Date,
-      required: true,
+      required: [true, 'Date is required'],
     },
-    imgUrl: {
+    breed: {
+      type: String,
+      minlength: 2,
+      maxlength: 16,
+      required: [true, 'Breed is required'],
+    },
+    petURL: {
       type: String,
       required: true,
     },
-    comments: String,
+    comments: {
+      type: String,
+      minlength: 8,
+      maxlength: 120,
+      default: '',
+    },
     owner: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'user',
+      required: true,
     },
   },
   { versionKey: false }
 );
 
-const createPetSchema = Joi.object({
+const addPetSchema = Joi.object({
   name: Joi.string().min(2).max(16).required(),
-  breed: Joi.string().min(2).max(16).required(),
   date: Joi.date().less('now').required(),
+  breed: Joi.string().alphanum().min(2).max(16).required(),
   comments: Joi.string().min(8).max(120),
 });
 
-const schemas = { createPetSchema };
+const schemas = {
+  addPetSchema,
+};
 
 const Pet = model('Pet', PetSchema);
 
-module.exports = { Pet, schemas };
+module.exports = {
+  Pet,
+  schemas,
+};

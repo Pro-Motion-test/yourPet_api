@@ -6,7 +6,7 @@ const swaggerDocument = require('./swagger.json');
 
 const app = express();
 
-const { authRouter, noticesRouter } = require('./routes');
+const { authRouter, noticesRouter, petsRouter } = require('./routes');
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
@@ -18,8 +18,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // ROUTER MIDDLEWARE
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/notices', noticesRouter);
-// app.use("/api/v1/pet",petRouter);
-//
+app.use('/api/v1/pets', petsRouter);
+
 app.use((req, res) => {
   res.status(404).json({
     status: 'Failed',
@@ -29,7 +29,7 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  console.log(err.statusCode);
+  console.log('statusCode', err);
   res.status(err.statusCode || 500).json({
     status: 'Failed',
     code: err.statusCode || 500,
