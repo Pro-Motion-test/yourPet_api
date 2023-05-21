@@ -17,7 +17,7 @@ router.get(
   controllers.Notice.getMy
 );
 
-router.get('/:notId', controllers.Notice.getById);
+router.get('/:id', controllers.Notice.getById);
 
 router.post(
   '/',

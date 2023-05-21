@@ -1,18 +1,31 @@
 const { Provider } = require('./super');
+const { models } = require('../models');
+const mongoose = require('mongoose');
 
 class Notices extends Provider {
   constructor(modelName = 'Notice') {
     super(modelName);
   }
   async getAllNotices({ skip, limit, category, search }) {
-    return await this.model.find(
-      { category, title: { $regex: search, $options: 'i' } },
-      '',
+    const { _id } = await models.User.findById('6469b5679228478140b035e8');
+
+    return await this.model.aggregate([
+      { $match: { category, title: { $regex: search, $options: 'i' } } },
+      { $project: { name: 0, breed: 0, comments: 0, price: 0 } },
+      { $skip: skip },
+      { $limit: limit },
       {
-        skip,
-        limit,
-      }
-    );
+        $addFields: {
+          isOwner: {
+            $cond: [{ $eq: ['$owner', _id] }, true, false],
+          },
+          isLiked: {
+            $cond: [{ $in: [_id, '$likedByUsers'] }, true, false],
+          },
+        },
+      },
+      { $project: { owner: 0, likedByUsers: 0 } },
+    ]);
   }
   async getTotalPages({ limit, category, search }) {
     return Math.ceil(
@@ -24,8 +37,23 @@ class Notices extends Provider {
       ).length / limit
     );
   }
-  async getOneNotice(notId) {
-    return await this.model.findById(notId);
+  async getOneNotice({ noticeId }) {
+    const { _id } = await models.User.findById('6469b5679228478140b035e8');
+
+    return await this.model.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(noticeId) } },
+      {
+        $addFields: {
+          isOwner: {
+            $cond: [{ $eq: ['$owner', _id] }, true, false],
+          },
+          isLiked: {
+            $cond: [{ $in: [_id, '$likedByUsers'] }, true, false],
+          },
+        },
+      },
+      { $project: { owner: 0, likedByUsers: 0 } },
+    ]);
   }
   async createNew(data) {
     return await this.model.create(data);

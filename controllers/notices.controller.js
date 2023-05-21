@@ -37,9 +37,9 @@ class Notice {
   }
   static async getById(req, res, next) {
     try {
-      const { notId } = req.params;
+      const { id: noticeId } = req.params;
 
-      const notice = await providers.Notices.getOneNotice(notId);
+      const notice = await providers.Notices.getOneNotice({ noticeId });
 
       if (!notice) {
         throw HttpException.NOT_FOUND('Cannot find notice with this id');

@@ -30,7 +30,7 @@ const NoticeSchema = new Schema(
       type: String,
       required: true,
     },
-    date: {
+    birthday: {
       type: Date,
       required: true,
     },
@@ -76,7 +76,7 @@ const createNoticeSchema = Joi.object({
     .min(validation.minLocation)
     .max(validation.maxLocation)
     .required(),
-  date: Joi.date().less('now').required(),
+  birthday: Joi.date().less('now').required(),
   price: Joi.number().positive(),
   comments: Joi.string()
     .min(validation.minComments)

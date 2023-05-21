@@ -1,0 +1,273 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.0.0",
+    "title": "Your pet API"
+  },
+  "consumes": ["application/json", "multipart/form-data"],
+  "produces": ["application/json"],
+  "servers": [{ "url": "http://localhost:3000/api/v1" }],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
+    },
+    {
+      "name": "Notice",
+      "description": "Notice's endpoints"
+    },
+    {
+      "name": "Pet",
+      "description": "Pet's endpoints"
+    }
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User registration",
+        "parameters": [
+          {
+            "in": "path || query",
+            "name": "name",
+            "required": true,
+            "description": "desc"
+          }
+        ],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/notices": {
+      "get": {
+        "tags": ["Notice"],
+        "summary": "Get all notices by category",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "search",
+            "required": true,
+            "description": "Search by title"
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "required": true,
+            "description": "Notices's category"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "description": "Page"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": true,
+            "description": "Limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllNoticesResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notices/:id": {
+      "get": {
+        "tags": ["Notice"],
+        "summary": "Get one notice by id",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetOneNoticeResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        }
+      },
+      "RegistrationResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "User's email",
+              "format": "email"
+            },
+            "userId": {
+              "type": "number",
+              "description": "User's id",
+              "example": "32143232436545474"
+            }
+          }
+        },
+        "example": [
+          { "email": "1@gmail.com", "userId": "1" },
+          { "email": "2@gmail.com", "userId": "2" }
+        ]
+      },
+      "GetAllNoticesResponse": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "number"
+          },
+          "limit": {
+            "type": "number"
+          },
+          "totalPages": {
+            "type": "number"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "sex": {
+                  "type": "string"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "birthday": {
+                  "type": "date"
+                },
+                "imgUrl": {
+                  "type": "string"
+                },
+                "isOwner": {
+                  "type": "boolean"
+                },
+                "isLiked": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetOneNoticeResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "breed": {
+            "type": "string"
+          },
+          "sex": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "birthday": {
+            "type": "date"
+          },
+          "imgUrl": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "comments": {
+            "type": "string"
+          },
+          "isOwner": {
+            "type": "boolean"
+          },
+          "isLiked": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
