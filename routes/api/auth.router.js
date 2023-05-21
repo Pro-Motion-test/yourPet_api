@@ -15,7 +15,8 @@ router.post('/login', controllers.Auth.login);
 // ---LOGOUT---
 router.post(
   '/logout',
-  middlewares.Authorization.baseAuth,
+  // middlewares.Authorization.baseAuth,
+  middlewares.Authorization.checkTokenForPublicRoute,
   controllers.Auth.logout
 );
 
