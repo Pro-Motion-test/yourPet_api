@@ -9,9 +9,7 @@ class Pets extends Provider {
     return await this.model.find({ owner }).skip(skip).limit(limit);
   }
   async createPet(data) {
-    const newPet = await this.model.create(data);
-
-    return newPet;
+    return await this.model.create(data);
   }
   async removePet(petId) {
     const result = await this.model.findByIdAndRemove(petId);
