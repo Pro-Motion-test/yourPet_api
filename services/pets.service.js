@@ -19,7 +19,7 @@ class Pets {
   async deletePet(petId) {
     const result = await providers.Pets.removePet(petId);
     if (!result) {
-      throw HttpException.NOT_FOUND();
+      throw HttpException.NOT_FOUND('Cannot find pet with this id');
     }
     return result;
   }
