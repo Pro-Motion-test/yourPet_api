@@ -120,11 +120,33 @@ class Auth {
     return dataToSend;
   }
   async current(id) {
-  const { _id, email } = await providers.Auth.getUserById(id);
-  const dataToSend = { _id, email };
-  return dataToSend;
+    const { _id, email } = await providers.Auth.getUserById(id);
+    const dataToSend = { _id, email };
+    return dataToSend;
   }
-  async refreshing({ refreshToken }) {}
+  async updateData(id, dataToUpdate) {
+    const { _id, email } = await providers.Auth.updateUser(id, dataToUpdate);
 
+    const dataToSend = {
+      _id,
+      email,
+      avatarURL,
+      newUser,
+      name,
+      birthday,
+      phone,
+      city,
+    };
+    return dataToSend;
+  }
+  async refreshing(userData) {
+    const accessToken = await AuthHelper.createAccessToken({ ...userData });
+    const refreshToken = await AuthHelper.createAccessToken({ ...userData });
+    await providers.Auth.updateUser(userData.id, {
+      accessToken,
+      refreshToken,
+    });
+    return { accessToken, refreshToken };
+  }
 }
 module.exports = new Auth();
