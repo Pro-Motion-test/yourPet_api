@@ -21,12 +21,16 @@ router.post(
 );
 
 // ---CURRENT---
-router.get('/current', middlewares.Authorization.baseAuth, controllers.Auth.current);
+router.get(
+  '/current',
+  middlewares.Authorization.baseAuth,
+  controllers.Auth.current
+);
 
 // ---REFRESHING---
 router.post('/refresh', controllers.Auth.refreshing);
 
 // ---VERIFICATION---
-router.post('/verify');
+router.post('/verify', middlewares.Authorization.accessTokenAuth);
 
 module.exports = router;

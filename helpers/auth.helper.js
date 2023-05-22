@@ -11,6 +11,8 @@ class Auth {
   #refreshTokenLifetime;
   constructor({
     TOKEN_SECRET,
+    ACCESS_SECRET,
+    REFRESH_SECRET,
     tokenLifetime,
     accessTokenLifetime,
     refreshTokenLifetime,
@@ -20,7 +22,7 @@ class Auth {
     this.#REFRESH_SECRET = REFRESH_SECRET;
     this.#tokenLifetime = tokenLifetime || '2d';
     this.#refreshTokenLifetime = refreshTokenLifetime || '61d';
-    this.#accessTokenLifetime = accessTokenLifetime || '10m';
+    this.#accessTokenLifetime = accessTokenLifetime || '1m';
   }
   async verifyToken({ tokenType = 'token', token }) {
     let SECRET_BY_OPTION = '';
@@ -127,6 +129,7 @@ class Auth {
     }
     return token;
   }
+
   async validateToken({ tokenType, token }) {
     try {
       const data = await this.verifyToken({ tokenType, token });
@@ -137,6 +140,11 @@ class Auth {
 
       return data;
     } catch (e) {
+      if (e.message === 'jwt expired') {
+        throw HttpException.UNAUTHORIZED(
+          'EXPIRED! Access token have been expired! Please, use refresh token to continue.'
+        );
+      }
       console.error(e);
       throw HttpException.UNAUTHORIZED();
     }
