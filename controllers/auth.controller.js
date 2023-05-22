@@ -45,8 +45,15 @@ class Auth {
   }
   static async current(req, res, next) {
     try {
+      const currentUser = await services.Auth.current(req.user.id);
       //  --RESPONSE--
-      res.status(200).json();
+      res.status(200).json({
+        response: {
+          ...responseTemplates.SUCCESS_GET_RESPONSE,
+          message: 'Current user successfully found',
+        },
+        body: currentUser,
+      });
     } catch (e) {
       next(e);
     }

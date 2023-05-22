@@ -114,16 +114,17 @@ class Auth {
     return dataToSend;
   }
   async logout(id) {
-    console.log(id);
     const body = { token: null, accessToken: null, refreshToken: null };
     const { _id, email } = await providers.Auth.updateUser(id, body);
     const dataToSend = { _id, email };
     return dataToSend;
   }
-  async current({ id }) {
-    const user = await providers.Auth.getUserById(id);
-    return user;
+  async current(id) {
+  const { _id, email } = await providers.Auth.getUserById(id);
+  const dataToSend = { _id, email };
+  return dataToSend;
   }
   async refreshing({ refreshToken }) {}
+
 }
 module.exports = new Auth();
