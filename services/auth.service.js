@@ -115,13 +115,13 @@ class Auth {
   }
   async logout(id) {
     const body = { token: null, accessToken: null, refreshToken: null };
-    const { _id, email } = await providers.Auth.updateUser(id, body);
-    const dataToSend = { _id, email };
+    const { email } = await providers.Auth.updateUser(id, body);
+    const dataToSend = { email };
     return dataToSend;
   }
   async current(id) {
-  const { _id, email } = await providers.Auth.getUserById(id);
-  const dataToSend = { _id, email };
+  const { email } = await providers.Auth.getUserById(id);
+  const dataToSend = { email };
   return dataToSend;
   }
   async refreshing({ refreshToken }) {}

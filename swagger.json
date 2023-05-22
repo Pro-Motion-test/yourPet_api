@@ -63,19 +63,6 @@
       "post": {
         "tags": ["Auth"],
         "summary": "User login",
-         "parameters": [{
-            "in": "string",
-            "name": "email",
-            "required": true,
-            "description": "The user email for login" 
-         },
-         {
-            "in": "string",
-            "name": "password",
-            "required": true,
-            "description": "The password for login" 
-         }
-        ],
         "requestBody": {
           "description": "Login object",
           "required": true,
@@ -111,11 +98,11 @@
       "post": {
         "tags": ["Auth"],
         "summary": "User logout",
-        "parameters": [{
-            "in": "number",
-            "name": "id",
+            "parameters": [{
+            "in": "string",
+            "name": "token",
             "required": true,
-            "description": "The user id for logout"
+            "description": "The user token for logout"
         }],
         "responses": {
           "201": {
@@ -139,10 +126,10 @@
         "tags": ["Auth"],
         "summary": "Get current user",
         "parameters": [{
-            "in": "number",
-            "name": "id",
+            "in": "string",
+            "name": "token",
             "required": true,
-            "description": "The user id for getting user params"
+            "description": "The user token for getting user params"
         }],
         "responses": {
           "200": {
@@ -510,17 +497,29 @@
               "description": "User's email",
               "format": "email"
             },
-            "userId": {
-              "type": "number",
-              "description": "User's id",
-              "example": "32143232436545474"
+            "avatarURL": {
+              "type": "string"
+            },
+             "newUser": {
+              "type": "boolean",
+            "name": {
+              "type": "string"
+            },
+             "birthday": {
+              "type": "string",
+              "format": "date"
+            },
+             "phone": {
+              "type": "string"
+            },
+             "city": {
+              "type": "string"
+            }
             }
           }
         },
-        "example": [
-          { "email": "1@gmail.com", "userId": "1" },
-          { "email": "2@gmail.com", "userId": "2" }
-        ]
+        "example": 
+          { "email": "user@example.com", "avatarURL": "null", "newUser": "true", "birthday": "null", "phone": "string", "city": "string" }
       },
        "LoginRequest": {
         "type": "object",
@@ -548,58 +547,53 @@
               "description": "User's email",
               "format": "email"
             },
-            "userId": {
-              "type": "number",
-              "description": "User's id",
-              "example": "32143232436545474"
+            "avatarURL": {
+              "type": "string"
+            },
+             "newUser": {
+              "type": "boolean",
+            "name": {
+              "type": "string"
+            },
+             "birthday": {
+              "type": "string",
+              "format": "date"
+            },
+             "phone": {
+              "type": "string"
+            },
+             "city": {
+              "type": "string"
+            }
             }
           }
         },
-        "example": [
-          { "email": "1@gmail.com", "userId": "1" }
-        ]
+        "example": 
+          { "email": "user@example.com", "avatarURL": "null", "newUser": "false", "birthday": "null", "phone": "string", "city": "string" }
       },
       "LogoutResponse": {
-        "type": "array",
-        "items": {
           "type": "object",
           "properties": {
             "email": {
               "type": "string",
               "description": "User's email",
               "format": "email"
-            },
-            "userId": {
-              "type": "number",
-              "description": "User's id",
-              "example": "32143232436545474"
             }
-          }
-        },
-        "example": [
-          { "userId": "1", "email": "1@gmail.com" }
-        ]
+          },
+        "example":
+          { "email": "user@example.com" }
       },
       "CurrentResponse": {
-        "type": "array",
-        "items": {
           "type": "object",
           "properties": {
             "email": {
               "type": "string",
               "description": "User's email",
               "format": "email"
-            },
-            "userId": {
-              "type": "number",
-              "description": "User's id",
-              "example": "32143232436545474"
             }
-          }
-        },
-        "example": [
-          { "userId": "1", "email": "1@gmail.com" }
-        ]
+          },
+        "example":
+          { "email": "user@example.com" }
       },
       "GetAllNoticesResponse": {
         "type": "object",
