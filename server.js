@@ -1,7 +1,7 @@
 const db = require('./db/connection');
 const { PORT, BASE_URL } = require('./config');
-const app = require('./app');
 
+const app = require('./app');
 const startServer = async () => {
   const serverErrorMessage = 'Error! Server launch failed. ';
   const databaseErrorMessage = 'Error! Database launch failed.';
