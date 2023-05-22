@@ -63,18 +63,19 @@
       "post": {
         "tags": ["Auth"],
         "summary": "User login",
-         "parameters": [{
+        "parameters": [
+          {
             "in": "string",
             "name": "email",
             "required": true,
-            "description": "The user email for login" 
-         },
-         {
+            "description": "The user email for login"
+          },
+          {
             "in": "string",
             "name": "password",
             "required": true,
-            "description": "The password for login" 
-         }
+            "description": "The password for login"
+          }
         ],
         "requestBody": {
           "description": "Login object",
@@ -111,12 +112,14 @@
       "post": {
         "tags": ["Auth"],
         "summary": "User logout",
-        "parameters": [{
+        "parameters": [
+          {
             "in": "number",
             "name": "id",
             "required": true,
             "description": "The user id for logout"
-        }],
+          }
+        ],
         "responses": {
           "201": {
             "description": "Successful operation",
@@ -138,12 +141,14 @@
       "get": {
         "tags": ["Auth"],
         "summary": "Get current user",
-        "parameters": [{
+        "parameters": [
+          {
             "in": "number",
             "name": "id",
             "required": true,
             "description": "The user id for getting user params"
-        }],
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful request",
@@ -402,8 +407,20 @@
     },
     "/pets": {
       "get": {
-        "tags": ["Pets"],
+        "tags": ["Pet"],
         "summary": "Get all pets",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "description": "Page"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Limit"
+          }
+        ],
         "security": [
           {
             "Bearer": []
@@ -452,7 +469,7 @@
         }
       }
     },
-    "/pets/:petId": {
+    "/pets/:id": {
       "delete": {
         "tags": ["Pet"],
         "summary": "Delete pet by id",
@@ -522,7 +539,7 @@
           { "email": "2@gmail.com", "userId": "2" }
         ]
       },
-       "LoginRequest": {
+      "LoginRequest": {
         "type": "object",
         "required": ["email", "password"],
         "properties": {
@@ -555,9 +572,7 @@
             }
           }
         },
-        "example": [
-          { "email": "1@gmail.com", "userId": "1" }
-        ]
+        "example": [{ "email": "1@gmail.com", "userId": "1" }]
       },
       "LogoutResponse": {
         "type": "array",
@@ -576,9 +591,7 @@
             }
           }
         },
-        "example": [
-          { "userId": "1", "email": "1@gmail.com" }
-        ]
+        "example": [{ "userId": "1", "email": "1@gmail.com" }]
       },
       "CurrentResponse": {
         "type": "array",
@@ -597,9 +610,7 @@
             }
           }
         },
-        "example": [
-          { "userId": "1", "email": "1@gmail.com" }
-        ]
+        "example": [{ "userId": "1", "email": "1@gmail.com" }]
       },
       "GetAllNoticesResponse": {
         "type": "object",
@@ -851,6 +862,9 @@
           "limit": {
             "type": "number"
           },
+          "totalPages": {
+            "type": "number"
+          },
           "data": {
             "type": "array",
             "items": {
@@ -871,9 +885,6 @@
                 },
                 "avatarURL": {
                   "type": "string"
-                },
-                "owner": {
-                  "type": "boolean"
                 }
               }
             }
