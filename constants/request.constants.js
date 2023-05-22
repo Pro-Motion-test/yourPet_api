@@ -21,7 +21,7 @@ const validation = Object.freeze({
 });
 
 const defParams = Object.freeze({
-  limit: 2,
+  limit: 12,
   page: 1,
   category: validation.categoryValues.SELL,
 });

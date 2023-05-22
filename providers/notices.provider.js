@@ -6,8 +6,8 @@ class Notices extends Provider {
   constructor(modelName = 'Notice') {
     super(modelName);
   }
-  async getAllNotices({ skip, limit, category, search }) {
-    const { _id } = await models.User.findById('6469b5679228478140b035e8');
+  async getAllNotices({ skip, limit, category, search, userId }) {
+    const userObjectId = userId ? new mongoose.Types.ObjectId(userId) : null;
 
     return await this.model.aggregate([
       { $match: { category, title: { $regex: search, $options: 'i' } } },
@@ -17,28 +17,28 @@ class Notices extends Provider {
       {
         $addFields: {
           isOwner: {
-            $cond: [{ $eq: ['$owner', _id] }, true, false],
+            $cond: [{ $eq: ['$owner', userObjectId] }, true, false],
           },
-          isLiked: {
-            $cond: [{ $in: [_id, '$likedByUsers'] }, true, false],
+          isFavourite: {
+            $cond: [{ $in: [userObjectId, '$likedByUsers'] }, true, false],
           },
         },
       },
       { $project: { owner: 0, likedByUsers: 0 } },
     ]);
   }
-  async getOneNotice({ noticeId }) {
-    const { _id } = await models.User.findById('6469b5679228478140b035e8');
+  async getOneNotice({ noticeId, userId }) {
+    const userObjectId = userId ? new mongoose.Types.ObjectId(userId) : null;
 
     return await this.model.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(noticeId) } },
       {
         $addFields: {
           isOwner: {
-            $cond: [{ $eq: ['$owner', _id] }, true, false],
+            $cond: [{ $eq: ['$owner', userObjectId] }, true, false],
           },
-          isLiked: {
-            $cond: [{ $in: [_id, '$likedByUsers'] }, true, false],
+          isFavourite: {
+            $cond: [{ $in: [userObjectId, '$likedByUsers'] }, true, false],
           },
         },
       },
@@ -79,31 +79,72 @@ class Notices extends Provider {
   async deleteNotice(id) {
     return await this.model.findByIdAndDelete(id);
   }
-  async getMyNotices({ owner, skip, limit }) {
-    return await this.model.find({ owner }).skip(skip).limit(limit);
+  async getMyNotices({ skip, limit, userId, search }) {
+    const userObjectId = userId ? new mongoose.Types.ObjectId(userId) : null;
+
+    return await this.model.aggregate([
+      {
+        $match: {
+          owner: userObjectId,
+          title: { $regex: search, $options: 'i' },
+        },
+      },
+      {
+        $project: { name: 0, breed: 0, comments: 0, price: 0, owner: 0 },
+      },
+      { $skip: skip },
+      { $limit: limit },
+      {
+        $addFields: {
+          isFavourite: {
+            $cond: [{ $in: [userObjectId, '$likedByUsers'] }, true, false],
+          },
+        },
+      },
+      { $project: { likedByUsers: 0 } },
+    ]);
   }
-  async like({ notId, userId }) {
+  async like({ noticeId, userId }) {
     return await this.model.findByIdAndUpdate(
-      notId,
+      noticeId,
       { $push: { likedByUsers: userId } },
       { new: true }
     );
   }
-  async dislike({ notId, userId }) {
+  async dislike({ noticeId, userId }) {
     return await this.model.findByIdAndUpdate(
-      notId,
+      noticeId,
       { $pull: { likedByUsers: userId } },
       { new: true }
     );
   }
-  async getOneLikedNotice({ notId, userId }) {
-    return await this.model.findOne({ _id: notId, likedByUsers: userId });
+  async getOneLikedNotice({ noticeId, userId }) {
+    return await this.model.findOne({ _id: noticeId, likedByUsers: userId });
   }
-  async getLikedNotices({ skip, limit, userId }) {
-    return await this.model
-      .find({ likedByUsers: userId })
-      .skip(skip)
-      .limit(limit);
+  async getLikedNotices({ skip, limit, userId, search }) {
+    const userObjectId = userId ? new mongoose.Types.ObjectId(userId) : null;
+
+    return await this.model.aggregate([
+      {
+        $match: {
+          likedByUsers: userObjectId,
+          title: { $regex: search, $options: 'i' },
+        },
+      },
+      {
+        $project: { name: 0, breed: 0, comments: 0, price: 0, likedByUsers: 0 },
+      },
+      { $skip: skip },
+      { $limit: limit },
+      {
+        $addFields: {
+          isOwner: {
+            $cond: [{ $eq: ['$owner', userObjectId] }, true, false],
+          },
+        },
+      },
+      { $project: { owner: 0 } },
+    ]);
   }
   async getTotalPages({ limit, category, search }) {
     return Math.ceil(
@@ -115,12 +156,24 @@ class Notices extends Provider {
       ).length / limit
     );
   }
-  async getTotalPagesForMyNotices({ limit, owner }) {
-    return Math.ceil((await this.model.find({ owner })).length / limit);
-  }
-  async getTotalPagesForLikedNotices({ limit, userId }) {
+  async getTotalPagesForMyNotices({ limit, userId, search }) {
     return Math.ceil(
-      (await this.model.find({ likedByUsers: userId })).length / limit
+      (
+        await this.model.find({
+          owner: userId,
+          title: { $regex: search, $options: 'i' },
+        })
+      ).length / limit
+    );
+  }
+  async getTotalPagesForLikedNotices({ limit, userId, search }) {
+    return Math.ceil(
+      (
+        await this.model.find({
+          likedByUsers: userId,
+          title: { $regex: search, $options: 'i' },
+        })
+      ).length / limit
     );
   }
 }

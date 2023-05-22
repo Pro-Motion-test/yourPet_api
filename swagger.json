@@ -109,7 +109,7 @@
           "description": "Notice's object",
           "required": true,
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CreateNoticeRequest"
               }
@@ -124,6 +124,84 @@
           "400": {
             "description": "BAD_REQUEST",
             "content": {}
+          }
+        }
+      }
+    },
+    "/notices/own": {
+      "get": {
+        "tags": ["Notice"],
+        "summary": "Get my notices",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "search",
+            "description": "Search by title"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "description": "Page"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMyNoticesResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notices/favourite": {
+      "get": {
+        "tags": ["Notice"],
+        "summary": "Get favoutite notices",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "search",
+            "description": "Search by title"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "description": "Page"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetFavouriteNoticesResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -179,6 +257,35 @@
           },
           "403": {
             "description": "You cannot delete this notice, because it's not yours!",
+            "content": {}
+          },
+          "404": {
+            "description": "Cannot find notice with this id",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/notices/:id/favourite": {
+      "patch": {
+        "tags": ["Notice"],
+        "summary": "Select to favorites or delete",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Notice's id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
             "content": {}
           },
           "404": {
@@ -271,7 +378,7 @@
                 "isOwner": {
                   "type": "boolean"
                 },
-                "isLiked": {
+                "isFavourite": {
                   "type": "boolean"
                 }
               }
@@ -319,7 +426,7 @@
           "isOwner": {
             "type": "boolean"
           },
-          "isLiked": {
+          "isFavourite": {
             "type": "boolean"
           },
           "user": {
@@ -373,6 +480,100 @@
           },
           "comments": {
             "type": "string"
+          }
+        }
+      },
+      "GetMyNoticesResponse": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "number"
+          },
+          "limit": {
+            "type": "number"
+          },
+          "totalPages": {
+            "type": "number"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "sex": {
+                  "type": "string"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "birthday": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "imgUrl": {
+                  "type": "string"
+                },
+                "isFavourite": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetFavouriteNoticesResponse": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "number"
+          },
+          "limit": {
+            "type": "number"
+          },
+          "totalPages": {
+            "type": "number"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "sex": {
+                  "type": "string"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "birthday": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "imgUrl": {
+                  "type": "string"
+                },
+                "isOwner": {
+                  "type": "boolean"
+                }
+              }
+            }
           }
         }
       }
