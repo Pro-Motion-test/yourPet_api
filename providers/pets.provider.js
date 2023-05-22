@@ -15,15 +15,6 @@ class Pets extends Provider {
     const result = await this.model.findByIdAndRemove(petId);
     return result;
   }
-  async getTotalPages({ limit, owner }) {
-    return Math.ceil(
-      (
-        await this.model.find({
-          owner,
-        })
-      ).length / limit
-    );
-  }
 }
 
 module.exports = new Pets('Pet');
