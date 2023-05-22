@@ -31,7 +31,7 @@ const noticeSchema = new Schema(
       type: String,
       required: true,
     },
-    date: {
+    birthday: {
       type: Date,
       required: true,
     },
@@ -62,9 +62,9 @@ const createNoticeSchema = Joi.object({
   name: Joi.string().min(validation.minName).max(validation.maxName).required(),
   category: Joi.string()
     .valid(
-      validation.categoryValues.sell,
-      validation.categoryValues.forFree,
-      validation.categoryValues.lostFound
+      validation.categoryValues.SELL,
+      validation.categoryValues.FOR_FREE,
+      validation.categoryValues.LOST_FOUND
     )
     .required(),
   breed: Joi.string()
@@ -72,13 +72,13 @@ const createNoticeSchema = Joi.object({
     .max(validation.maxBreed)
     .required(),
   sex: Joi.string()
-    .valid(validation.sexValues.male, validation.sexValues.female)
+    .valid(validation.sexValues.MALE, validation.sexValues.FEMALE)
     .required(),
   location: Joi.string()
     .min(validation.minLocation)
     .max(validation.maxLocation)
     .required(),
-  date: Joi.date().less('now').required(),
+  birthday: Joi.date().less('now').required(),
   price: Joi.number().positive(),
   comments: Joi.string()
     .min(validation.minComments)

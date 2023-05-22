@@ -4,7 +4,6 @@ class Notice {
   constructor() {}
 
   static checkCategory(body) {
-    // try {
     const { category, price } = body;
 
     if (category === 'sell' && !price) {
@@ -18,11 +17,6 @@ class Notice {
         `For for-free-notice or lost-found-notice mustn't be field "price"`
       );
     }
-
-    // return {};
-    // } catch (error) {
-    //   return { error };
-    // }
   }
 }
 

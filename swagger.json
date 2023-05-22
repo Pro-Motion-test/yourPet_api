@@ -1,0 +1,589 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.0.0",
+    "title": "Your pet API"
+  },
+  "consumes": ["application/json", "multipart/form-data"],
+  "produces": ["application/json"],
+  "servers": [{ "url": "http://localhost:3000/api/v1" }],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
+    },
+    {
+      "name": "Notice",
+      "description": "Notice's endpoints"
+    },
+    {
+      "name": "Pet",
+      "description": "Pet's endpoints"
+    }
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User registration",
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/notices": {
+      "get": {
+        "tags": ["Notice"],
+        "summary": "Get all notices by category",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "search",
+            "description": "Search by title"
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "description": "Notices's category"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "description": "Page"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllNoticesResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Notice"],
+        "summary": "Create notice",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "requestBody": {
+          "description": "Notice's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateNoticeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {}
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/notices/own": {
+      "get": {
+        "tags": ["Notice"],
+        "summary": "Get my notices",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "search",
+            "description": "Search by title"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "description": "Page"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMyNoticesResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notices/favourite": {
+      "get": {
+        "tags": ["Notice"],
+        "summary": "Get favoutite notices",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "search",
+            "description": "Search by title"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "description": "Page"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetFavouriteNoticesResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notices/:id": {
+      "get": {
+        "tags": ["Notice"],
+        "summary": "Get one notice by id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Notice's id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetOneNoticeResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cannot find notice with this id",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Notice"],
+        "summary": "Delete notice by id",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Notice's id"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted",
+            "content": {}
+          },
+          "403": {
+            "description": "You cannot delete this notice, because it's not yours!",
+            "content": {}
+          },
+          "404": {
+            "description": "Cannot find notice with this id",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/notices/:id/favourite": {
+      "patch": {
+        "tags": ["Notice"],
+        "summary": "Select to favorites or delete",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Notice's id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {}
+          },
+          "404": {
+            "description": "Cannot find notice with this id",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        }
+      },
+      "RegistrationResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "User's email",
+              "format": "email"
+            },
+            "userId": {
+              "type": "number",
+              "description": "User's id",
+              "example": "32143232436545474"
+            }
+          }
+        },
+        "example": [
+          { "email": "1@gmail.com", "userId": "1" },
+          { "email": "2@gmail.com", "userId": "2" }
+        ]
+      },
+      "GetAllNoticesResponse": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "number"
+          },
+          "limit": {
+            "type": "number"
+          },
+          "totalPages": {
+            "type": "number"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "sex": {
+                  "type": "string"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "birthday": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "imgUrl": {
+                  "type": "string"
+                },
+                "isOwner": {
+                  "type": "boolean"
+                },
+                "isFavourite": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetOneNoticeResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "breed": {
+            "type": "string"
+          },
+          "sex": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "birthday": {
+            "type": "string",
+            "format": "date"
+          },
+          "imgUrl": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "comments": {
+            "type": "string"
+          },
+          "isOwner": {
+            "type": "boolean"
+          },
+          "isFavourite": {
+            "type": "boolean"
+          },
+          "user": {
+            "type": "object",
+            "description": "User contacts info",
+            "properties": {
+              "email": { "type": "string", "format": "email" },
+              "phone": { "type": "string" }
+            }
+          }
+        }
+      },
+      "CreateNoticeRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "category": {
+            "type": "string",
+            "required": true
+          },
+          "breed": {
+            "type": "string",
+            "required": true
+          },
+          "sex": {
+            "type": "string",
+            "required": true
+          },
+          "location": {
+            "type": "string",
+            "required": true
+          },
+          "birthday": {
+            "type": "string",
+            "required": true,
+            "format": "date"
+          },
+          "file": {
+            "type": "file",
+            "required": true
+          },
+          "price": {
+            "type": "number"
+          },
+          "comments": {
+            "type": "string"
+          }
+        }
+      },
+      "GetMyNoticesResponse": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "number"
+          },
+          "limit": {
+            "type": "number"
+          },
+          "totalPages": {
+            "type": "number"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "sex": {
+                  "type": "string"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "birthday": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "imgUrl": {
+                  "type": "string"
+                },
+                "isFavourite": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetFavouriteNoticesResponse": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "number"
+          },
+          "limit": {
+            "type": "number"
+          },
+          "totalPages": {
+            "type": "number"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "sex": {
+                  "type": "string"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "birthday": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "imgUrl": {
+                  "type": "string"
+                },
+                "isOwner": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

@@ -8,7 +8,12 @@ const {
 const { schemas } = require('../../models');
 const router = express.Router();
 
-router.get('/', paginationValidate, controllers.Notice.getAll);
+router.get(
+  '/',
+  Authorization.checkTokenForPublicRoute,
+  paginationValidate,
+  controllers.Notice.getAll
+);
 
 router.get(
   '/own',
@@ -17,7 +22,18 @@ router.get(
   controllers.Notice.getMy
 );
 
-router.get('/:notId', controllers.Notice.getById);
+router.get(
+  '/favourite',
+  Authorization.baseAuth,
+  paginationValidate,
+  controllers.Notice.getFavourite
+);
+
+router.get(
+  '/:id',
+  Authorization.checkTokenForPublicRoute,
+  controllers.Notice.getById
+);
 
 router.post(
   '/',
@@ -26,23 +42,12 @@ router.post(
   controllers.Notice.createNotice
 );
 
-router.delete(
-  '/:notId',
-  Authorization.baseAuth,
-  controllers.Notice.removeNotice
-);
+router.delete('/:id', Authorization.baseAuth, controllers.Notice.removeNotice);
 
 router.patch(
-  '/:notId/favourite',
+  '/:id/favourite',
   Authorization.baseAuth,
   controllers.Notice.changeFavourite
-);
-
-router.get(
-  '/favorite',
-  Authorization.baseAuth,
-  paginationValidate,
-  controllers.Notice.getFavourite
 );
 
 module.exports = router;
