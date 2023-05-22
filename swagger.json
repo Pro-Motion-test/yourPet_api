@@ -294,6 +294,87 @@
           }
         }
       }
+    },
+    "/pets": {
+      "get": {
+        "tags": ["Pets"],
+        "summary": "Get all pets",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllPetsResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Pet"],
+        "summary": "Create pet",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "requestBody": {
+          "description": "Pet's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePetRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created pet",
+            "content": {}
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/pets/:petId": {
+      "delete": {
+        "tags": ["Pet"],
+        "summary": "Delete pet by id",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Pet's id"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Pet deleted successfully",
+            "content": {}
+          },
+          "404": {
+            "description": "Cannot find pet with this id",
+            "content": {}
+          }
+        }
+      }
     }
   },
   "components": {
@@ -574,6 +655,69 @@
                 }
               }
             }
+          }
+        }
+      },
+      "GetAllPetsResponse": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "number"
+          },
+          "limit": {
+            "type": "number"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "birthday": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "breed": {
+                  "type": "string"
+                },
+                "avatarURL": {
+                  "type": "string"
+                },
+                "owner": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
+      "CreatePetRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "birthday": {
+            "type": "string",
+            "required": true,
+            "format": "date"
+          },
+          "breed": {
+            "type": "string",
+            "required": true
+          },
+          "file": {
+            "type": "file",
+            "required": true
+          },
+          "comments": {
+            "type": "string"
           }
         }
       }

@@ -8,21 +8,18 @@ class Pets {
 
   static async getAllPets(req, res, next) {
     try {
-      const { page, limit } = req.query;
+      const { page = 1, limit = 10 } = req.query;
       const { id: owner } = req.user;
       const skip = (page - 1) * limit;
-      const totalPages = await providers.Pets.getTotalPages({
-        owner,
-        limit,
-      });
 
       const pets = await services.Pets.getPets({
         owner,
         skip,
         limit,
       });
+
       //  --RESPONSE--
-      res.json({ page, limit, totalPages, data: pets });
+      res.json({ page, limit, data: pets });
     } catch (e) {
       next(e);
     }
@@ -34,7 +31,7 @@ class Pets {
       await services.Pets.addOnePet({
         ...req.body,
         owner,
-        petURL: 'dddd',
+        avatarURL: 'dddd',
       });
 
       //  --RESPONSE--

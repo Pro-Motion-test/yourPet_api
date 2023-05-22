@@ -17,11 +17,6 @@ router.post(
 // ---DELETE PET---
 router.delete('/:petId', Authorization.baseAuth, controllers.Pets.removePet);
 // ---GET PETS---
-router.get(
-  '/',
-  Authorization.baseAuth,
-  paginationValidate,
-  controllers.Pets.getAllPets
-);
+router.get('/', Authorization.baseAuth, controllers.Pets.getAllPets);
 
 module.exports = router;
