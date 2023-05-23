@@ -531,7 +531,7 @@
           }
         },
         "example": 
-          { "email": "user@example.com", "avatarURL": "null", "newUser": "true", "birthday": "null", "phone": "string", "city": "string" }
+          { "email": "user@example.com", "avatarURL": null, "newUser": true, "birthday": null, "phone": "string", "city": "string" }
       },
       "LoginRequest": {
         "type": "object",
@@ -581,7 +581,7 @@
           }
         },
         "example": 
-          { "email": "user@example.com", "avatarURL": "null", "newUser": "false", "birthday": "null", "phone": "string", "city": "string" } 
+          { "email": "user@example.com", "avatarURL": null, "newUser": false, "birthday": null, "phone": "string", "city": "string" } 
       },
       "LogoutResponse": {
           "type": "object",
