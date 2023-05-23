@@ -126,6 +126,7 @@ class Auth {
   }
   async updateData(id, { body, file }) {
     const { path } = file;
+    console.log(body);
     const { _id, email, title, avatarURL, name, birthday, phone, city } =
       await providers.Auth.updateUser(id, { avatarURL: path, ...body });
     const dataToSend = {

@@ -1,6 +1,7 @@
 const express = require('express');
 const controllers = require('../../controllers');
 const middlewares = require('../../middlewares');
+const { schemas } = require('../../models');
 const router = express.Router();
 // -------------------------------------------------------
 // Base endpoint
@@ -8,9 +9,17 @@ const router = express.Router();
 // -------------------------------------------------------
 // ROUTES
 // ---REGISTRATION---
-router.post('/register', controllers.Auth.register);
+router.post(
+  '/register',
+  middlewares.bodyValidation(schemas.userSchemas.authenticationSchema),
+  controllers.Auth.register
+);
 // ---LOGIN---
-router.post('/login', controllers.Auth.login);
+router.post(
+  '/login',
+  middlewares.bodyValidation(schemas.userSchemas.authenticationSchema),
+  controllers.Auth.login
+);
 
 // ---LOGOUT---
 router.post(
@@ -30,6 +39,8 @@ router.put(
   '/update',
   middlewares.Authorization.accessTokenAuth,
   middlewares.upload.single('file'),
+  middlewares.bodyValidation(schemas.userSchemas.formSchema),
+
   controllers.Auth.updateData
 );
 // ---REFRESHING---
