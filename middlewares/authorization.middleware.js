@@ -19,11 +19,11 @@ class Authorization {
   static async accessTokenAuth(req, res, next) {
     const { headers } = req;
     try {
-      const token = await AuthHelper.getTokenWithHeader(headers);
+      const accessToken = await AuthHelper.getTokenWithHeader(headers);
       //  tokenType could be 'access' or 'refresh' and  'token' by default
       const { id, email } = await AuthHelper.validateToken({
         tokenType: 'access',
-        token,
+        token: accessToken,
       });
       req.user = { id, email };
       return next();
@@ -31,7 +31,19 @@ class Authorization {
       next(e);
     }
   }
-
+  static async checkRefreshToken(req, res, next) {
+    const { refreshToken } = req.body;
+    try {
+      const userData = await AuthHelper.validateToken({
+        tokenType: 'refresh',
+        token: refreshToken,
+      });
+      req.user = { ...userData };
+      next();
+    } catch (e) {
+      next(e);
+    }
+  }
   static async checkTokenForPublicRoute(req, res, next) {
     const { headers } = req;
     try {

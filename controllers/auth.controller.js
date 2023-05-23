@@ -44,8 +44,9 @@ class Auth {
     }
   }
   static async current(req, res, next) {
+    const { user } = req;
     try {
-      const currentUser = await services.Auth.current(req.user.id);
+      const currentUser = await services.Auth.current(user.id);
       //  --RESPONSE--
       res.status(200).json({
         response: {
@@ -59,9 +60,33 @@ class Auth {
     }
   }
   static async refreshing(req, res, next) {
+    const { body } = req;
+
     try {
+      const newTokens = await services.Auth.refreshing(body);
+
       //  --RESPONSE--
-      res.status(201).json();
+      res.status(201).json({
+        responce: {
+          ...responseTemplates.SUCCESS_POST_RESPONSE,
+          message: 'New access and refresh tokens generated',
+        },
+        body: newTokens,
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  static async updateData(req, res, next) {
+    const { body, user } = req;
+    try {
+      const updatedUserData = await services.Auth.updateData(user.id, body);
+      //  --RESPONSE--
+      res.status(200).json({
+        response: { ...responseTemplates.SUCCESS_PUT_RESPONSE },
+        body: updatedUserData,
+      });
     } catch (e) {
       next(e);
     }

@@ -15,20 +15,28 @@ router.post('/login', controllers.Auth.login);
 // ---LOGOUT---
 router.post(
   '/logout',
-  // middlewares.Authorization.baseAuth,
-  middlewares.Authorization.checkTokenForPublicRoute,
+  middlewares.Authorization.accessTokenAuth,
   controllers.Auth.logout
 );
 
 // ---CURRENT---
 router.get(
   '/current',
-  middlewares.Authorization.baseAuth,
+  middlewares.Authorization.accessTokenAuth,
   controllers.Auth.current
 );
-
+// ---UPDATING-USER-DATA---
+router.put(
+  '/update',
+  middlewares.Authorization.accessTokenAuth,
+  controllers.Auth.updateData
+);
 // ---REFRESHING---
-router.post('/refresh', controllers.Auth.refreshing);
+router.post(
+  '/refresh',
+  middlewares.Authorization.checkRefreshToken,
+  controllers.Auth.refreshing
+);
 
 // ---VERIFICATION---
 router.post('/verify', middlewares.Authorization.accessTokenAuth);
