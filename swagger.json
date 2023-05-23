@@ -116,7 +116,7 @@
         "parameters": [
           {
             "in": "string",
-            "name": "token",
+            "name": "access token",
             "required": true,
             "description": "The user token for logout"
           }
@@ -154,7 +154,7 @@
         "parameters": [
           {
             "in": "string",
-            "name": "token",
+            "name": "access token",
             "required": true,
             "description": "The user token for getting user params"
           }
@@ -191,7 +191,7 @@
         "parameters": [
           {
             "in": "string",
-            "name": "token",
+            "name": "access token",
             "required": true,
             "description": "The user token for udate user params"
           }
@@ -221,15 +221,10 @@
       "post": {
         "tags": ["Auth"],
         "summary": "Refresh user's token",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "parameters": [
           {
             "in": "string",
-            "name": "token",
+            "name": "access token",
             "required": true,
             "description": "The user token for udate user params"
           }
@@ -259,15 +254,11 @@
       "post": {
         "tags": ["Auth"],
         "summary": "Verify user's email",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
+
         "parameters": [
           {
             "in": "string",
-            "name": "token",
+            "name": "access token",
             "required": true,
             "description": "The user token for udate user params"
           }
@@ -832,7 +823,7 @@
             "format": "email"
           },
           "userId": {
-            "type": "number",
+            "type": "string",
             "description": "User's id",
             "example": "32143232436545474"
           }
@@ -848,12 +839,81 @@
             "format": "email"
           },
           "userId": {
-            "type": "number",
+            "type": "string",
             "description": "User's id",
             "example": "32143232436545474"
           }
         },
         "example": { "userId": "1", "email": "user@example.com" }
+      },
+      "UpdateRequest": {
+        "type": "object",
+        "required": ["email", "birthday"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "name": {
+            "type": "string"
+          },
+          "birthday": {
+            "type": "string",
+            "format": "date"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "avatarURL": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "User's email",
+              "format": "email"
+            },
+            "avatarURL": {
+              "type": "string"
+            },
+            "newUser": {
+              "type": "boolean",
+              "name": {
+                "type": "string"
+              },
+              "birthday": {
+                "type": "string",
+                "format": "date"
+              },
+              "phone": {
+                "type": "string"
+              },
+              "city": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "example": {
+          "email": "user@example.com",
+
+          "avatarURL": null,
+          "newUser": false,
+          "name": "string",
+          "birthday": "string",
+          "phone": "string",
+          "city": "string"
+        }
       },
       "GetAllNoticesResponse": {
         "type": "object",
