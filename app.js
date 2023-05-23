@@ -6,7 +6,12 @@ const swaggerDocument = require('./swagger.json');
 
 const app = express();
 
-const { authRouter, noticesRouter, petsRouter } = require('./routes');
+const {
+  authRouter,
+  noticesRouter,
+  petsRouter,
+  newsRouter,
+} = require('./routes');
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
@@ -19,6 +24,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/notices', noticesRouter);
 app.use('/api/v1/pets', petsRouter);
+app.use('/api/v1/news', newsRouter);
 
 app.use((req, res) => {
   res.status(404).json({
