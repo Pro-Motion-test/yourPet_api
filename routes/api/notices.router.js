@@ -4,6 +4,7 @@ const {
   Authorization,
   bodyValidation,
   paginationValidate,
+  upload,
 } = require('../../middlewares');
 const { schemas } = require('../../models');
 const router = express.Router();
