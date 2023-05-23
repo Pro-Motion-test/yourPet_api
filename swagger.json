@@ -479,7 +479,28 @@
           }
         }
       }
-    }
+    },
+     "/friends": {
+      "get": {
+      "tags": ["Friend"],
+      "summary": "Get friends list",
+      "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FriendsResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+     }
   },
   "components": {
     "schemas": {
@@ -918,6 +939,39 @@
             "type": "string"
           }
         }
+      },
+      "FriendsResponse": {
+        "type": "object",
+        "properties": {
+            "title": {
+            "type": "string",
+            "required": true
+          },
+            "url": {
+            "type": "string",
+            "required": true
+          },
+            "addressUrl": {
+            "type": "string"
+          },
+            "imageUrl": {
+            "type": "string"
+          },
+            "address": {
+            "type": "string"
+          },
+            "wordDays": {
+            "type": "array"
+          },
+            "phone": {
+            "type": "string"
+          },
+            "email": {
+            "type": "string"
+          }
+        },
+         "example": 
+          { "title": "Friend's name", "url": "http://name.com", "addressUrl": null, "imageUrl": null, "address": null, "wordDays": null, "phone": null, "email": null }
       }
     },
     "securitySchemes": {
