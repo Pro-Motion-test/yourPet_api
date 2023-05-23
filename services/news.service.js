@@ -9,12 +9,13 @@ class News {
       limit,
     });
 
-    // const totalPages = await providers.Pets.getTotalPages({
-    //   news,
+    // const totalPages =
+    // await providers.Pets.getTotalPages({
+    //
     //   limit,
     // });
 
-    return { news };
+    return news;
   }
 }
 

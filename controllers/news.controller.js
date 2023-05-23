@@ -8,7 +8,7 @@ class News {
 
       const skip = (page - 1) * limit;
 
-      const news  = await services.News.getNews({
+      const news = await services.News.getNews({
         skip,
         limit,
         search,
@@ -20,5 +20,4 @@ class News {
     }
   }
 }
-
 module.exports = News;
