@@ -29,6 +29,7 @@ router.get(
 router.put(
   '/update',
   middlewares.Authorization.accessTokenAuth,
+  middlewares.upload.single('file'),
   controllers.Auth.updateData
 );
 // ---REFRESHING---
