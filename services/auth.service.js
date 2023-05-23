@@ -17,10 +17,6 @@ class Auth {
       throw HttpException.INTERNAL_SERVER_ERROR();
     }
 
-    const token = await AuthHelper.createToken({
-      id: createdUser._id,
-      email,
-    });
     const newAccessToken = await AuthHelper.createAccessToken({
       id: createdUser._id,
       email,
@@ -29,7 +25,6 @@ class Auth {
       id: createdUser._id,
       email,
     });
-    createdUser.token = token;
     (createdUser.accessToken = newAccessToken),
       (createdUser.refreshToken = newRefreshToken),
       await createdUser.save();
@@ -47,7 +42,6 @@ class Auth {
     const dataToSend = {
       _id,
       email,
-      token,
       accessToken,
       refreshToken,
       avatarURL,
@@ -71,7 +65,6 @@ class Auth {
       throw HttpException.UNAUTHORIZED('Failed! Invalid email or password ');
     }
 
-    const newToken = await AuthHelper.createToken({ id: user._id, email });
     const newAccessToken = await AuthHelper.createAccessToken({
       id: user._id,
       email,
@@ -81,8 +74,7 @@ class Auth {
       email,
     });
 
-    (user.token = newToken),
-      (user.newUser = false),
+    (user.newUser = false),
       (user.accessToken = newAccessToken),
       (user.refreshToken = newRefreshToken),
       await user.save();
