@@ -4,5 +4,5 @@ class Provider {
     this.model = models[modelName];
   }
 }
-// console.log(Provider.model);
+
 module.exports = { Provider };

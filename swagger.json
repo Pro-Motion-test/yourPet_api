@@ -19,6 +19,10 @@
     {
       "name": "Pet",
       "description": "Pet's endpoints"
+    },
+    {
+      "name": "News",
+      "description": "News endpoints"
     }
   ],
   "paths": {
@@ -483,6 +487,61 @@
           }
         }
       }
+    },
+    "/friends": {
+      "get": {
+        "tags": ["Friend"],
+        "summary": "Get friends list",
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FriendsResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/news": {
+      "get": {
+        "tags": ["News"],
+        "summary": "Get all news",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "search",
+            "description": "Search by title"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "description": "Page"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllNewsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -537,8 +596,8 @@
         "example": {
           "email": "user@example.com",
           "avatarURL": null,
-          "newUser": "true",
-          "birthday": "null",
+          "newUser": true,
+          "birthday": null,
           "phone": "string",
           "city": "string"
         }
@@ -592,9 +651,10 @@
         },
         "example": {
           "email": "user@example.com",
-          "avatarURL": "null",
-          "newUser": "false",
-          "birthday": "null",
+
+          "avatarURL": null,
+          "newUser": false,
+          "birthday": null,
           "phone": "string",
           "city": "string"
         }
@@ -934,13 +994,95 @@
             "type": "string"
           }
         }
-      }
-    },
-    "securitySchemes": {
-      "Bearer": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
+      },
+      "FriendsResponse": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "url": {
+            "type": "string",
+            "required": true
+          },
+          "addressUrl": {
+            "type": "string"
+          },
+          "imageUrl": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "wordDays": {
+            "type": "array"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "title": "Friend's name",
+          "url": "http://name.com",
+          "addressUrl": null,
+          "imageUrl": null,
+          "address": null,
+          "wordDays": null,
+          "phone": null,
+          "email": null
+        },
+        "GetAllNewsResponse": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "number"
+            },
+            "limit": {
+              "type": "number"
+            },
+            "totalPages": {
+              "type": "number"
+            },
+            "data": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "_id": {
+                    "type": "string"
+                  },
+                  "imgUrl": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "securitySchemes": {
+        "Bearer": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
       }
     }
   }
