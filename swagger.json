@@ -19,6 +19,10 @@
     {
       "name": "Pet",
       "description": "Pet's endpoints"
+    },
+    {
+      "name": "News",
+      "description": "News endpoints"
     }
   ],
   "paths": {
@@ -98,12 +102,14 @@
       "post": {
         "tags": ["Auth"],
         "summary": "User logout",
-        "parameters": [{
+        "parameters": [
+          {
             "in": "string",
             "name": "token",
             "required": true,
             "description": "The user token for logout"
-        }],
+          }
+        ],
         "responses": {
           "201": {
             "description": "Successful operation",
@@ -125,12 +131,14 @@
       "get": {
         "tags": ["Auth"],
         "summary": "Get current user",
-        "parameters": [{
+        "parameters": [
+          {
             "in": "string",
             "name": "token",
             "required": true,
             "description": "The user token for getting user params"
-        }],
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful request",
@@ -500,11 +508,45 @@
           }
         }
       }
-     }
+     },
+    "/news": {
+      "get": {
+        "tags": ["News"],
+        "summary": "Get all news",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "search",
+            "description": "Search by title"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "description": "Page"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllNewsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   "components": {
     "schemas": {
-"RegistrationRequest": {
+      "RegistrationRequest": {
         "type": "object",
         "required": ["email", "password"],
         "properties": {
@@ -520,7 +562,7 @@
           }
         }
       },
- "RegistrationResponse": {
+      "RegistrationResponse": {
         "type": "array",
         "items": {
           "type": "object",
@@ -533,26 +575,32 @@
             "avatarURL": {
               "type": "string"
             },
-             "newUser": {
+            "newUser": {
               "type": "boolean",
-            "name": {
-              "type": "string"
-            },
-             "birthday": {
-              "type": "string",
-              "format": "date"
-            },
-             "phone": {
-              "type": "string"
-            },
-             "city": {
-              "type": "string"
-            }
+              "name": {
+                "type": "string"
+              },
+              "birthday": {
+                "type": "string",
+                "format": "date"
+              },
+              "phone": {
+                "type": "string"
+              },
+              "city": {
+                "type": "string"
+              }
             }
           }
         },
-        "example": 
-          { "email": "user@example.com", "avatarURL": null, "newUser": true, "birthday": null, "phone": "string", "city": "string" }
+        "example": {
+          "email": "user@example.com",
+          "avatarURL": null,
+          "newUser": true,
+          "birthday": null,
+          "phone": "string",
+          "city": "string"
+        }
       },
       "LoginRequest": {
         "type": "object",
@@ -583,56 +631,62 @@
             "avatarURL": {
               "type": "string"
             },
-             "newUser": {
+            "newUser": {
               "type": "boolean",
-            "name": {
-              "type": "string"
-            },
-             "birthday": {
-              "type": "string",
-              "format": "date"
-            },
-             "phone": {
-              "type": "string"
-            },
-             "city": {
-              "type": "string"
-            }
+              "name": {
+                "type": "string"
+              },
+              "birthday": {
+                "type": "string",
+                "format": "date"
+              },
+              "phone": {
+                "type": "string"
+              },
+              "city": {
+                "type": "string"
+              }
             }
           }
         },
-        "example": 
-          { "email": "user@example.com", "avatarURL": null, "newUser": false, "birthday": null, "phone": "string", "city": "string" } 
+        "example": {
+          "email": "user@example.com",
+          "avatarURL": null,
+          "newUser": false,
+          "birthday": null,
+          "phone": "string",
+          "city": "string"
+        }
       },
       "LogoutResponse": {
-          "type": "object",
-          "properties": {
-            "email": {
-              "type": "string",
-              "description": "User's email",
-              "format": "email"
-            },
-            "userId": {
-              "type": "number",
-              "description": "User's id",
-              "example": "32143232436545474"
-            }
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
           },
+          "userId": {
+            "type": "number",
+            "description": "User's id",
+            "example": "32143232436545474"
+          }
+        },
         "example": { "userId": "1", "email": "user@example.com" }
       },
       "CurrentResponse": {
-          "type": "object",
-          "properties": {
-            "email": {
-              "type": "string",
-              "description": "User's email",
-              "format": "email"
-            },
-            "userId": {
-              "type": "number",
-              "description": "User's id",
-              "example": "32143232436545474"
-            }
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "userId": {
+            "type": "number",
+            "description": "User's id",
+            "example": "32143232436545474"
+          }
         },
         "example": { "userId": "1", "email": "user@example.com" }
       },
@@ -971,7 +1025,47 @@
           }
         },
          "example": 
-          { "title": "Friend's name", "url": "http://name.com", "addressUrl": null, "imageUrl": null, "address": null, "wordDays": null, "phone": null, "email": null }
+          { "title": "Friend's name", "url": "http://name.com", "addressUrl": null, "imageUrl": null, "address": null, "wordDays": null, "phone": null, "email": null },
+      "GetAllNewsResponse": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "number"
+          },
+          "limit": {
+            "type": "number"
+          },
+          "totalPages": {
+            "type": "number"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "imgUrl": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                },
+                "date": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "url": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "securitySchemes": {
@@ -982,4 +1076,5 @@
       }
     }
   }
+}
 }
