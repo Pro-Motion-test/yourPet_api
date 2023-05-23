@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const { HttpException, AuthHelper } = require('../helpers');
+const { HttpException, AuthHelper, CloudinaryHelper } = require('../helpers');
 const { providers } = require('../providers');
 class Auth {
   constructor() {}
@@ -124,14 +124,16 @@ class Auth {
     const dataToSend = { _id, email };
     return dataToSend;
   }
-  async updateData(id, dataToUpdate) {
-    const { _id, email } = await providers.Auth.updateUser(id, dataToUpdate);
-
+  async updateData(id, { body, file }) {
+    const { path } = file;
+    console.log(body);
+    const { _id, email, title, avatarURL, name, birthday, phone, city } =
+      await providers.Auth.updateUser(id, { avatarURL: path, ...body });
     const dataToSend = {
       _id,
       email,
+      title,
       avatarURL,
-      newUser,
       name,
       birthday,
       phone,
