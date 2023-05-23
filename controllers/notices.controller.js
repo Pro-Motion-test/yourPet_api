@@ -1,3 +1,4 @@
+const { HttpException } = require('../helpers');
 const services = require('../services');
 
 class Notice {
@@ -28,10 +29,14 @@ class Notice {
   }
   static async createNotice(req, res, next) {
     try {
-      const { body } = req;
+      const { body, file } = req;
       const { id: owner } = req.user;
 
-      await services.Notices.createNotice({ body, owner });
+      if (!req.file) {
+        throw HttpException.NOT_FOUND('No file uploaded');
+      }
+
+      await services.Notices.createNotice({ body, owner, imgUrl: file.path });
 
       res.status(201).send();
     } catch (error) {

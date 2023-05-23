@@ -50,14 +50,13 @@ class Notices {
     return notice[0];
   }
 
-  async createNotice({ body, owner }) {
+  async createNotice({ body, owner, imgUrl }) {
     NoticeHelper.checkCategory(body);
 
     await providers.Notices.createNew({
       ...body,
       owner,
-      imgUrl:
-        'https://images.saymedia-content.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:eco%2Cw_1200/MTk2NzY3MjA5ODc0MjY5ODI2/top-10-cutest-cat-photos-of-all-time.jpg',
+      imgUrl,
     });
   }
 
@@ -90,8 +89,6 @@ class Notices {
       gender,
       fromTheDate,
     });
-
-    console.log(notices);
 
     const totalPages = await providers.Notices.getTotalPagesForMyNotices({
       userId,
