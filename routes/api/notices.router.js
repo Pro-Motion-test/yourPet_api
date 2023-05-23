@@ -4,9 +4,18 @@ const {
   Authorization,
   bodyValidation,
   paginationValidate,
+  upload,
 } = require('../../middlewares');
 const { schemas } = require('../../models');
 const router = express.Router();
+
+router.post(
+  '/',
+  Authorization.baseAuth,
+  upload.single('file'),
+  bodyValidation(schemas.noticeSchemas.createNoticeSchema),
+  controllers.Notice.createNotice
+);
 
 router.get(
   '/',
@@ -33,13 +42,6 @@ router.get(
   '/:id',
   Authorization.checkTokenForPublicRoute,
   controllers.Notice.getById
-);
-
-router.post(
-  '/',
-  Authorization.baseAuth,
-  bodyValidation(schemas.noticeSchemas.createNoticeSchema),
-  controllers.Notice.createNotice
 );
 
 router.delete('/:id', Authorization.baseAuth, controllers.Notice.removeNotice);

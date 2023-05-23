@@ -23,6 +23,10 @@
     {
       "name": "News",
       "description": "News endpoints"
+    },
+    {
+      "name": "Friend",
+      "description": "Endpoints about friends"
     }
   ],
   "paths": {
@@ -166,13 +170,23 @@
         "parameters": [
           {
             "in": "query",
+            "name": "category",
+            "description": "Notices's category"
+          },
+          {
+            "in": "query",
             "name": "search",
             "description": "Search by title"
           },
           {
             "in": "query",
-            "name": "category",
-            "description": "Notices's category"
+            "name": "gender",
+            "description": "Filtering by sex"
+          },
+          {
+            "in": "query",
+            "name": "fromTheDate",
+            "description": "Filtering by birthday"
           },
           {
             "in": "query",
@@ -209,7 +223,7 @@
           "description": "Notice's object",
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "$ref": "#/components/schemas/CreateNoticeRequest"
               }
@@ -242,6 +256,16 @@
             "in": "query",
             "name": "search",
             "description": "Search by title"
+          },
+          {
+            "in": "query",
+            "name": "gender",
+            "description": "Filtering by sex"
+          },
+          {
+            "in": "query",
+            "name": "fromTheDate",
+            "description": "Filtering by birthday"
           },
           {
             "in": "query",
@@ -281,6 +305,16 @@
             "in": "query",
             "name": "search",
             "description": "Search by title"
+          },
+          {
+            "in": "query",
+            "name": "gender",
+            "description": "Filtering by sex"
+          },
+          {
+            "in": "query",
+            "name": "fromTheDate",
+            "description": "Filtering by birthday"
           },
           {
             "in": "query",
@@ -440,7 +474,7 @@
           "description": "Pet's object",
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "$ref": "#/components/schemas/CreatePetRequest"
               }
@@ -1076,13 +1110,14 @@
             }
           }
         }
-      },
-      "securitySchemes": {
-        "Bearer": {
-          "type": "http",
-          "scheme": "bearer",
-          "bearerFormat": "JWT"
-        }
+      }
+    },
+
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }

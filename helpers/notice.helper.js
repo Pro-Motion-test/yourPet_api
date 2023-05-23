@@ -18,6 +18,11 @@ class Notice {
       );
     }
   }
+
+  static isDate(value) {
+    const date = new Date(value);
+    return !isNaN(date);
+  }
 }
 
 module.exports = Notice;

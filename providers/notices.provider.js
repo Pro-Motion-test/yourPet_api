@@ -1,16 +1,41 @@
 const { Provider } = require('./super');
 const { models } = require('../models');
 const mongoose = require('mongoose');
+const {
+  requestConstants: { validation },
+} = require('../constants');
+const { NoticeHelper } = require('../helpers');
 
 class Notices extends Provider {
   constructor(modelName = 'Notice') {
     super(modelName);
   }
-  async getAllNotices({ skip, limit, category, search, userId }) {
+  async getAllNotices({
+    skip,
+    limit,
+    category,
+    search,
+    gender,
+    userId,
+    fromTheDate,
+  }) {
     const userObjectId = userId ? new mongoose.Types.ObjectId(userId) : null;
 
     return await this.model.aggregate([
-      { $match: { category, title: { $regex: search, $options: 'i' } } },
+      {
+        $match: {
+          category,
+          title: { $regex: search, $options: 'i' },
+          sex:
+            gender === validation.sexValues.MALE ||
+            gender === validation.sexValues.FEMALE
+              ? gender
+              : { $exists: true },
+          birthday: NoticeHelper.isDate(fromTheDate)
+            ? { $gte: new Date(fromTheDate) }
+            : { $exists: true },
+        },
+      },
       { $project: { name: 0, breed: 0, comments: 0, price: 0 } },
       { $skip: skip },
       { $limit: limit },
@@ -66,7 +91,7 @@ class Notices extends Provider {
           price: 1,
           comments: 1,
           isOwner: 1,
-          isLiked: 1,
+          isFavourite: 1,
           'user.phone': 1,
           'user.email': 1,
         },
@@ -79,7 +104,7 @@ class Notices extends Provider {
   async deleteNotice(id) {
     return await this.model.findByIdAndDelete(id);
   }
-  async getMyNotices({ skip, limit, userId, search }) {
+  async getMyNotices({ skip, limit, userId, search, gender, fromTheDate }) {
     const userObjectId = userId ? new mongoose.Types.ObjectId(userId) : null;
 
     return await this.model.aggregate([
@@ -87,6 +112,14 @@ class Notices extends Provider {
         $match: {
           owner: userObjectId,
           title: { $regex: search, $options: 'i' },
+          sex:
+            gender === validation.sexValues.MALE ||
+            gender === validation.sexValues.FEMALE
+              ? gender
+              : { $exists: true },
+          birthday: NoticeHelper.isDate(fromTheDate)
+            ? { $gte: new Date(fromTheDate) }
+            : { $exists: true },
         },
       },
       {
@@ -121,7 +154,7 @@ class Notices extends Provider {
   async getOneLikedNotice({ noticeId, userId }) {
     return await this.model.findOne({ _id: noticeId, likedByUsers: userId });
   }
-  async getLikedNotices({ skip, limit, userId, search }) {
+  async getLikedNotices({ skip, limit, userId, search, gender, fromTheDate }) {
     const userObjectId = userId ? new mongoose.Types.ObjectId(userId) : null;
 
     return await this.model.aggregate([
@@ -129,6 +162,14 @@ class Notices extends Provider {
         $match: {
           likedByUsers: userObjectId,
           title: { $regex: search, $options: 'i' },
+          sex:
+            gender === validation.sexValues.MALE ||
+            gender === validation.sexValues.FEMALE
+              ? gender
+              : { $exists: true },
+          birthday: NoticeHelper.isDate(fromTheDate)
+            ? { $gte: new Date(fromTheDate) }
+            : { $exists: true },
         },
       },
       {
@@ -146,32 +187,68 @@ class Notices extends Provider {
       { $project: { owner: 0 } },
     ]);
   }
-  async getTotalPages({ limit, category, search }) {
+  async getTotalPages({ limit, category, search, gender, fromTheDate }) {
     return Math.ceil(
       (
         await this.model.find({
           category,
           title: { $regex: search, $options: 'i' },
+          sex:
+            gender === validation.sexValues.MALE ||
+            gender === validation.sexValues.FEMALE
+              ? gender
+              : { $exists: true },
+          birthday: NoticeHelper.isDate(fromTheDate)
+            ? { $gte: new Date(fromTheDate) }
+            : { $exists: true },
         })
       ).length / limit
     );
   }
-  async getTotalPagesForMyNotices({ limit, userId, search }) {
+  async getTotalPagesForMyNotices({
+    limit,
+    userId,
+    search,
+    gender,
+    fromTheDate,
+  }) {
     return Math.ceil(
       (
         await this.model.find({
           owner: userId,
           title: { $regex: search, $options: 'i' },
+          sex:
+            gender === validation.sexValues.MALE ||
+            gender === validation.sexValues.FEMALE
+              ? gender
+              : { $exists: true },
+          birthday: NoticeHelper.isDate(fromTheDate)
+            ? { $gte: new Date(fromTheDate) }
+            : { $exists: true },
         })
       ).length / limit
     );
   }
-  async getTotalPagesForLikedNotices({ limit, userId, search }) {
+  async getTotalPagesForLikedNotices({
+    limit,
+    userId,
+    search,
+    gender,
+    fromTheDate,
+  }) {
     return Math.ceil(
       (
         await this.model.find({
           likedByUsers: userId,
           title: { $regex: search, $options: 'i' },
+          sex:
+            gender === validation.sexValues.MALE ||
+            gender === validation.sexValues.FEMALE
+              ? gender
+              : { $exists: true },
+          birthday: NoticeHelper.isDate(fromTheDate)
+            ? { $gte: new Date(fromTheDate) }
+            : { $exists: true },
         })
       ).length / limit
     );
