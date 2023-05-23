@@ -1,4 +1,4 @@
-const { services } = require('../services');
+const services = require('../services');
 
 class News {
   constructor() {}
@@ -8,13 +8,13 @@ class News {
 
       const skip = (page - 1) * limit;
 
-      const news = await services.News.getNews({
+      const { news, totalPages } = await services.News.getNews({
         skip,
         limit,
         search,
       });
 
-      res.json({ page, limit, data: news });
+      res.json({ page, limit, totalPages, data: news });
     } catch (error) {
       next(error);
     }

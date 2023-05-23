@@ -12,16 +12,14 @@ class News extends Provider {
       .limit(limit);
   }
 
-  // async getTotalPages({ limit, newsId }) {
-  //   const newsObjectId = new mongoose.Types.ObjectId(newsId);
-  //   const totalPages = Math.ceil(
-  //     (
-  //       await this.model.find({
-  //         newsObjectId,
-  //       })
-  //     ).length / limit
-  //   );
-  //   return totalPages;
-  // }
+  async getTotalPages({ limit, search }) {
+    return Math.ceil(
+      (
+        await this.model.find({
+          title: { $regex: search, $options: 'i' },
+        })
+      ).length / limit
+    );
+  }
 }
 module.exports = new News('News');
