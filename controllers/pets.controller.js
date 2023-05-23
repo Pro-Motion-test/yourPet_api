@@ -1,6 +1,6 @@
-const { providers } = require('../providers');
 const { responseTemplates } = require('../constants');
 const services = require('../services');
+const { HttpException } = require('../helpers');
 
 class Pets {
   constructor() {}
@@ -27,11 +27,14 @@ class Pets {
     try {
       const { id: owner } = req.user;
 
+      if (!req.file) {
+        throw HttpException.NOT_FOUND('No file uploaded');
+      }
+
       await services.Pets.addOnePet({
         ...req.body,
         owner,
-        avatarURL:
-          'https://krasivosti.pro/uploads/posts/2021-04/1618053923_50-p-samie-milie-sobachki-sobaki-krasivo-foto-51.jpg',
+        avatarURL: req.file.path,
       });
 
       //  --RESPONSE--

@@ -23,6 +23,10 @@
     {
       "name": "News",
       "description": "News endpoints"
+    },
+    {
+      "name": "Friend",
+      "description": "Endpoints about friends"
     }
   ],
   "paths": {
@@ -219,7 +223,7 @@
           "description": "Notice's object",
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "$ref": "#/components/schemas/CreateNoticeRequest"
               }
@@ -470,7 +474,7 @@
           "description": "Pet's object",
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "$ref": "#/components/schemas/CreatePetRequest"
               }
@@ -1106,13 +1110,14 @@
             }
           }
         }
-      },
-      "securitySchemes": {
-        "Bearer": {
-          "type": "http",
-          "scheme": "bearer",
-          "bearerFormat": "JWT"
-        }
+      }
+    },
+
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }

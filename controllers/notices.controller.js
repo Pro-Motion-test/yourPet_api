@@ -32,7 +32,9 @@ class Notice {
       const { body, file } = req;
       const { id: owner } = req.user;
 
-      if (!req.file) {
+      console.log('controller');
+
+      if (!file) {
         throw HttpException.NOT_FOUND('No file uploaded');
       }
 

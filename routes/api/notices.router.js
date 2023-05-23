@@ -4,31 +4,10 @@ const {
   Authorization,
   bodyValidation,
   paginationValidate,
+  upload,
 } = require('../../middlewares');
 const { schemas } = require('../../models');
 const router = express.Router();
-const cloudinary = require('cloudinary').v2;
-const multer = require('multer');
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
-
-// Настройка Cloudinary
-cloudinary.config({
-  cloud_name: 'dfms27k9p',
-  api_key: '467861895157293',
-  api_secret: '43cCK_Tenfd109w1w8zlgIKeBAo',
-});
-
-// Настройка хранилища Multer для загрузки файлов на Cloudinary
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: 'uploads', // Папка, в которую будут загружаться изображения
-    allowedFormats: ['jpg', 'jpeg', 'png'], // Разрешенные форматы файлов
-  },
-});
-
-// Использование Multer для обработки входящих файлов
-const upload = multer({ storage: storage });
 
 router.post(
   '/',
