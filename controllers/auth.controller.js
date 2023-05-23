@@ -79,9 +79,13 @@ class Auth {
   }
 
   static async updateData(req, res, next) {
-    const { body, user } = req;
+    const { body, user, file } = req;
     try {
-      const updatedUserData = await services.Auth.updateData(user.id, body);
+      const updatedUserData = await services.Auth.updateData(user.id, {
+        body,
+        file,
+      });
+
       //  --RESPONSE--
       res.status(200).json({
         response: { ...responseTemplates.SUCCESS_PUT_RESPONSE },

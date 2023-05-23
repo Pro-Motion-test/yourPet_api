@@ -22,7 +22,7 @@ class Auth {
     this.#REFRESH_SECRET = REFRESH_SECRET;
     this.#tokenLifetime = tokenLifetime || '2d';
     this.#refreshTokenLifetime = refreshTokenLifetime || '61d';
-    this.#accessTokenLifetime = accessTokenLifetime || '15m';
+    this.#accessTokenLifetime = accessTokenLifetime || '20m';
   }
   async verifyToken({ tokenType = 'token', token }) {
     let SECRET_BY_OPTION = '';

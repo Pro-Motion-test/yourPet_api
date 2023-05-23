@@ -488,11 +488,11 @@
         }
       }
     },
-     "/friends": {
+    "/friends": {
       "get": {
-      "tags": ["Friend"],
-      "summary": "Get friends list",
-      "responses": {
+        "tags": ["Friend"],
+        "summary": "Get friends list",
+        "responses": {
           "200": {
             "description": "Successful request",
             "content": {
@@ -508,7 +508,7 @@
           }
         }
       }
-     },
+    },
     "/news": {
       "get": {
         "tags": ["News"],
@@ -651,6 +651,7 @@
         },
         "example": {
           "email": "user@example.com",
+
           "avatarURL": null,
           "newUser": false,
           "birthday": null,
@@ -997,84 +998,92 @@
       "FriendsResponse": {
         "type": "object",
         "properties": {
-            "title": {
+          "title": {
             "type": "string",
             "required": true
           },
-            "url": {
+          "url": {
             "type": "string",
             "required": true
           },
-            "addressUrl": {
+          "addressUrl": {
             "type": "string"
           },
-            "imageUrl": {
+          "imageUrl": {
             "type": "string"
           },
-            "address": {
+          "address": {
             "type": "string"
           },
-            "wordDays": {
+          "wordDays": {
             "type": "array"
           },
-            "phone": {
+          "phone": {
             "type": "string"
           },
-            "email": {
+          "email": {
             "type": "string"
           }
         },
-         "example": 
-          { "title": "Friend's name", "url": "http://name.com", "addressUrl": null, "imageUrl": null, "address": null, "wordDays": null, "phone": null, "email": null },
-      "GetAllNewsResponse": {
-        "type": "object",
-        "properties": {
-          "page": {
-            "type": "number"
-          },
-          "limit": {
-            "type": "number"
-          },
-          "totalPages": {
-            "type": "number"
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "_id": {
-                  "type": "string"
-                },
-                "imgUrl": {
-                  "type": "string"
-                },
-                "title": {
-                  "type": "string"
-                },
-                "text": {
-                  "type": "string"
-                },
-                "date": {
-                  "type": "string",
-                  "format": "date"
-                },
-                "url": {
-                  "type": "string"
+        "example": {
+          "title": "Friend's name",
+          "url": "http://name.com",
+          "addressUrl": null,
+          "imageUrl": null,
+          "address": null,
+          "wordDays": null,
+          "phone": null,
+          "email": null
+        },
+        "GetAllNewsResponse": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "number"
+            },
+            "limit": {
+              "type": "number"
+            },
+            "totalPages": {
+              "type": "number"
+            },
+            "data": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "_id": {
+                    "type": "string"
+                  },
+                  "imgUrl": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
                 }
               }
             }
           }
         }
-      }
-    },
-    "securitySchemes": {
-      "Bearer": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
+      },
+      "securitySchemes": {
+        "Bearer": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
       }
     }
   }
-}
 }
