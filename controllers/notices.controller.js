@@ -1,38 +1,15 @@
-const { providers } = require('../providers');
-const { HttpException, NoticeHelper } = require('../helpers');
-const {
-  requestConstants: { defParams },
-} = require('../constants');
+const services = require('../services');
 
 class Notice {
   constructor() {}
   static async getAll(req, res, next) {
     try {
-      const {
-        search = '',
-        category = defParams.category,
-        page,
-        limit,
-      } = req.query;
+      const { query } = req;
       const { id: userId } = req.user;
 
-      const skip = (page - 1) * limit;
+      const response = await services.Notices.getAll({ query, userId });
 
-      const notices = await providers.Notices.getAllNotices({
-        skip,
-        limit,
-        category,
-        search,
-        userId,
-      });
-
-      const totalPages = await providers.Notices.getTotalPages({
-        limit,
-        category,
-        search,
-      });
-
-      res.json({ page, limit, totalPages, data: notices });
+      res.json(response);
     } catch (error) {
       next(error);
     }
@@ -42,29 +19,21 @@ class Notice {
       const { id: noticeId } = req.params;
       const { id: userId } = req.user;
 
-      const notice = await providers.Notices.getOneNotice({ noticeId, userId });
+      const response = await services.Notices.getById({ noticeId, userId });
 
-      if (notice.length === 0) {
-        throw HttpException.NOT_FOUND('Cannot find notice with this id');
-      }
-
-      res.json(...notice);
+      res.send(response);
     } catch (error) {
       next(error);
     }
   }
   static async createNotice(req, res, next) {
     try {
-      NoticeHelper.checkCategory(req.body);
+      const { body } = req;
+      const { id: owner } = req.user;
 
-      await providers.Notices.createNew({
-        ...req.body,
-        owner: req.user.id,
-        imgUrl:
-          'https://images.saymedia-content.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:eco%2Cw_1200/MTk2NzY3MjA5ODc0MjY5ODI2/top-10-cutest-cat-photos-of-all-time.jpg',
-      });
+      await services.Notices.createNotice({ body, owner });
 
-      res.status(201).json({ message: 'Created' });
+      res.status(201).send();
     } catch (error) {
       next(error);
     }
@@ -74,21 +43,7 @@ class Notice {
       const { id: noticeId } = req.params;
       const { id: userId } = req.user;
 
-      const notice = await providers.Notices.getOneNotice({ noticeId, userId });
-
-      console.log(notice);
-
-      if (notice.length === 0) {
-        throw HttpException.NOT_FOUND('Cannot find notice with this id');
-      }
-
-      if (!notice[0].isOwner) {
-        throw HttpException.FORBIDDEN(
-          `You cannot delete this notice, because it's not yours!`
-        );
-      }
-
-      await providers.Notices.deleteNotice(noticeId);
+      await services.Notices.removeNotice({ noticeId, userId });
 
       res.status(204).send();
     } catch (error) {
@@ -97,24 +52,12 @@ class Notice {
   }
   static async getMy(req, res, next) {
     try {
-      const { page, limit, search = '' } = req.query;
+      const { query } = req;
       const { id: userId } = req.user;
-      const skip = (page - 1) * limit;
 
-      const totalPages = await providers.Notices.getTotalPagesForMyNotices({
-        userId,
-        limit,
-        search,
-      });
+      const response = await services.Notices.getMy({ query, userId });
 
-      const notices = await providers.Notices.getMyNotices({
-        userId,
-        skip,
-        limit,
-        search,
-      });
-
-      res.json({ page, limit, totalPages, data: notices });
+      res.json(response);
     } catch (error) {
       next(error);
     }
@@ -124,24 +67,9 @@ class Notice {
       const { id: noticeId } = req.params;
       const { id: userId } = req.user;
 
-      const notice = await providers.Notices.getOneNotice({ noticeId, userId });
+      await services.Notices.changeFavourite({ noticeId, userId });
 
-      if (notice.length === 0) {
-        throw HttpException.NOT_FOUND('Cannot find notice with this id');
-      }
-
-      const isLiked = await providers.Notices.getOneLikedNotice({
-        noticeId,
-        userId,
-      });
-
-      if (isLiked) {
-        await providers.Notices.dislike({ noticeId, userId });
-      } else {
-        await providers.Notices.like({ noticeId, userId });
-      }
-
-      res.json({ message: 'Ok' });
+      res.send();
     } catch (error) {
       next(error);
     }
@@ -149,24 +77,11 @@ class Notice {
   static async getFavourite(req, res, next) {
     try {
       const { id: userId } = req.user;
-      const { page, limit, search = '' } = req.query;
+      const { query } = req;
 
-      const skip = (page - 1) * limit;
+      const response = await services.Notices.getFavourite({ query, userId });
 
-      const totalPages = await providers.Notices.getTotalPagesForLikedNotices({
-        limit,
-        userId,
-        search,
-      });
-
-      const likedNotices = await providers.Notices.getLikedNotices({
-        skip,
-        limit,
-        userId,
-        search,
-      });
-
-      res.json({ page, limit, totalPages, data: likedNotices });
+      res.json(response);
     } catch (error) {
       next(error);
     }

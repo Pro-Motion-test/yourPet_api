@@ -176,13 +176,23 @@
         "parameters": [
           {
             "in": "query",
+            "name": "category",
+            "description": "Notices's category"
+          },
+          {
+            "in": "query",
             "name": "search",
             "description": "Search by title"
           },
           {
             "in": "query",
-            "name": "category",
-            "description": "Notices's category"
+            "name": "gender",
+            "description": "Filtering by sex"
+          },
+          {
+            "in": "query",
+            "name": "fromTheDate",
+            "description": "Filtering by birthday"
           },
           {
             "in": "query",
@@ -255,6 +265,16 @@
           },
           {
             "in": "query",
+            "name": "gender",
+            "description": "Filtering by sex"
+          },
+          {
+            "in": "query",
+            "name": "fromTheDate",
+            "description": "Filtering by birthday"
+          },
+          {
+            "in": "query",
             "name": "page",
             "description": "Page"
           },
@@ -291,6 +311,16 @@
             "in": "query",
             "name": "search",
             "description": "Search by title"
+          },
+          {
+            "in": "query",
+            "name": "gender",
+            "description": "Filtering by sex"
+          },
+          {
+            "in": "query",
+            "name": "fromTheDate",
+            "description": "Filtering by birthday"
           },
           {
             "in": "query",
