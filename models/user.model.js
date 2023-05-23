@@ -26,10 +26,6 @@ const userSchema = new Schema(
       type: Date,
       default: '',
     },
-    token: {
-      type: String,
-      default: null,
-    },
     accessToken: {
       type: String,
       default: null,

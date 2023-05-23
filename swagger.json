@@ -6,7 +6,7 @@
   },
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
-  "servers": [{ "url": "http://localhost:3000/api/v1" }],
+  "servers": [{ "url": "https://your-pet-api.onrender.com/api/v1" }],
   "tags": [
     {
       "name": "Auth",
@@ -118,7 +118,7 @@
             "in": "string",
             "name": "access token",
             "required": true,
-            "description": "The user token for logout"
+            "description": "The user access token for logout"
           }
         ],
         "responses": {
@@ -193,9 +193,20 @@
             "in": "string",
             "name": "access token",
             "required": true,
-            "description": "The user token for udate user params"
+            "description": "The user access token for udate user params"
           }
         ],
+        "requestBody": {
+          "description": "Update object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successfully updated",
@@ -220,15 +231,26 @@
     "/auth/refresh": {
       "post": {
         "tags": ["Auth"],
-        "summary": "Refresh user's token",
+        "summary": "Get new access and refresh tokens for current user",
         "parameters": [
           {
             "in": "string",
-            "name": "access token",
+            "name": "refreshToken",
             "required": true,
-            "description": "The user token for udate user params"
+            "description": "The user refresh token for getting new access & refresh"
           }
         ],
+        "requestBody": {
+          "description": "Refresh user tokens",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": "New access and refresh tokens generated",
@@ -253,19 +275,19 @@
     "/auth/verify": {
       "post": {
         "tags": ["Auth"],
-        "summary": "Verify user's email",
+        "summary": "Verify current user's email",
 
         "parameters": [
           {
-            "in": "string",
-            "name": "access token",
+            "in": "number",
+            "name": "code",
             "required": true,
-            "description": "The user token for udate user params"
+            "description": "The confirmation code that will be sent to the user's email address"
           }
         ],
         "responses": {
-          "200": {
-            "description": "Verification successful",
+          "201": {
+            "description": "Successfully confirmed the user's email address",
             "content": {
               "application/json": {
                 "schema": {
@@ -277,13 +299,11 @@
           "400": {
             "description": "Failed! Bad request, invalid value",
             "content": {}
-          },
-          "401": {
-            "description": "Unauthorized"
           }
         }
       }
     },
+
     "/notices": {
       "get": {
         "tags": ["Notice"],
@@ -713,7 +733,7 @@
           "password": {
             "type": "string",
             "description": "User's password",
-            "example": "qwerty123"
+            "example": "123456aZ"
           }
         }
       },
@@ -731,25 +751,33 @@
               "type": "string"
             },
             "newUser": {
-              "type": "boolean",
-              "name": {
-                "type": "string"
-              },
-              "birthday": {
-                "type": "string",
-                "format": "date"
-              },
-              "phone": {
-                "type": "string"
-              },
-              "city": {
-                "type": "string"
-              }
+              "type": "boolean"
+            },
+            "accessToken": {
+              "type": "string"
+            },
+            "refreshToken": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "birthday": {
+              "type": "string",
+              "format": "date"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
             }
           }
         },
         "example": {
           "email": "user@example.com",
+          "accessToken": "string",
+          "refreshToken": "string",
           "avatarURL": null,
           "newUser": true,
           "birthday": null,
@@ -769,7 +797,7 @@
           "password": {
             "type": "string",
             "description": "User's password",
-            "example": "qwerty123"
+            "example": "123456aZ"
           }
         }
       },
@@ -786,27 +814,34 @@
             "avatarURL": {
               "type": "string"
             },
+            "accessToken": {
+              "type": "string"
+            },
+            "refreshToken": {
+              "type": "string"
+            },
             "newUser": {
-              "type": "boolean",
-              "name": {
-                "type": "string"
-              },
-              "birthday": {
-                "type": "string",
-                "format": "date"
-              },
-              "phone": {
-                "type": "string"
-              },
-              "city": {
-                "type": "string"
-              }
+              "type": "boolean"
+            },
+            "name": {
+              "type": "string"
+            },
+            "birthday": {
+              "type": "string",
+              "format": "date"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
             }
           }
         },
         "example": {
           "email": "user@example.com",
-
+          "accessToken": "string",
+          "refreshToken": "string",
           "avatarURL": null,
           "newUser": false,
           "birthday": null,
@@ -855,6 +890,14 @@
             "description": "User's email",
             "format": "email"
           },
+          "avatarURL": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string",
+            "description": "User's id",
+            "example": "32143232436545474"
+          },
           "name": {
             "type": "string"
           },
@@ -867,53 +910,83 @@
           },
           "city": {
             "type": "string"
-          },
-          "avatarURL": {
-            "type": "string"
-          }
-        }
-      },
-      "UpdateResponse": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "email": {
-              "type": "string",
-              "description": "User's email",
-              "format": "email"
-            },
-            "avatarURL": {
-              "type": "string"
-            },
-            "newUser": {
-              "type": "boolean",
-              "name": {
-                "type": "string"
-              },
-              "birthday": {
-                "type": "string",
-                "format": "date"
-              },
-              "phone": {
-                "type": "string"
-              },
-              "city": {
-                "type": "string"
-              }
-            }
           }
         },
         "example": {
+          "userId": "1",
           "email": "user@example.com",
-
+          "accessToken": "string",
+          "refreshToken": "string",
           "avatarURL": null,
-          "newUser": false,
-          "name": "string",
-          "birthday": "string",
+          "birthday": null,
           "phone": "string",
           "city": "string"
         }
+      },
+      "UpdateResponse": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "avatarURL": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string",
+            "description": "User's id",
+            "example": "32143232436545474"
+          },
+          "name": {
+            "type": "string"
+          },
+          "birthday": {
+            "type": "string",
+            "format": "date"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "userId": "1",
+          "email": "user@example.com",
+          "accessToken": "string",
+          "refreshToken": "string",
+          "avatarURL": null,
+          "birthday": null,
+          "phone": "string",
+          "city": "string"
+        }
+      },
+      "RefreshRequest": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "description": "User's refresh token"
+          }
+        },
+        "example": { "refreshToken": "old user  refresh token..." }
+      },
+      "RefreshResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "User's access token"
+          },
+          "refreshToken": {
+            "type": "string",
+            "description": "User's refresh token"
+          }
+        },
+        "example": { "accessToken": "token...", "refreshToken": "token..." }
       },
       "GetAllNoticesResponse": {
         "type": "object",
