@@ -108,11 +108,16 @@ class Auth {
   async logout(id) {
     const body = { token: null, accessToken: null, refreshToken: null };
     const { _id, email } = await providers.Auth.updateUser(id, body);
+
     const dataToSend = { _id, email };
     return dataToSend;
   }
   async current(id) {
-    const { _id, email } = await providers.Auth.getUserById(id);
+    const { _id, email, accessToken, refreshToken } =
+      await providers.Auth.getUserById(id);
+    if (!accessToken || !refreshToken) {
+      throw HttpException.UNAUTHORIZED();
+    }
     const dataToSend = { _id, email };
     return dataToSend;
   }
