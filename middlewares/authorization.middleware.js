@@ -48,8 +48,6 @@ class Authorization {
     const { headers } = req;
     try {
       if (!headers.Authorization && !headers.authorization) {
-        console.log('sss');
-
         req.user = { isUserLoggedIn: false };
         return next();
       }
@@ -57,7 +55,7 @@ class Authorization {
       const token = await AuthHelper.getTokenWithHeader(headers);
       //  tokenType could be 'access' or 'refresh' and  'token' by default
       const { id, email } = await AuthHelper.verifyToken({
-        tokenType: 'token',
+        tokenType: 'access',
         token,
       });
 
