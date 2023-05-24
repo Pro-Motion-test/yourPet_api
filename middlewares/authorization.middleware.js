@@ -20,7 +20,7 @@ class Authorization {
     const { headers } = req;
     try {
       const accessToken = await AuthHelper.getTokenWithHeader(headers);
-      //  tokenType could be 'access' or 'refresh' and  'token' by default
+      //  tokenType could be 'access' or 'refresh' and  'token' by default!
       const { id, email } = await AuthHelper.validateToken({
         tokenType: 'access',
         token: accessToken,
