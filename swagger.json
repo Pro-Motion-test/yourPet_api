@@ -200,7 +200,7 @@
           "description": "Update object",
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "$ref": "#/components/schemas/UpdateRequest"
               }
@@ -826,7 +826,7 @@
             "name": {
               "type": "string"
             },
-            "birthday": {
+            "date": {
               "type": "string",
               "format": "date"
             },
@@ -845,7 +845,7 @@
           "avatarURL": null,
           "newUser": false,
           "birthday": null,
-          "phone": "string",
+          "phone": "+############",
           "city": "string"
         }
       },
@@ -918,7 +918,8 @@
           "accessToken": "string",
           "refreshToken": "string",
           "avatarURL": null,
-          "birthday": null,
+          "date": null,
+          "name": "string",
           "phone": "string",
           "city": "string"
         }
@@ -959,7 +960,8 @@
           "accessToken": "string",
           "refreshToken": "string",
           "avatarURL": null,
-          "birthday": null,
+          "date": null,
+          "name": "string",
           "phone": "string",
           "city": "string"
         }
