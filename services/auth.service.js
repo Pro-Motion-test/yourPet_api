@@ -140,7 +140,7 @@ class Auth {
   }
   async refreshing(userData) {
     const accessToken = await AuthHelper.createAccessToken({ ...userData });
-    const refreshToken = await AuthHelper.createAccessToken({ ...userData });
+    const refreshToken = await AuthHelper.createRefreshToken({ ...userData });
     await providers.Auth.updateUser(userData.id, {
       accessToken,
       refreshToken,

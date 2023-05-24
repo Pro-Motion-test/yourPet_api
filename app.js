@@ -13,6 +13,7 @@ const {
   friendsRouter,
   newsRouter,
 } = require('./routes');
+const middlewares = require('./middlewares');
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
@@ -21,10 +22,7 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // 503 ERROR // TECHNICAL SERVICING
-app.use((req, res, next) => {
-  console.log(process.env.RENDER_PREV_DEPLOY_ID);
-  next();
-});
+app.use(middlewares.Server.maintenanceExecutor);
 // ROUTER MIDDLEWARE
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/notices', noticesRouter);

@@ -9,9 +9,21 @@ const {
   REFRESH_SECRET,
   CLOUDINARY_API_KEY,
   CLOUDINARY_SECRET,
+  IS_MAINTENANCE_MODE,
 } = process.env;
 class Config {
-  constructor() {
+  constructor({
+    PORT,
+    BASE_URL,
+    DB_URI,
+    SENDGRID_API_KEY,
+    TOKEN_SECRET,
+    ACCESS_SECRET,
+    REFRESH_SECRET,
+    CLOUDINARY_API_KEY,
+    CLOUDINARY_SECRET,
+    IS_MAINTENANCE_MODE,
+  }) {
     (this.PORT = PORT || 8090),
       (this.BASE_URL = BASE_URL || `http://localhost:${this.PORT}`),
       (this.DB_URI = DB_URI),
@@ -21,7 +33,18 @@ class Config {
     this.REFRESH_SECRET = REFRESH_SECRET;
     this.CLOUDINARY_API_KEY = CLOUDINARY_API_KEY;
     this.CLOUDINARY_SECRET = CLOUDINARY_SECRET;
+    this.IS_MAINTENANCE_MODE = IS_MAINTENANCE_MODE === 'false' ? false : true;
   }
 }
-
-module.exports = new Config();
+module.exports = new Config({
+  PORT,
+  BASE_URL,
+  DB_URI,
+  SENDGRID_API_KEY,
+  TOKEN_SECRET,
+  ACCESS_SECRET,
+  REFRESH_SECRET,
+  CLOUDINARY_API_KEY,
+  CLOUDINARY_SECRET,
+  IS_MAINTENANCE_MODE,
+});
