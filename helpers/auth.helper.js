@@ -146,9 +146,8 @@ class Auth {
           return data;
 
         default:
-          throw new Error('Invalid token type');
+          return data;
       }
-      return data;
     } catch (e) {
       if (tokenType === 'access' && e.message === 'jwt expired') {
         throw HttpException.FORBIDDEN(

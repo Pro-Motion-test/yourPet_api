@@ -122,24 +122,32 @@ class Auth {
     return dataToSend;
   }
   async updateData(id, { body, file }) {
-    const { path } = file;
-    console.log(body);
-    const { _id, email, title, avatarURL, name, birthday, phone, city } =
-      await providers.Auth.updateUser(id, { avatarURL: path, ...body });
-    const dataToSend = {
-      _id,
-      email,
-      title,
-      avatarURL,
-      name,
-      birthday,
-      phone,
-      city,
-    };
+    const path = file?.path ? file.path : null;
+    const userNewData = { ...body };
+
+    let dataToSend = {};
+
+    if (!path) {
+      const { _id, email, avatarURL, name, birthday, phone, city } =
+        await providers.Auth.updateUser(id, { ...userNewData });
+
+      dataToSend = {
+        _id,
+        email,
+        avatarURL,
+        name,
+        birthday,
+        phone,
+        city,
+      };
+      return dataToSend;
+    }
+    const { _id, email, avatarURL, name, birthday, phone, city } =
+      await providers.Auth.updateUser(id, { avatarURL: path, ...userNewData });
+    dataToSend = { _id, email, avatarURL, name, birthday, phone, city };
     return dataToSend;
   }
   async refreshing({ email, id }) {
-    console.log('SIISIFIISFISFIF', id);
     const accessToken = await AuthHelper.createAccessToken({ id, email });
     const refreshToken = await AuthHelper.createRefreshToken({ id, email });
     await providers.Auth.updateUser(id, {

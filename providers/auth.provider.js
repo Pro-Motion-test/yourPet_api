@@ -23,7 +23,9 @@ class Auth extends Provider {
     return newUser;
   }
   async updateUser(id, userData) {
-    const updatedUser = await this.model.findByIdAndUpdate(id, userData);
+    const updatedUser = await this.model.findByIdAndUpdate(id, userData, {
+      new: true,
+    });
     return updatedUser;
   }
   async removeUser(id, userData) {
