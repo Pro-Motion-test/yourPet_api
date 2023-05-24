@@ -1,3 +1,4 @@
+const { responseTemplates } = require('../constants');
 const { HttpException } = require('../helpers');
 const services = require('../services');
 
@@ -40,7 +41,7 @@ class Notice {
 
       await services.Notices.createNotice({ body, owner, imgUrl: file.path });
 
-      res.status(201).send();
+      res.status(201).send(responseTemplates.SUCCESS_POST_RESPONSE);
     } catch (error) {
       next(error);
     }
@@ -52,7 +53,7 @@ class Notice {
 
       await services.Notices.removeNotice({ noticeId, userId });
 
-      res.status(204).send();
+      res.status(200).send(responseTemplates.SUCCESS_DELETE_RESPONSE);
     } catch (error) {
       next(error);
     }
@@ -76,7 +77,7 @@ class Notice {
 
       await services.Notices.changeFavourite({ noticeId, userId });
 
-      res.send();
+      res.send(responseTemplates.SUCCESS_GET_RESPONSE);
     } catch (error) {
       next(error);
     }
