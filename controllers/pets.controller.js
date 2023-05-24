@@ -18,7 +18,13 @@ class Pets {
       });
 
       //  --RESPONSE--
-      res.json({ page, limit, totalPages, data: pets });
+      res.status(200).json({
+        response: {
+          ...responseTemplates.SUCCESS_GET_RESPONSE,
+          message: 'Successfully processed',
+        },
+        body: { page, limit, totalPages, data: pets },
+      });
     } catch (e) {
       next(e);
     }
@@ -31,7 +37,7 @@ class Pets {
         throw HttpException.NOT_FOUND('No file uploaded');
       }
 
-      await services.Pets.addOnePet({
+      const pet = await services.Pets.addOnePet({
         ...req.body,
         owner,
         avatarURL: req.file.path,
@@ -39,8 +45,11 @@ class Pets {
 
       //  --RESPONSE--
       res.status(201).json({
-        ...responseTemplates.SUCCESS_POST_RESPONSE,
-        message: 'Created pet',
+        response: {
+          ...responseTemplates.SUCCESS_POST_RESPONSE,
+          message: 'Successfully created pet',
+        },
+        body: { pet },
       });
     } catch (e) {
       next(e);
@@ -49,10 +58,15 @@ class Pets {
   static async removePet(req, res, next) {
     try {
       const { id: petId } = req.params;
-      await services.Pets.deletePet(petId);
+      const result = await services.Pets.deletePet(petId);
 
       //  --RESPONSE--
-      res.status(200).send(responseTemplates.SUCCESS_DELETE_RESPONSE);
+      res.status(200).json({
+        response: {
+          ...responseTemplates.SUCCESS_DELETE_RESPONSE,
+          message: 'Successfully deleted pet',
+        },
+      });
     } catch (e) {
       next(e);
     }

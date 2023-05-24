@@ -1,3 +1,4 @@
+const { responseTemplates } = require('../constants');
 const services = require('../services');
 
 class News {
@@ -14,7 +15,13 @@ class News {
         search,
       });
 
-      res.json({ page, limit, totalPages, data: news });
+      res.status(200).json({
+        response: {
+          ...responseTemplates.SUCCESS_GET_RESPONSE,
+          message: 'Successfully processed',
+        },
+        body: { page, limit, totalPages, data: news },
+      });
     } catch (error) {
       next(error);
     }
