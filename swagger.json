@@ -232,14 +232,6 @@
       "post": {
         "tags": ["Auth"],
         "summary": "Get new access and refresh tokens for current user",
-        "parameters": [
-          {
-            "in": "string",
-            "name": "refreshToken",
-            "required": true,
-            "description": "The user refresh token for getting new access & refresh"
-          }
-        ],
         "requestBody": {
           "description": "Refresh user tokens",
           "required": true,
