@@ -5,7 +5,10 @@ class Pets extends Provider {
     super(modelName);
   }
   async getAllPets({ owner, skip, limit }) {
-    return await this.model.find({ owner }).skip(skip).limit(limit);
+    return await this.model
+      .find({ owner }, { owner: 0 })
+      .skip(skip)
+      .limit(limit);
   }
   async createPet(data) {
     return await this.model.create(data);

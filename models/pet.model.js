@@ -10,7 +10,7 @@ const petSchema = new Schema(
       maxlength: 16,
       required: [true, 'Name is required'],
     },
-    birthday: {
+    date: {
       type: Date,
       required: [true, 'Date is required'],
     },
@@ -39,7 +39,7 @@ petSchema.post('save', mongooseServerError);
 
 const addPetSchema = Joi.object({
   name: Joi.string().min(2).max(16).required(),
-  birthday: Joi.date().less('now').required(),
+  date: Joi.date().less('now').required(),
   breed: Joi.string().alphanum().min(2).max(16).required(),
   comments: Joi.string().min(8).max(120),
 });

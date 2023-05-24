@@ -1,10 +1,9 @@
 const { Provider } = require('./super');
-const { models } = require('../models');
 const mongoose = require('mongoose');
 const {
   requestConstants: { validation },
 } = require('../constants');
-const { NoticeHelper } = require('../helpers');
+const NoticeHelper = require('../helpers/notice.helper');
 
 class Notices extends Provider {
   constructor(modelName = 'Notice') {
@@ -31,7 +30,7 @@ class Notices extends Provider {
             gender === validation.sexValues.FEMALE
               ? gender
               : { $exists: true },
-          birthday: NoticeHelper.isDate(fromTheDate)
+          date: NoticeHelper.isDate(fromTheDate)
             ? { $gte: new Date(fromTheDate) }
             : { $exists: true },
         },
@@ -117,7 +116,7 @@ class Notices extends Provider {
             gender === validation.sexValues.FEMALE
               ? gender
               : { $exists: true },
-          birthday: NoticeHelper.isDate(fromTheDate)
+          date: NoticeHelper.isDate(fromTheDate)
             ? { $gte: new Date(fromTheDate) }
             : { $exists: true },
         },
@@ -167,7 +166,7 @@ class Notices extends Provider {
             gender === validation.sexValues.FEMALE
               ? gender
               : { $exists: true },
-          birthday: NoticeHelper.isDate(fromTheDate)
+          date: NoticeHelper.isDate(fromTheDate)
             ? { $gte: new Date(fromTheDate) }
             : { $exists: true },
         },
@@ -198,7 +197,7 @@ class Notices extends Provider {
             gender === validation.sexValues.FEMALE
               ? gender
               : { $exists: true },
-          birthday: NoticeHelper.isDate(fromTheDate)
+          date: NoticeHelper.isDate(fromTheDate)
             ? { $gte: new Date(fromTheDate) }
             : { $exists: true },
         })
@@ -222,7 +221,7 @@ class Notices extends Provider {
             gender === validation.sexValues.FEMALE
               ? gender
               : { $exists: true },
-          birthday: NoticeHelper.isDate(fromTheDate)
+          date: NoticeHelper.isDate(fromTheDate)
             ? { $gte: new Date(fromTheDate) }
             : { $exists: true },
         })
@@ -246,7 +245,7 @@ class Notices extends Provider {
             gender === validation.sexValues.FEMALE
               ? gender
               : { $exists: true },
-          birthday: NoticeHelper.isDate(fromTheDate)
+          date: NoticeHelper.isDate(fromTheDate)
             ? { $gte: new Date(fromTheDate) }
             : { $exists: true },
         })
