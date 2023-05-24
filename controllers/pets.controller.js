@@ -52,7 +52,7 @@ class Pets {
       await services.Pets.deletePet(petId);
 
       //  --RESPONSE--
-      res.status(204).send();
+      res.status(200).send(responseTemplates.SUCCESS_DELETE_RESPONSE);
     } catch (e) {
       next(e);
     }
