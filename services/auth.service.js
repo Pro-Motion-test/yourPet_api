@@ -125,13 +125,13 @@ class Auth {
     const path = file?.path ? file.path : null;
     const userNewData = { ...body };
 
-    let dataToSend = {};
-
     if (!path) {
       const { _id, email, avatarURL, name, birthday, phone, city } =
         await providers.Auth.updateUser(id, { ...userNewData });
+      // if(userNewData.email !== email){
 
-      dataToSend = {
+      // }
+      return {
         _id,
         email,
         avatarURL,
@@ -140,12 +140,11 @@ class Auth {
         phone,
         city,
       };
-      return dataToSend;
     }
     const { _id, email, avatarURL, name, birthday, phone, city } =
       await providers.Auth.updateUser(id, { avatarURL: path, ...userNewData });
-    dataToSend = { _id, email, avatarURL, name, birthday, phone, city };
-    return dataToSend;
+
+    return { _id, email, avatarURL, name, birthday, phone, city };
   }
   async refreshing({ email, id }) {
     const accessToken = await AuthHelper.createAccessToken({ id, email });
