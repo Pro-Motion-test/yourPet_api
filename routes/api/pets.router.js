@@ -11,17 +11,21 @@ const router = express.Router();
 
 router.post(
   '/',
-  Authorization.baseAuth,
+  Authorization.accessTokenAuth,
   upload.single('file'),
   bodyValidation(schemas.petSchemas.addPetSchema),
   controllers.Pets.addPet
 );
 // ---DELETE PET---
-router.delete('/:id', Authorization.baseAuth, controllers.Pets.removePet);
+router.delete(
+  '/:id',
+  Authorization.accessTokenAuth,
+  controllers.Pets.removePet
+);
 // ---GET PETS---
 router.get(
   '/',
-  Authorization.baseAuth,
+  Authorization.accessTokenAuth,
   paginationValidate,
   controllers.Pets.getAllPets
 );

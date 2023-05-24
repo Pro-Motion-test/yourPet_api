@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.post(
   '/',
-  Authorization.baseAuth,
+  Authorization.accessTokenAuth,
   upload.single('file'),
   bodyValidation(schemas.noticeSchemas.createNoticeSchema),
   controllers.Notice.createNotice
@@ -26,14 +26,14 @@ router.get(
 
 router.get(
   '/own',
-  Authorization.baseAuth,
+  Authorization.accessTokenAuth,
   paginationValidate,
   controllers.Notice.getMy
 );
 
 router.get(
   '/favourite',
-  Authorization.baseAuth,
+  Authorization.accessTokenAuth,
   paginationValidate,
   controllers.Notice.getFavourite
 );
@@ -44,11 +44,15 @@ router.get(
   controllers.Notice.getById
 );
 
-router.delete('/:id', Authorization.baseAuth, controllers.Notice.removeNotice);
+router.delete(
+  '/:id',
+  Authorization.accessTokenAuth,
+  controllers.Notice.removeNotice
+);
 
 router.patch(
   '/:id/favourite',
-  Authorization.baseAuth,
+  Authorization.accessTokenAuth,
   controllers.Notice.changeFavourite
 );
 
