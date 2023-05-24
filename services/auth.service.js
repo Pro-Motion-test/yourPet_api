@@ -124,13 +124,19 @@ class Auth {
   async updateData(id, { body, file }) {
     const path = file?.path ? file.path : null;
     const userNewData = { ...body };
-
+    const getAllUsers = await providers.Auth.getAllUsers({});
+    if (
+      typeof getAllUsers === 'object' &&
+      getAllUsers.some(user => user.email === userNewData.email)
+    ) {
+      throw HttpException.CONFLICT(
+        `The provided email: "${userNewData.email}" still exist!`
+      );
+    }
     if (!path) {
       const { _id, email, avatarURL, name, birthday, phone, city } =
         await providers.Auth.updateUser(id, { ...userNewData });
-      // if(userNewData.email !== email){
 
-      // }
       return {
         _id,
         email,

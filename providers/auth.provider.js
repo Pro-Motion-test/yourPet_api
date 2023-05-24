@@ -4,7 +4,7 @@ class Auth extends Provider {
   constructor(modelName = 'User') {
     super(modelName);
   }
-  async getAllUsers({ skip, limit }) {
+  async getAllUsers({ skip = 0, limit = 0 }) {
     const users = await this.model.find({}, '', { skip, limit });
     return users;
   }
