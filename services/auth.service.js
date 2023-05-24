@@ -80,7 +80,6 @@ class Auth {
       await user.save();
     const {
       _id,
-      token,
       accessToken,
       refreshToken,
       avatarURL,
@@ -93,7 +92,6 @@ class Auth {
     const dataToSend = {
       _id,
       email,
-      token,
       accessToken,
       refreshToken,
       avatarURL,
@@ -106,19 +104,40 @@ class Auth {
     return dataToSend;
   }
   async logout(id) {
-    const body = { token: null, accessToken: null, refreshToken: null };
+    const body = { accessToken: null, refreshToken: null };
     const { _id, email } = await providers.Auth.updateUser(id, body);
 
     const dataToSend = { _id, email };
     return dataToSend;
   }
   async current(id) {
-    const { _id, email, accessToken, refreshToken } =
-      await providers.Auth.getUserById(id);
+    const {
+      _id,
+      email,
+      accessToken,
+      refreshToken,
+      avatarURL,
+      newUser,
+      name,
+      birthday,
+      phone,
+      city,
+    } = await providers.Auth.getUserById(id);
     if (!accessToken || !refreshToken) {
       throw HttpException.UNAUTHORIZED();
     }
-    const dataToSend = { _id, email };
+    const dataToSend = {
+      _id,
+      email,
+      accessToken,
+      refreshToken,
+      avatarURL,
+      newUser,
+      name,
+      birthday,
+      phone,
+      city,
+    };
     return dataToSend;
   }
   async updateData(id, { body, file }) {
