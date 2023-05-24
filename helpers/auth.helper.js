@@ -39,7 +39,6 @@ class Auth {
       default:
         throw new Error('Invalid token type');
     }
-    console.log(token);
     const resultOfVerifying = jwt.verify(token, SECRET_BY_OPTION);
     return resultOfVerifying;
   }
