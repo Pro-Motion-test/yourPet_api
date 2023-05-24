@@ -22,7 +22,7 @@ app.use(express.json({ limit: '50mb' }));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // 503 ERROR // TECHNICAL SERVICING
 app.use((req, res, next) => {
-  console.log(req.get('X-Render-Deploy-Id'));
+  console.log(process.env.RENDER_PREV_DEPLOY_ID);
   next();
 });
 // ROUTER MIDDLEWARE
