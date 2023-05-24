@@ -666,7 +666,7 @@
     "/friends": {
       "get": {
         "tags": ["Friend"],
-        "summary": "Get friends list",
+        "summary": "НЕ ПРАЦЮЄ!!!!!!!!!!!!!!!!!!!!!!!!!",
         "responses": {
           "200": {
             "description": "Successful request",
@@ -1050,7 +1050,7 @@
                 "location": {
                   "type": "string"
                 },
-                "birthday": {
+                "date": {
                   "type": "string",
                   "format": "date"
                 },
@@ -1092,7 +1092,7 @@
           "location": {
             "type": "string"
           },
-          "birthday": {
+          "date": {
             "type": "string",
             "format": "date"
           },
@@ -1148,7 +1148,7 @@
             "type": "string",
             "required": true
           },
-          "birthday": {
+          "date": {
             "type": "string",
             "required": true,
             "format": "date"
@@ -1197,7 +1197,7 @@
                 "location": {
                   "type": "string"
                 },
-                "birthday": {
+                "date": {
                   "type": "string",
                   "format": "date"
                 },
@@ -1244,7 +1244,7 @@
                 "location": {
                   "type": "string"
                 },
-                "birthday": {
+                "date": {
                   "type": "string",
                   "format": "date"
                 },
@@ -1282,7 +1282,7 @@
                 "name": {
                   "type": "string"
                 },
-                "birthday": {
+                "date": {
                   "type": "string",
                   "format": "date"
                 },
@@ -1304,7 +1304,7 @@
             "type": "string",
             "required": true
           },
-          "birthday": {
+          "date": {
             "type": "string",
             "required": true,
             "format": "date"
@@ -1323,44 +1323,44 @@
         }
       },
       "FriendsResponse": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string",
-            "required": true
-          },
-          "url": {
-            "type": "string",
-            "required": true
-          },
-          "addressUrl": {
-            "type": "string"
-          },
-          "imageUrl": {
-            "type": "string"
-          },
-          "address": {
-            "type": "string"
-          },
-          "wordDays": {
-            "type": "array"
-          },
-          "phone": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
+        "type": "array",
+        "description": "НЕ ПРАЦЮЄ!!!!!!!!!!!!!!!!!!!!!!!!!",
+        "items": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            },
+            "addressUrl": {
+              "type": "string"
+            },
+            "imageUrl": {
+              "type": "string"
+            },
+            "address": {
+              "type": "string"
+            },
+            "workDays": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "from": { "type": "string", "format": "date" },
+                  "to": { "type": "string", "format": "date" }
+                }
+              }
+            },
+            "phone": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            }
           }
-        },
-        "example": {
-          "title": "Friend's name",
-          "url": "http://name.com",
-          "addressUrl": null,
-          "imageUrl": null,
-          "address": null,
-          "wordDays": null,
-          "phone": null,
-          "email": null
         }
       },
       "GetAllNewsResponse": {
