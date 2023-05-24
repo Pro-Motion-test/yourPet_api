@@ -138,10 +138,11 @@ class Auth {
     };
     return dataToSend;
   }
-  async refreshing(userData) {
-    const accessToken = await AuthHelper.createAccessToken({ ...userData });
-    const refreshToken = await AuthHelper.createRefreshToken({ ...userData });
-    await providers.Auth.updateUser(userData.id, {
+  async refreshing({ email, id }) {
+    console.log('SIISIFIISFISFIF', id);
+    const accessToken = await AuthHelper.createAccessToken({ id, email });
+    const refreshToken = await AuthHelper.createRefreshToken({ id, email });
+    await providers.Auth.updateUser(id, {
       accessToken,
       refreshToken,
     });

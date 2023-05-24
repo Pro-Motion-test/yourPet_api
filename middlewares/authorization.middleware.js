@@ -39,7 +39,7 @@ class Authorization {
         token: refreshToken,
       });
       req.user = { ...userData };
-      next();
+      return next();
     } catch (e) {
       next(e);
     }

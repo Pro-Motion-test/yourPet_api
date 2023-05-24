@@ -60,10 +60,9 @@ class Auth {
     }
   }
   static async refreshing(req, res, next) {
-    const { body } = req;
-
+    const { email, id } = req.user;
     try {
-      const newTokens = await services.Auth.refreshing(body);
+      const newTokens = await services.Auth.refreshing({ email, id });
 
       //  --RESPONSE--
       res.status(201).json({
