@@ -1,6 +1,7 @@
 const HttpException = require('./HttpException.helper');
 const jwt = require('jsonwebtoken');
 const { TOKEN_SECRET, ACCESS_SECRET, REFRESH_SECRET } = require('../config');
+const { providers } = require('../providers');
 
 class Auth {
   #TOKEN_SECRET;
@@ -135,7 +136,18 @@ class Auth {
       if (!data) {
         throw HttpException.UNAUTHORIZED();
       }
+      const user = await providers.Auth.getUserById(data.id);
+      console.log();
+      switch (tokenType) {
+        case 'refresh':
+          if (user.refreshToken !== token) {
+            throw HttpException.UNAUTHORIZED();
+          }
+          return data;
 
+        default:
+          throw new Error('Invalid token type');
+      }
       return data;
     } catch (e) {
       if (tokenType === 'access' && e.message === 'jwt expired') {

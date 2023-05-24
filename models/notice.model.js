@@ -3,7 +3,7 @@ const Joi = require('joi');
 const {
   requestConstants: { validation },
 } = require('../constants');
-const { handleMongooseError } = require('../helpers');
+const mongooseServerError = require('./mongooseServerError');
 
 const noticeSchema = new Schema(
   {
@@ -52,7 +52,7 @@ const noticeSchema = new Schema(
   },
   { versionKey: false }
 );
-noticeSchema.post('save', handleMongooseError.mongooseServerError);
+noticeSchema.post('save', mongooseServerError);
 // ----------------------------------------------------------
 const createNoticeSchema = Joi.object({
   title: Joi.string()

@@ -1,5 +1,5 @@
 const { Schema, model } = require('mongoose');
-const { handleMongooseError } = require('../helpers');
+const mongooseServerError = require('./mongooseServerError');
 
 const newsSchema = new Schema(
   {
@@ -26,7 +26,7 @@ const newsSchema = new Schema(
   },
   { versionKey: false }
 );
-newsSchema.post('save', handleMongooseError.mongooseServerError);
+newsSchema.post('save', mongooseServerError);
 
 const News = model('News', newsSchema);
 

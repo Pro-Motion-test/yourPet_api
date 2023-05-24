@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 const Joi = require('joi');
-const { handleMongooseError } = require('../helpers');
+const mongooseServerError = require('./mongooseServerError');
 
 const petSchema = new Schema(
   {
@@ -35,7 +35,7 @@ const petSchema = new Schema(
   },
   { versionKey: false }
 );
-petSchema.post('save', handleMongooseError.mongooseServerError);
+petSchema.post('save', mongooseServerError);
 
 const addPetSchema = Joi.object({
   name: Joi.string().min(2).max(16).required(),
