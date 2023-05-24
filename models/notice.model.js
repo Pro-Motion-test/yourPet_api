@@ -74,9 +74,8 @@ const createNoticeSchema = Joi.object({
   sex: Joi.string()
     .valid(validation.sexValues.MALE, validation.sexValues.FEMALE)
     .required(),
-  location: Joi.string()
-    .min(validation.minLocation)
-    .max(validation.maxLocation)
+  location:
+    Joi.string()
     .required(),
   date: Joi.date().less('now').required(),
   price: Joi.number().positive(),

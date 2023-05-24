@@ -61,7 +61,7 @@ class Pets {
       const result = await services.Pets.deletePet(petId);
 
       //  --RESPONSE--
-      res.status(202).json({
+      res.status(200).json({
         response: {
           ...responseTemplates.SUCCESS_DELETE_RESPONSE,
           message: 'Successfully deleted pet',

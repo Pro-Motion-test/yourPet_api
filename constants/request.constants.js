@@ -5,8 +5,6 @@ const validation = Object.freeze({
   maxName: 16,
   minBreed: 2,
   maxBreed: 16,
-  minLocation: 2,
-  maxLocation: 25,
   minComments: 8,
   maxComments: 120,
   sexValues: {
