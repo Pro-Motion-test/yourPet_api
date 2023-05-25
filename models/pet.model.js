@@ -41,7 +41,7 @@ const addPetSchema = Joi.object({
   name: Joi.string().min(2).max(16).required(),
   date: Joi.date().less('now').required(),
   breed: Joi.string().min(2).max(16).required(),
-  comments: Joi.string().min(8).max(350),
+  comments: Joi.string().min(8).max(120),
 });
 
 const schemas = {
