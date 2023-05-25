@@ -6,7 +6,7 @@ const validation = Object.freeze({
   minBreed: 2,
   maxBreed: 16,
   minComments: 8,
-  maxComments: 120,
+  maxComments: 350,
   sexValues: {
     MALE: 'male',
     FEMALE: 'female',
