@@ -232,14 +232,6 @@
       "post": {
         "tags": ["Auth"],
         "summary": "Get new access and refresh tokens for current user",
-        "parameters": [
-          {
-            "in": "string",
-            "name": "refreshToken",
-            "required": true,
-            "description": "The user refresh token for getting new access & refresh"
-          }
-        ],
         "requestBody": {
           "description": "Refresh user tokens",
           "required": true,
@@ -666,7 +658,7 @@
     "/friends": {
       "get": {
         "tags": ["Friend"],
-        "summary": "Get friends list",
+        "summary": "НЕ ПРАЦЮЄ!!!!!!!!!!!!!!!!!!!!!!!!!",
         "responses": {
           "200": {
             "description": "Successful request",
@@ -1050,7 +1042,7 @@
                 "location": {
                   "type": "string"
                 },
-                "birthday": {
+                "date": {
                   "type": "string",
                   "format": "date"
                 },
@@ -1092,7 +1084,7 @@
           "location": {
             "type": "string"
           },
-          "birthday": {
+          "date": {
             "type": "string",
             "format": "date"
           },
@@ -1123,6 +1115,16 @@
       },
       "CreateNoticeRequest": {
         "type": "object",
+        "required": [
+          "title",
+          "name",
+          "category",
+          "breed",
+          "sex",
+          "location",
+          "date",
+          "file"
+        ],
         "properties": {
           "title": {
             "type": "string",
@@ -1148,7 +1150,7 @@
             "type": "string",
             "required": true
           },
-          "birthday": {
+          "date": {
             "type": "string",
             "required": true,
             "format": "date"
@@ -1197,7 +1199,7 @@
                 "location": {
                   "type": "string"
                 },
-                "birthday": {
+                "date": {
                   "type": "string",
                   "format": "date"
                 },
@@ -1244,7 +1246,7 @@
                 "location": {
                   "type": "string"
                 },
-                "birthday": {
+                "date": {
                   "type": "string",
                   "format": "date"
                 },
@@ -1282,7 +1284,7 @@
                 "name": {
                   "type": "string"
                 },
-                "birthday": {
+                "date": {
                   "type": "string",
                   "format": "date"
                 },
@@ -1299,12 +1301,13 @@
       },
       "CreatePetRequest": {
         "type": "object",
+        "required": ["name", "breed", "date", "file"],
         "properties": {
           "name": {
             "type": "string",
             "required": true
           },
-          "birthday": {
+          "date": {
             "type": "string",
             "required": true,
             "format": "date"
@@ -1323,44 +1326,44 @@
         }
       },
       "FriendsResponse": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string",
-            "required": true
-          },
-          "url": {
-            "type": "string",
-            "required": true
-          },
-          "addressUrl": {
-            "type": "string"
-          },
-          "imageUrl": {
-            "type": "string"
-          },
-          "address": {
-            "type": "string"
-          },
-          "wordDays": {
-            "type": "array"
-          },
-          "phone": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            },
+            "addressUrl": {
+              "type": "string"
+            },
+            "imageUrl": {
+              "type": "string"
+            },
+            "address": {
+              "type": "string"
+            },
+            "workDays": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "isOpen": { "type": "boolean" },
+                  "from": { "type": "string" },
+                  "to": { "type": "string" }
+                }
+              }
+            },
+            "phone": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            }
           }
-        },
-        "example": {
-          "title": "Friend's name",
-          "url": "http://name.com",
-          "addressUrl": null,
-          "imageUrl": null,
-          "address": null,
-          "wordDays": null,
-          "phone": null,
-          "email": null
         }
       },
       "GetAllNewsResponse": {
