@@ -7,7 +7,13 @@ class Auth {
     try {
       const createdUser = await services.Auth.registration(req.body);
       //  --RESPONSE--
-      res.status(201).json(createdUser);
+      res.status(201).json({
+        response: {
+          ...responseTemplates.SUCCESS_POST_RESPONSE,
+          message: 'Account is successfully created',
+        },
+        body: createdUser,
+      });
     } catch (e) {
       next(e);
     }
@@ -18,7 +24,7 @@ class Auth {
       //  --RESPONSE--
       res.status(200).json({
         response: {
-          ...responseTemplates.SUCCESS_POST_RESPONSE,
+          ...responseTemplates.SUCCESS_GET_RESPONSE,
           message: 'Login is successfully completed',
         },
         body: ourUser,
