@@ -37,7 +37,7 @@ class Pets {
         throw HttpException.NOT_FOUND('No file uploaded');
       }
 
-      const pet = await services.Pets.addOnePet({
+      await services.Pets.addOnePet({
         ...req.body,
         owner,
         avatarURL: req.file.path,
@@ -49,7 +49,6 @@ class Pets {
           ...responseTemplates.SUCCESS_POST_RESPONSE,
           message: 'Successfully created pet',
         },
-        body: { pet },
       });
     } catch (e) {
       next(e);

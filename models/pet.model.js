@@ -1,24 +1,23 @@
 const { Schema, model } = require('mongoose');
 const Joi = require('joi');
+const {
+  requestConstants: { validation },
+} = require('../constants');
 const mongooseServerError = require('./mongooseServerError');
 
 const petSchema = new Schema(
   {
     name: {
       type: String,
-      minlength: 2,
-      maxlength: 16,
-      required: [true, 'Name is required'],
+      required: true,
     },
     date: {
       type: Date,
-      required: [true, 'Date is required'],
+      required: true,
     },
     breed: {
       type: String,
-      minlength: 2,
-      maxlength: 16,
-      required: [true, 'Breed is required'],
+      required: true,
     },
     avatarURL: {
       type: String,
@@ -30,7 +29,6 @@ const petSchema = new Schema(
     owner: {
       type: Schema.Types.ObjectId,
       ref: 'user',
-      required: true,
     },
   },
   { versionKey: false }
@@ -38,10 +36,15 @@ const petSchema = new Schema(
 petSchema.post('save', mongooseServerError);
 
 const addPetSchema = Joi.object({
-  name: Joi.string().min(2).max(16).required(),
+  name: Joi.string().min(validation.minName).max(validation.maxName).required(),
   date: Joi.date().less('now').required(),
-  breed: Joi.string().min(2).max(16).required(),
-  comments: Joi.string().min(8).max(120),
+  breed: Joi.string()
+    .min(validation.minBreed)
+    .max(validation.maxBreed)
+    .required(),
+  comments: Joi.string()
+    .min(validation.minComments)
+    .max(validation.maxComments),
 });
 
 const schemas = {
