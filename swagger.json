@@ -1327,7 +1327,6 @@
       },
       "FriendsResponse": {
         "type": "array",
-        "description": "НЕ ПРАЦЮЄ!!!!!!!!!!!!!!!!!!!!!!!!!",
         "items": {
           "type": "object",
           "properties": {
@@ -1351,8 +1350,9 @@
               "items": {
                 "type": "object",
                 "properties": {
-                  "from": { "type": "string", "format": "date" },
-                  "to": { "type": "string", "format": "date" }
+                  "isOpen": { "type": "boolean" },
+                  "from": { "type": "string" },
+                  "to": { "type": "string" }
                 }
               }
             },

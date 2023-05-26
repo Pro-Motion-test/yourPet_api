@@ -1,6 +1,12 @@
 const HttpException = require('./HttpException.helper');
 const jwt = require('jsonwebtoken');
-const { TOKEN_SECRET, ACCESS_SECRET, REFRESH_SECRET } = require('../config');
+const {
+  TOKEN_SECRET,
+  ACCESS_SECRET,
+  REFRESH_SECRET,
+  accessTokenLifetime,
+  refreshTokenLifetime,
+} = require('../config');
 const { providers } = require('../providers');
 
 class Auth {
@@ -22,8 +28,8 @@ class Auth {
     this.#ACCESS_SECRET = ACCESS_SECRET;
     this.#REFRESH_SECRET = REFRESH_SECRET;
     this.#tokenLifetime = tokenLifetime || '2d';
-    this.#refreshTokenLifetime = refreshTokenLifetime || '61d';
-    this.#accessTokenLifetime = accessTokenLifetime || '1m';
+    this.#refreshTokenLifetime = refreshTokenLifetime;
+    this.#accessTokenLifetime = accessTokenLifetime;
   }
   async verifyToken({ tokenType = 'token', token }) {
     let SECRET_BY_OPTION = '';
@@ -160,4 +166,10 @@ class Auth {
   }
 }
 
-module.exports = new Auth({ TOKEN_SECRET, ACCESS_SECRET, REFRESH_SECRET });
+module.exports = new Auth({
+  TOKEN_SECRET,
+  ACCESS_SECRET,
+  REFRESH_SECRET,
+  accessTokenLifetime,
+  refreshTokenLifetime,
+});

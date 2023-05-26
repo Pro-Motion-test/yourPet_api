@@ -5,40 +5,31 @@ const friendSchema = new Schema(
   {
     title: {
       type: String,
-      required: true,
     },
     url: {
       type: String,
-      required: true,
     },
     addressUrl: {
       type: String,
-      required: true,
     },
     imageUrl: {
       type: String,
-      required: true,
     },
     address: {
       type: String,
-      required: true,
     },
-    workDays: {
-      type: [
-        {
-          from: { type: Date, required: true },
-          to: { type: Date, required: true },
-        },
-      ],
-      default: null,
-    },
+    workDays: [
+      {
+        isOpen: Boolean,
+        from: String,
+        to: String,
+      },
+    ],
     phone: {
       type: String,
-      required: true,
     },
     email: {
       type: String,
-      required: true,
     },
   },
   { versionKey: false }

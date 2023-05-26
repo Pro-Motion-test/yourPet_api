@@ -10,6 +10,8 @@ const {
   CLOUDINARY_API_KEY,
   CLOUDINARY_SECRET,
   IS_MAINTENANCE_MODE,
+  refreshTokenLifetime,
+  accessTokenLifetime,
 } = process.env;
 class Config {
   constructor({
@@ -23,6 +25,8 @@ class Config {
     CLOUDINARY_API_KEY,
     CLOUDINARY_SECRET,
     IS_MAINTENANCE_MODE,
+    refreshTokenLifetime,
+    accessTokenLifetime,
   }) {
     (this.PORT = PORT || 8090),
       (this.BASE_URL = BASE_URL || `http://localhost:${this.PORT}`),
@@ -34,6 +38,8 @@ class Config {
     this.CLOUDINARY_API_KEY = CLOUDINARY_API_KEY;
     this.CLOUDINARY_SECRET = CLOUDINARY_SECRET;
     this.IS_MAINTENANCE_MODE = IS_MAINTENANCE_MODE === 'false' ? false : true;
+    (this.refreshTokenLifetime = refreshTokenLifetime || '60d'),
+      (this.accessTokenLifetime = accessTokenLifetime) || '15m';
   }
 }
 module.exports = new Config({
@@ -47,4 +53,6 @@ module.exports = new Config({
   CLOUDINARY_API_KEY,
   CLOUDINARY_SECRET,
   IS_MAINTENANCE_MODE,
+  refreshTokenLifetime,
+  accessTokenLifetime,
 });
