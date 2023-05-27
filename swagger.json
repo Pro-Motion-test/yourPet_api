@@ -910,8 +910,8 @@
             "description": "User's email",
             "format": "email"
           },
-          "avatarURL": {
-            "type": "string"
+          "file": {
+            "type": "file"
           },
           "userId": {
             "type": "string",
@@ -937,7 +937,7 @@
           "email": "user@example.com",
           "accessToken": "string",
           "refreshToken": "string",
-          "avatarURL": null,
+          "file": null,
           "date": null,
           "name": "string",
           "phone": "string",
