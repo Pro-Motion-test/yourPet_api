@@ -68,7 +68,7 @@ class Notices {
     }
 
     if (!notice[0].isOwner) {
-      throw HttpException.FORBIDDEN(
+      throw HttpException.BAD_REQUEST(
         `You cannot delete this notice, because it's not yours!`
       );
     }
