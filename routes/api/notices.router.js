@@ -32,7 +32,7 @@ router.get(
 );
 
 router.get(
-  '/favourite',
+  'favorite',
   Authorization.accessTokenAuth,
   paginationValidate,
   controllers.Notice.getFavourite
@@ -51,7 +51,7 @@ router.delete(
 );
 
 router.patch(
-  '/:id/favourite',
+  '/:id/favorite',
   Authorization.accessTokenAuth,
   controllers.Notice.changeFavourite
 );
