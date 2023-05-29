@@ -424,10 +424,10 @@
         }
       }
     },
-    "/notices/favourite": {
+    "/notices/favorite": {
       "get": {
         "tags": ["Notice"],
-        "summary": "Get favoutite notices",
+        "summary": "Get favorite notices",
         "security": [
           {
             "Bearer": []
@@ -533,7 +533,7 @@
         }
       }
     },
-    "/notices/:id/favourite": {
+    "/notices/:id/favorite": {
       "patch": {
         "tags": ["Notice"],
         "summary": "Select to favorites or delete",
