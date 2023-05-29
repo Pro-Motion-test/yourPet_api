@@ -739,7 +739,7 @@
           "password": {
             "type": "string",
             "description": "User's password",
-            "example": "123456aZ"
+            "example": "12345678aZ"
           }
         }
       },
@@ -803,7 +803,7 @@
           "password": {
             "type": "string",
             "description": "User's password",
-            "example": "123456aZ"
+            "example": "12345678aZ"
           }
         }
       },
