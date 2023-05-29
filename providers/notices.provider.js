@@ -154,6 +154,7 @@ class Notices extends Provider {
     return await this.model.findOne({ _id: noticeId, likedByUsers: userId });
   }
   async getLikedNotices({ skip, limit, userId, search, gender, fromTheDate }) {
+    console.log(userId);
     const userObjectId = userId ? new mongoose.Types.ObjectId(userId) : null;
 
     return await this.model.aggregate([
