@@ -17,6 +17,7 @@ class Notices extends Provider {
     gender,
     userId,
     fromTheDate,
+    toTheDate,
   }) {
     const userObjectId = userId ? new mongoose.Types.ObjectId(userId) : null;
 
@@ -30,9 +31,14 @@ class Notices extends Provider {
             gender === validation.sexValues.FEMALE
               ? gender
               : { $exists: true },
-          date: NoticeHelper.isDate(fromTheDate)
-            ? { $gte: new Date(fromTheDate) }
-            : { $exists: true },
+          date: {
+            $gte: NoticeHelper.isDate(fromTheDate)
+              ? new Date(fromTheDate)
+              : new Date('1800-01-01'),
+            $lte: NoticeHelper.isDate(toTheDate)
+              ? new Date(toTheDate)
+              : new Date(),
+          },
         },
       },
       { $project: { name: 0, breed: 0, comments: 0, price: 0 } },
@@ -103,7 +109,15 @@ class Notices extends Provider {
   async deleteNotice(id) {
     return await this.model.findByIdAndDelete(id);
   }
-  async getMyNotices({ skip, limit, userId, search, gender, fromTheDate }) {
+  async getMyNotices({
+    skip,
+    limit,
+    userId,
+    search,
+    gender,
+    fromTheDate,
+    toTheDate,
+  }) {
     const userObjectId = userId ? new mongoose.Types.ObjectId(userId) : null;
 
     return await this.model.aggregate([
@@ -116,9 +130,14 @@ class Notices extends Provider {
             gender === validation.sexValues.FEMALE
               ? gender
               : { $exists: true },
-          date: NoticeHelper.isDate(fromTheDate)
-            ? { $gte: new Date(fromTheDate) }
-            : { $exists: true },
+          date: {
+            $gte: NoticeHelper.isDate(fromTheDate)
+              ? new Date(fromTheDate)
+              : new Date('1800-01-01'),
+            $lte: NoticeHelper.isDate(toTheDate)
+              ? new Date(toTheDate)
+              : new Date(),
+          },
         },
       },
       {
@@ -153,8 +172,15 @@ class Notices extends Provider {
   async getOneLikedNotice({ noticeId, userId }) {
     return await this.model.findOne({ _id: noticeId, likedByUsers: userId });
   }
-  async getLikedNotices({ skip, limit, userId, search, gender, fromTheDate }) {
-    console.log(userId);
+  async getLikedNotices({
+    skip,
+    limit,
+    userId,
+    search,
+    gender,
+    fromTheDate,
+    toTheDate,
+  }) {
     const userObjectId = userId ? new mongoose.Types.ObjectId(userId) : null;
 
     return await this.model.aggregate([
@@ -167,9 +193,14 @@ class Notices extends Provider {
             gender === validation.sexValues.FEMALE
               ? gender
               : { $exists: true },
-          date: NoticeHelper.isDate(fromTheDate)
-            ? { $gte: new Date(fromTheDate) }
-            : { $exists: true },
+          date: {
+            $gte: NoticeHelper.isDate(fromTheDate)
+              ? new Date(fromTheDate)
+              : new Date('1800-01-01'),
+            $lte: NoticeHelper.isDate(toTheDate)
+              ? new Date(toTheDate)
+              : new Date(),
+          },
         },
       },
       {
@@ -187,7 +218,14 @@ class Notices extends Provider {
       { $project: { owner: 0 } },
     ]);
   }
-  async getTotalPages({ limit, category, search, gender, fromTheDate }) {
+  async getTotalPages({
+    limit,
+    category,
+    search,
+    gender,
+    fromTheDate,
+    toTheDate,
+  }) {
     return Math.ceil(
       (
         await this.model.find({
@@ -198,9 +236,14 @@ class Notices extends Provider {
             gender === validation.sexValues.FEMALE
               ? gender
               : { $exists: true },
-          date: NoticeHelper.isDate(fromTheDate)
-            ? { $gte: new Date(fromTheDate) }
-            : { $exists: true },
+          date: {
+            $gte: NoticeHelper.isDate(fromTheDate)
+              ? new Date(fromTheDate)
+              : new Date('1800-01-01'),
+            $lte: NoticeHelper.isDate(toTheDate)
+              ? new Date(toTheDate)
+              : new Date(),
+          },
         })
       ).length / limit
     );
@@ -211,6 +254,7 @@ class Notices extends Provider {
     search,
     gender,
     fromTheDate,
+    toTheDate,
   }) {
     return Math.ceil(
       (
@@ -222,9 +266,14 @@ class Notices extends Provider {
             gender === validation.sexValues.FEMALE
               ? gender
               : { $exists: true },
-          date: NoticeHelper.isDate(fromTheDate)
-            ? { $gte: new Date(fromTheDate) }
-            : { $exists: true },
+          date: {
+            $gte: NoticeHelper.isDate(fromTheDate)
+              ? new Date(fromTheDate)
+              : new Date('1800-01-01'),
+            $lte: NoticeHelper.isDate(toTheDate)
+              ? new Date(toTheDate)
+              : new Date(),
+          },
         })
       ).length / limit
     );
@@ -235,6 +284,7 @@ class Notices extends Provider {
     search,
     gender,
     fromTheDate,
+    toTheDate,
   }) {
     return Math.ceil(
       (
@@ -246,9 +296,14 @@ class Notices extends Provider {
             gender === validation.sexValues.FEMALE
               ? gender
               : { $exists: true },
-          date: NoticeHelper.isDate(fromTheDate)
-            ? { $gte: new Date(fromTheDate) }
-            : { $exists: true },
+          date: {
+            $gte: NoticeHelper.isDate(fromTheDate)
+              ? new Date(fromTheDate)
+              : new Date('1800-01-01'),
+            $lte: NoticeHelper.isDate(toTheDate)
+              ? new Date(toTheDate)
+              : new Date(),
+          },
         })
       ).length / limit
     );
