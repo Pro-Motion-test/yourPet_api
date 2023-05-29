@@ -32,7 +32,7 @@ router.get(
 );
 
 router.get(
-  'favorite',
+  '/favorite',
   Authorization.accessTokenAuth,
   paginationValidate,
   controllers.Notice.getFavourite

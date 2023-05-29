@@ -54,7 +54,7 @@ class Authorization {
 
       const token = await AuthHelper.getTokenWithHeader(headers);
       //  tokenType could be 'access' or 'refresh' and  'token' by default
-      const { id, email } = await AuthHelper.verifyToken({
+      const { id, email } = await AuthHelper.validateToken({
         tokenType: 'access',
         token,
       });
