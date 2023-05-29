@@ -1222,6 +1222,9 @@
                 },
                 "isFavourite": {
                   "type": "boolean"
+                },
+                "isOwner": {
+                  "type": "boolean"
                 }
               }
             }
@@ -1268,6 +1271,9 @@
                   "type": "string"
                 },
                 "isOwner": {
+                  "type": "boolean"
+                },
+                "isFavourite": {
                   "type": "boolean"
                 }
               }

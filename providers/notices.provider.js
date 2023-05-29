@@ -147,6 +147,7 @@ class Notices extends Provider {
       { $limit: limit },
       {
         $addFields: {
+          isOwner: true,
           isFavourite: {
             $cond: [{ $in: [userObjectId, '$likedByUsers'] }, true, false],
           },
@@ -213,6 +214,7 @@ class Notices extends Provider {
           isOwner: {
             $cond: [{ $eq: ['$owner', userObjectId] }, true, false],
           },
+          isFavourite: true,
         },
       },
       { $project: { owner: 0 } },
