@@ -15,6 +15,7 @@ class Notices {
       limit,
       gender,
       fromTheDate,
+      toTheDate,
     } = query;
 
     const skip = (page - 1) * limit;
@@ -27,6 +28,7 @@ class Notices {
       userId,
       gender,
       fromTheDate,
+      toTheDate,
     });
 
     const totalPages = await providers.Notices.getTotalPages({
@@ -35,6 +37,7 @@ class Notices {
       search,
       gender,
       fromTheDate,
+      toTheDate,
     });
 
     return { page, limit, totalPages, data: notices };
@@ -77,7 +80,7 @@ class Notices {
   }
 
   async getMy({ query, userId }) {
-    const { page, limit, search = '', gender, fromTheDate } = query;
+    const { page, limit, search = '', gender, fromTheDate, toTheDate } = query;
 
     const skip = (page - 1) * limit;
 
@@ -88,6 +91,7 @@ class Notices {
       search,
       gender,
       fromTheDate,
+      toTheDate,
     });
 
     const totalPages = await providers.Notices.getTotalPagesForMyNotices({
@@ -96,6 +100,7 @@ class Notices {
       search,
       gender,
       fromTheDate,
+      toTheDate,
     });
 
     return { page, limit, totalPages, data: notices };
@@ -121,7 +126,7 @@ class Notices {
   }
 
   async getFavourite({ query, userId }) {
-    const { page, limit, search = '', gender, fromTheDate } = query;
+    const { page, limit, search = '', gender, fromTheDate, toTheDate } = query;
 
     const skip = (page - 1) * limit;
 
@@ -131,6 +136,7 @@ class Notices {
       search,
       gender,
       fromTheDate,
+      toTheDate,
     });
 
     const notices = await providers.Notices.getLikedNotices({
@@ -140,6 +146,7 @@ class Notices {
       search,
       gender,
       fromTheDate,
+      toTheDate,
     });
 
     return { page, limit, totalPages, data: notices };

@@ -295,7 +295,6 @@
         }
       }
     },
-
     "/notices": {
       "get": {
         "tags": ["Notice"],
@@ -319,7 +318,12 @@
           {
             "in": "query",
             "name": "fromTheDate",
-            "description": "Filtering by birthday"
+            "description": "From what date to filter"
+          },
+          {
+            "in": "query",
+            "name": "toTheDate",
+            "description": "Until what date to filter"
           },
           {
             "in": "query",
@@ -398,7 +402,12 @@
           {
             "in": "query",
             "name": "fromTheDate",
-            "description": "Filtering by birthday"
+            "description": "From what date to filter"
+          },
+          {
+            "in": "query",
+            "name": "toTheDate",
+            "description": "Until what date to filter"
           },
           {
             "in": "query",
@@ -447,7 +456,12 @@
           {
             "in": "query",
             "name": "fromTheDate",
-            "description": "Filtering by birthday"
+            "description": "From what date to filter"
+          },
+          {
+            "in": "query",
+            "name": "toTheDate",
+            "description": "Until what date to filter"
           },
           {
             "in": "query",
@@ -658,7 +672,7 @@
     "/friends": {
       "get": {
         "tags": ["Friend"],
-        "summary": "НЕ ПРАЦЮЄ!!!!!!!!!!!!!!!!!!!!!!!!!",
+        "summary": "get all friends",
         "responses": {
           "200": {
             "description": "Successful request",
