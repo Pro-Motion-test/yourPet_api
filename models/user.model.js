@@ -63,7 +63,7 @@ const authenticationSchema = Joi.object({
 });
 
 const formSchema = Joi.object({
-  email: Joi.string().pattern(emailRegex).required(),
+  email: Joi.string().pattern(emailRegex),
   name: Joi.string(),
   birthday: Joi.date(),
   city: Joi.string(),
