@@ -140,9 +140,6 @@ class Auth {
     try {
       const data = await this.verifyToken({ tokenType, token });
       if (!data) {
-        if (tokenType === 'refresh') {
-          throw HttpException.UNAUTHORIZED('Invalid or expired refresh token');
-        }
         throw HttpException.UNAUTHORIZED();
       }
       const user = await providers.Auth.getUserById(data.id);
@@ -162,6 +159,9 @@ class Auth {
         throw HttpException.FORBIDDEN(
           'EXPIRED! Access token have been expired! Please, use refresh token to continue.'
         );
+      }
+      if (tokenType === 'refresh') {
+        throw HttpException.UNAUTHORIZED('Invalid or expired refresh token');
       }
       console.error(e);
       throw HttpException.UNAUTHORIZED();
