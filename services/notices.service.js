@@ -40,7 +40,9 @@ class Notices {
       toTheDate,
     });
 
-    return { page, limit, totalPages, data: notices };
+    const revercedNotices = notices.reverse();
+
+    return { page, limit, totalPages, data: revercedNotices };
   }
 
   async getById({ noticeId, userId }) {
@@ -103,7 +105,9 @@ class Notices {
       toTheDate,
     });
 
-    return { page, limit, totalPages, data: notices };
+    const revercedNotices = notices.reverse();
+
+    return { page, limit, totalPages, data: revercedNotices };
   }
 
   async changeFavourite({ noticeId, userId }) {
@@ -149,7 +153,9 @@ class Notices {
       toTheDate,
     });
 
-    return { page, limit, totalPages, data: notices };
+    const revercedNotices = notices.reverse();
+
+    return { page, limit, totalPages, data: revercedNotices };
   }
 }
 
