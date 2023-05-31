@@ -13,20 +13,20 @@
       "description": "Authorization endpoints"
     },
     {
-      "name": "Notice",
-      "description": "Notice's endpoints"
+      "name": "Notices",
+      "description": "Notices endpoints"
     },
     {
-      "name": "Pet",
-      "description": "Pet's endpoints"
+      "name": "Pets",
+      "description": "Pets endpoints"
     },
     {
       "name": "News",
       "description": "News endpoints"
     },
     {
-      "name": "Friend",
-      "description": "Endpoints about friends"
+      "name": "Friends",
+      "description": "Friends endpoints"
     }
   ],
   "paths": {
@@ -115,7 +115,7 @@
         ],
         "parameters": [
           {
-            "in": "string",
+            "in": "header",
             "name": "access token",
             "required": true,
             "description": "The user access token for logout"
@@ -153,7 +153,7 @@
         ],
         "parameters": [
           {
-            "in": "string",
+            "in": "header",
             "name": "access token",
             "required": true,
             "description": "The user token for getting user params"
@@ -190,7 +190,7 @@
         ],
         "parameters": [
           {
-            "in": "string",
+            "in": "header",
             "name": "access token",
             "required": true,
             "description": "The user access token for udate user params"
@@ -271,7 +271,7 @@
 
         "parameters": [
           {
-            "in": "number",
+            "in": "query",
             "name": "code",
             "required": true,
             "description": "The confirmation code that will be sent to the user's email address"
@@ -283,7 +283,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/verifyResponse"
+                  "$ref": "#/components/schemas/VerifyResponse"
                 }
               }
             }
@@ -297,7 +297,7 @@
     },
     "/notices": {
       "get": {
-        "tags": ["Notice"],
+        "tags": ["Notices"],
         "summary": "Get all notices by category",
         "parameters": [
           {
@@ -349,7 +349,7 @@
         }
       },
       "post": {
-        "tags": ["Notice"],
+        "tags": ["Notices"],
         "summary": "Create notice",
         "security": [
           {
@@ -381,7 +381,7 @@
     },
     "/notices/own": {
       "get": {
-        "tags": ["Notice"],
+        "tags": ["Notices"],
         "summary": "Get my notices",
         "security": [
           {
@@ -435,7 +435,7 @@
     },
     "/notices/favorite": {
       "get": {
-        "tags": ["Notice"],
+        "tags": ["Notices"],
         "summary": "Get favorite notices",
         "security": [
           {
@@ -487,9 +487,9 @@
         }
       }
     },
-    "/notices/:id": {
+    "/notices/{id}": {
       "get": {
-        "tags": ["Notice"],
+        "tags": ["Notices"],
         "summary": "Get one notice by id",
         "parameters": [
           {
@@ -516,7 +516,7 @@
         }
       },
       "delete": {
-        "tags": ["Notice"],
+        "tags": ["Notices"],
         "summary": "Delete notice by id",
         "security": [
           {
@@ -547,9 +547,9 @@
         }
       }
     },
-    "/notices/:id/favorite": {
+    "/notices/{id}/favorite": {
       "patch": {
-        "tags": ["Notice"],
+        "tags": ["Notices"],
         "summary": "Select to favorites or delete",
         "security": [
           {
@@ -578,7 +578,7 @@
     },
     "/pets": {
       "get": {
-        "tags": ["Pet"],
+        "tags": ["Pets"],
         "summary": "Get all pets",
         "parameters": [
           {
@@ -610,7 +610,7 @@
         }
       },
       "post": {
-        "tags": ["Pet"],
+        "tags": ["Pets"],
         "summary": "Create pet",
         "security": [
           {
@@ -630,19 +630,24 @@
         },
         "responses": {
           "201": {
-            "description": "Created pet",
-            "content": {}
+            "description": "Successfully created pet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatePetResponse"
+                }
+              }
+            }
           },
           "400": {
-            "description": "BAD_REQUEST",
-            "content": {}
+            "description": "BAD_REQUEST"
           }
         }
       }
     },
-    "/pets/:id": {
+    "/pets/{id}": {
       "delete": {
-        "tags": ["Pet"],
+        "tags": ["Pets"],
         "summary": "Delete pet by id",
         "security": [
           {
@@ -671,11 +676,11 @@
     },
     "/friends": {
       "get": {
-        "tags": ["Friend"],
+        "tags": ["Friends"],
         "summary": "get all friends",
         "responses": {
           "200": {
-            "description": "Successful request",
+            "description": "Successful  processed",
             "content": {
               "application/json": {
                 "schema": {
@@ -720,6 +725,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not found"
           }
         }
       }
@@ -744,40 +752,37 @@
         }
       },
       "RegistrationResponse": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "email": {
-              "type": "string",
-              "description": "User's email",
-              "format": "email"
-            },
-            "avatarURL": {
-              "type": "string"
-            },
-            "newUser": {
-              "type": "boolean"
-            },
-            "accessToken": {
-              "type": "string"
-            },
-            "refreshToken": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
-            },
-            "birthday": {
-              "type": "string",
-              "format": "date"
-            },
-            "phone": {
-              "type": "string"
-            },
-            "city": {
-              "type": "string"
-            }
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "avatarURL": {
+            "type": "string"
+          },
+          "newUser": {
+            "type": "boolean"
+          },
+          "accessToken": {
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "birthday": {
+            "type": "string",
+            "format": "date"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
           }
         },
         "example": {
@@ -808,40 +813,37 @@
         }
       },
       "LoginResponse": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "email": {
-              "type": "string",
-              "description": "User's email",
-              "format": "email"
-            },
-            "avatarURL": {
-              "type": "string"
-            },
-            "accessToken": {
-              "type": "string"
-            },
-            "refreshToken": {
-              "type": "string"
-            },
-            "newUser": {
-              "type": "boolean"
-            },
-            "name": {
-              "type": "string"
-            },
-            "date": {
-              "type": "string",
-              "format": "date"
-            },
-            "phone": {
-              "type": "string"
-            },
-            "city": {
-              "type": "string"
-            }
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "avatarURL": {
+            "type": "string"
+          },
+          "accessToken": {
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          },
+          "newUser": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
           }
         },
         "example": {
@@ -869,7 +871,7 @@
             "example": "32143232436545474"
           }
         },
-        "example": { "userId": "1", "email": "user@example.com" }
+        "example": 1
       },
       "CurrentResponse": {
         "type": "object",
@@ -887,8 +889,14 @@
             "description": "User's id",
             "example": "32143232436545474"
           },
-          "accessToken": "token...",
-          "refreshToken": "token...",
+          "accessToken": {
+            "type": "string",
+            "description": "User's accessToken"
+          },
+          "refreshToken": {
+            "type": "string",
+            "description": "User's refreshToken"
+          },
           "name": {
             "type": "string"
           },
@@ -1341,6 +1349,20 @@
             "required": true
           },
           "comments": {
+            "type": "string"
+          }
+        }
+      },
+      "CreatePetResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "code": {
+            "type": "number"
+          },
+          "message": {
             "type": "string"
           }
         }
