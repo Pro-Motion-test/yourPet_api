@@ -1,25 +1,22 @@
 const { Provider } = require('./super');
-// const mongoose = require('mongoose');
 
 class News extends Provider {
   constructor(modelName = 'News') {
     super(modelName);
   }
-  async getAllNews({ search, skip, limit }) {
-    return await this.model
-      .find({ title: { $regex: search, $options: 'i' } })
-      .skip(skip)
-      .limit(limit);
+
+  async getAllNews({ search = '', skip = 0, limit = 0 }) {
+    const query = { title: { $regex: search, $options: 'i' } };
+
+    return await this.model.find(query).skip(skip).limit(limit);
   }
 
-  async getTotalPages({ limit, search }) {
-    return Math.ceil(
-      (
-        await this.model.find({
-          title: { $regex: search, $options: 'i' },
-        })
-      ).length / limit
-    );
+  async getTotalPages({ search = '', limit = 0 }) {
+    const query = { title: { $regex: search, $options: 'i' } };
+    const count = await this.model.countDocuments(query);
+    const totalPages = Math.ceil(count / limit);
+
+    return totalPages;
   }
 }
-module.exports = new News('News');
+module.exports = new News();
