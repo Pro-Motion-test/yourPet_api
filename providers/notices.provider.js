@@ -20,28 +20,59 @@ class Notices extends Provider {
     toTheDate,
   }) {
     const userObjectId = userId ? new mongoose.Types.ObjectId(userId) : null;
+    const startDate = NoticeHelper.isDate(fromTheDate)
+      ? new Date(fromTheDate)
+      : new Date('1800-01-01');
+    const endDate = NoticeHelper.isDate(toTheDate)
+      ? new Date(toTheDate)
+      : new Date();
+
+    const query = {
+      category,
+      title: { $regex: search, $options: 'i' },
+      sex: [validation.sexValues.MALE, validation.sexValues.FEMALE].includes(
+        gender
+      )
+        ? gender
+        : { $exists: true },
+      $or: [
+        startDate > endDate
+          ? {
+              $or: [
+                {
+                  date: {
+                    $gt: startDate,
+                  },
+                },
+                {
+                  date: {
+                    $lt: endDate,
+                  },
+                },
+              ],
+            }
+          : {
+              date: {
+                $gte: startDate,
+                $lte: endDate,
+              },
+            },
+      ],
+    };
+
+    const projection = {
+      name: 0,
+      breed: 0,
+      comments: 0,
+      price: 0,
+      owner: 0,
+      likedByUsers: 0,
+    };
 
     return await this.model.aggregate([
       {
-        $match: {
-          category,
-          title: { $regex: search, $options: 'i' },
-          sex:
-            gender === validation.sexValues.MALE ||
-            gender === validation.sexValues.FEMALE
-              ? gender
-              : { $exists: true },
-          date: {
-            $gte: NoticeHelper.isDate(fromTheDate)
-              ? new Date(fromTheDate)
-              : new Date('1800-01-01'),
-            $lte: NoticeHelper.isDate(toTheDate)
-              ? new Date(toTheDate)
-              : new Date(),
-          },
-        },
+        $match: query,
       },
-      { $project: { name: 0, breed: 0, comments: 0, price: 0 } },
       { $skip: skip },
       { $limit: limit },
       {
@@ -54,14 +85,31 @@ class Notices extends Provider {
           },
         },
       },
-      { $project: { owner: 0, likedByUsers: 0 } },
+      { $project: projection },
     ]);
   }
   async getOneNotice({ noticeId, userId }) {
     const userObjectId = userId ? new mongoose.Types.ObjectId(userId) : null;
+    const query = { _id: new mongoose.Types.ObjectId(noticeId) };
+    const projection = {
+      title: 1,
+      name: 1,
+      category: 1,
+      breed: 1,
+      sex: 1,
+      location: 1,
+      date: 1,
+      imgUrl: 1,
+      price: 1,
+      comments: 1,
+      isOwner: 1,
+      isFavourite: 1,
+      'user.phone': 1,
+      'user.email': 1,
+    };
 
     return await this.model.aggregate([
-      { $match: { _id: new mongoose.Types.ObjectId(noticeId) } },
+      { $match: query },
       {
         $addFields: {
           isOwner: {
@@ -84,22 +132,7 @@ class Notices extends Provider {
         $unwind: '$user',
       },
       {
-        $project: {
-          title: 1,
-          name: 1,
-          category: 1,
-          breed: 1,
-          sex: 1,
-          location: 1,
-          date: 1,
-          imgUrl: 1,
-          price: 1,
-          comments: 1,
-          isOwner: 1,
-          isFavourite: 1,
-          'user.phone': 1,
-          'user.email': 1,
-        },
+        $project: projection,
       },
     ]);
   }
@@ -119,29 +152,57 @@ class Notices extends Provider {
     toTheDate,
   }) {
     const userObjectId = userId ? new mongoose.Types.ObjectId(userId) : null;
+    const startDate = NoticeHelper.isDate(fromTheDate)
+      ? new Date(fromTheDate)
+      : new Date('1800-01-01');
+    const endDate = NoticeHelper.isDate(toTheDate)
+      ? new Date(toTheDate)
+      : new Date();
+
+    const query = {
+      owner: userObjectId,
+      title: { $regex: search, $options: 'i' },
+      sex: [validation.sexValues.MALE, validation.sexValues.FEMALE].includes(
+        gender
+      )
+        ? gender
+        : { $exists: true },
+      $or: [
+        startDate > endDate
+          ? {
+              $or: [
+                {
+                  date: {
+                    $gt: startDate,
+                  },
+                },
+                {
+                  date: {
+                    $lt: endDate,
+                  },
+                },
+              ],
+            }
+          : {
+              date: {
+                $gte: startDate,
+                $lte: endDate,
+              },
+            },
+      ],
+    };
+    const projection = {
+      name: 0,
+      breed: 0,
+      comments: 0,
+      price: 0,
+      owner: 0,
+      likedByUsers: 0,
+    };
 
     return await this.model.aggregate([
       {
-        $match: {
-          owner: userObjectId,
-          title: { $regex: search, $options: 'i' },
-          sex:
-            gender === validation.sexValues.MALE ||
-            gender === validation.sexValues.FEMALE
-              ? gender
-              : { $exists: true },
-          date: {
-            $gte: NoticeHelper.isDate(fromTheDate)
-              ? new Date(fromTheDate)
-              : new Date('1800-01-01'),
-            $lte: NoticeHelper.isDate(toTheDate)
-              ? new Date(toTheDate)
-              : new Date(),
-          },
-        },
-      },
-      {
-        $project: { name: 0, breed: 0, comments: 0, price: 0, owner: 0 },
+        $match: query,
       },
       { $skip: skip },
       { $limit: limit },
@@ -153,7 +214,7 @@ class Notices extends Provider {
           },
         },
       },
-      { $project: { likedByUsers: 0 } },
+      { $project: projection },
     ]);
   }
   async like({ noticeId, userId }) {
@@ -183,29 +244,57 @@ class Notices extends Provider {
     toTheDate,
   }) {
     const userObjectId = userId ? new mongoose.Types.ObjectId(userId) : null;
+    const startDate = NoticeHelper.isDate(fromTheDate)
+      ? new Date(fromTheDate)
+      : new Date('1800-01-01');
+    const endDate = NoticeHelper.isDate(toTheDate)
+      ? new Date(toTheDate)
+      : new Date();
+
+    const query = {
+      likedByUsers: userObjectId,
+      title: { $regex: search, $options: 'i' },
+      sex: [validation.sexValues.MALE, validation.sexValues.FEMALE].includes(
+        gender
+      )
+        ? gender
+        : { $exists: true },
+      $or: [
+        startDate > endDate
+          ? {
+              $or: [
+                {
+                  date: {
+                    $gt: startDate,
+                  },
+                },
+                {
+                  date: {
+                    $lt: endDate,
+                  },
+                },
+              ],
+            }
+          : {
+              date: {
+                $gte: startDate,
+                $lte: endDate,
+              },
+            },
+      ],
+    };
+    const projection = {
+      name: 0,
+      breed: 0,
+      comments: 0,
+      price: 0,
+      likedByUsers: 0,
+      owner: 0,
+    };
 
     return await this.model.aggregate([
       {
-        $match: {
-          likedByUsers: userObjectId,
-          title: { $regex: search, $options: 'i' },
-          sex:
-            gender === validation.sexValues.MALE ||
-            gender === validation.sexValues.FEMALE
-              ? gender
-              : { $exists: true },
-          date: {
-            $gte: NoticeHelper.isDate(fromTheDate)
-              ? new Date(fromTheDate)
-              : new Date('1800-01-01'),
-            $lte: NoticeHelper.isDate(toTheDate)
-              ? new Date(toTheDate)
-              : new Date(),
-          },
-        },
-      },
-      {
-        $project: { name: 0, breed: 0, comments: 0, price: 0, likedByUsers: 0 },
+        $match: query,
       },
       { $skip: skip },
       { $limit: limit },
@@ -217,7 +306,9 @@ class Notices extends Provider {
           isFavourite: true,
         },
       },
-      { $project: { owner: 0 } },
+      {
+        $project: projection,
+      },
     ]);
   }
   async getTotalPages({
@@ -228,24 +319,47 @@ class Notices extends Provider {
     fromTheDate,
     toTheDate,
   }) {
+    const startDate = NoticeHelper.isDate(fromTheDate)
+      ? new Date(fromTheDate)
+      : new Date('1800-01-01');
+    const endDate = NoticeHelper.isDate(toTheDate)
+      ? new Date(toTheDate)
+      : new Date();
+
     return Math.ceil(
       (
         await this.model.find({
           category,
           title: { $regex: search, $options: 'i' },
-          sex:
-            gender === validation.sexValues.MALE ||
-            gender === validation.sexValues.FEMALE
-              ? gender
-              : { $exists: true },
-          date: {
-            $gte: NoticeHelper.isDate(fromTheDate)
-              ? new Date(fromTheDate)
-              : new Date('1800-01-01'),
-            $lte: NoticeHelper.isDate(toTheDate)
-              ? new Date(toTheDate)
-              : new Date(),
-          },
+          sex: [
+            validation.sexValues.MALE,
+            validation.sexValues.FEMALE,
+          ].includes(gender)
+            ? gender
+            : { $exists: true },
+          $or: [
+            startDate > endDate
+              ? {
+                  $or: [
+                    {
+                      date: {
+                        $gt: startDate,
+                      },
+                    },
+                    {
+                      date: {
+                        $lt: endDate,
+                      },
+                    },
+                  ],
+                }
+              : {
+                  date: {
+                    $gte: startDate,
+                    $lte: endDate,
+                  },
+                },
+          ],
         })
       ).length / limit
     );
@@ -258,24 +372,47 @@ class Notices extends Provider {
     fromTheDate,
     toTheDate,
   }) {
+    const startDate = NoticeHelper.isDate(fromTheDate)
+      ? new Date(fromTheDate)
+      : new Date('1800-01-01');
+    const endDate = NoticeHelper.isDate(toTheDate)
+      ? new Date(toTheDate)
+      : new Date();
+
     return Math.ceil(
       (
         await this.model.find({
           owner: userId,
           title: { $regex: search, $options: 'i' },
-          sex:
-            gender === validation.sexValues.MALE ||
-            gender === validation.sexValues.FEMALE
-              ? gender
-              : { $exists: true },
-          date: {
-            $gte: NoticeHelper.isDate(fromTheDate)
-              ? new Date(fromTheDate)
-              : new Date('1800-01-01'),
-            $lte: NoticeHelper.isDate(toTheDate)
-              ? new Date(toTheDate)
-              : new Date(),
-          },
+          sex: [
+            validation.sexValues.MALE,
+            validation.sexValues.FEMALE,
+          ].includes(gender)
+            ? gender
+            : { $exists: true },
+          $or: [
+            startDate > endDate
+              ? {
+                  $or: [
+                    {
+                      date: {
+                        $gt: startDate,
+                      },
+                    },
+                    {
+                      date: {
+                        $lt: endDate,
+                      },
+                    },
+                  ],
+                }
+              : {
+                  date: {
+                    $gte: startDate,
+                    $lte: endDate,
+                  },
+                },
+          ],
         })
       ).length / limit
     );
@@ -288,24 +425,47 @@ class Notices extends Provider {
     fromTheDate,
     toTheDate,
   }) {
+    const startDate = NoticeHelper.isDate(fromTheDate)
+      ? new Date(fromTheDate)
+      : new Date('1800-01-01');
+    const endDate = NoticeHelper.isDate(toTheDate)
+      ? new Date(toTheDate)
+      : new Date();
+
     return Math.ceil(
       (
         await this.model.find({
           likedByUsers: userId,
           title: { $regex: search, $options: 'i' },
-          sex:
-            gender === validation.sexValues.MALE ||
-            gender === validation.sexValues.FEMALE
-              ? gender
-              : { $exists: true },
-          date: {
-            $gte: NoticeHelper.isDate(fromTheDate)
-              ? new Date(fromTheDate)
-              : new Date('1800-01-01'),
-            $lte: NoticeHelper.isDate(toTheDate)
-              ? new Date(toTheDate)
-              : new Date(),
-          },
+          sex: [
+            validation.sexValues.MALE,
+            validation.sexValues.FEMALE,
+          ].includes(gender)
+            ? gender
+            : { $exists: true },
+          $or: [
+            startDate > endDate
+              ? {
+                  $or: [
+                    {
+                      date: {
+                        $gt: startDate,
+                      },
+                    },
+                    {
+                      date: {
+                        $lt: endDate,
+                      },
+                    },
+                  ],
+                }
+              : {
+                  date: {
+                    $gte: startDate,
+                    $lte: endDate,
+                  },
+                },
+          ],
         })
       ).length / limit
     );
