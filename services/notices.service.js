@@ -20,21 +20,12 @@ class Notices {
 
     const skip = (page - 1) * limit;
 
-    const notices = await providers.Notices.getAllNotices({
+    const { notices, totalPages } = await providers.Notices.getAllNotices({
       skip,
       limit,
       category,
       search,
       userId,
-      gender,
-      fromTheDate,
-      toTheDate,
-    });
-
-    const totalPages = await providers.Notices.getTotalPages({
-      limit,
-      category,
-      search,
       gender,
       fromTheDate,
       toTheDate,
@@ -86,18 +77,9 @@ class Notices {
 
     const skip = (page - 1) * limit;
 
-    const notices = await providers.Notices.getMyNotices({
+    const { notices, totalPages } = await providers.Notices.getMyNotices({
       userId,
       skip,
-      limit,
-      search,
-      gender,
-      fromTheDate,
-      toTheDate,
-    });
-
-    const totalPages = await providers.Notices.getTotalPagesForMyNotices({
-      userId,
       limit,
       search,
       gender,
@@ -134,16 +116,7 @@ class Notices {
 
     const skip = (page - 1) * limit;
 
-    const totalPages = await providers.Notices.getTotalPagesForLikedNotices({
-      limit,
-      userId,
-      search,
-      gender,
-      fromTheDate,
-      toTheDate,
-    });
-
-    const notices = await providers.Notices.getLikedNotices({
+    const { notices, totalPages } = await providers.Notices.getLikedNotices({
       skip,
       limit,
       userId,
