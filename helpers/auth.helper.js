@@ -120,7 +120,7 @@ class Auth {
     return decodedToken;
   }
 
-  async getTokenWithHeader(headers) {
+  async extractTokenFromHeader(headers) {
     const headerWithToken = headers.Authorization || headers.authorization;
     if (!headerWithToken) {
       throw HttpException.BAD_REQUEST(
