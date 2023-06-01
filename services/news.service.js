@@ -4,14 +4,9 @@ class News {
   constructor() {}
   async getNews({ search, skip, limit }) {
     try {
-      const news = await providers.News.getAllNews({
+      const { news, totalPages } = await providers.News.getAllNews({
         search,
         skip,
-        limit,
-      });
-
-      const totalPages = await providers.News.getTotalPages({
-        search,
         limit,
       });
 

@@ -5,7 +5,7 @@ class News {
   constructor() {}
   static async getAllNews(req, res, next) {
     try {
-      const { search = '', page, limit } = req.query;
+      const { search, page, limit } = req.query;
 
       const skip = (page - 1) * limit;
 
