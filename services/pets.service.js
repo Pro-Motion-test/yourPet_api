@@ -4,14 +4,9 @@ const { HttpException } = require('../helpers');
 class Pets {
   constructor() {}
   async getPets({ owner, skip, limit }) {
-    const pets = await providers.Pets.getAllPets({
+    const { pets, totalPages } = await providers.Pets.getAllPets({
       owner,
       skip,
-      limit,
-    });
-
-    const totalPages = await providers.Pets.getTotalPages({
-      owner,
       limit,
     });
 

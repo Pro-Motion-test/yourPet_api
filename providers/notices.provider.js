@@ -69,7 +69,7 @@ class Notices extends Provider {
       likedByUsers: 0,
     };
 
-    return await this.model.aggregate([
+    const notices = await this.model.aggregate([
       {
         $match: query,
       },
@@ -87,6 +87,11 @@ class Notices extends Provider {
       },
       { $project: projection },
     ]);
+
+    const count = await this.model.countDocuments(query);
+    const totalPages = Math.ceil(count / limit);
+
+    return { notices, totalPages };
   }
   async getOneNotice({ noticeId, userId }) {
     const userObjectId = userId ? new mongoose.Types.ObjectId(userId) : null;
@@ -200,7 +205,7 @@ class Notices extends Provider {
       likedByUsers: 0,
     };
 
-    return await this.model.aggregate([
+    const notices = await this.model.aggregate([
       {
         $match: query,
       },
@@ -216,6 +221,11 @@ class Notices extends Provider {
       },
       { $project: projection },
     ]);
+
+    const count = await this.model.countDocuments(query);
+    const totalPages = Math.ceil(count / limit);
+
+    return { notices, totalPages };
   }
   async like({ noticeId, userId }) {
     return await this.model.findByIdAndUpdate(
@@ -292,7 +302,7 @@ class Notices extends Provider {
       owner: 0,
     };
 
-    return await this.model.aggregate([
+    const notices = await this.model.aggregate([
       {
         $match: query,
       },
@@ -310,165 +320,11 @@ class Notices extends Provider {
         $project: projection,
       },
     ]);
-  }
-  async getTotalPages({
-    limit,
-    category,
-    search,
-    gender,
-    fromTheDate,
-    toTheDate,
-  }) {
-    const startDate = NoticeHelper.isDate(fromTheDate)
-      ? new Date(fromTheDate)
-      : new Date('1800-01-01');
-    const endDate = NoticeHelper.isDate(toTheDate)
-      ? new Date(toTheDate)
-      : new Date();
 
-    return Math.ceil(
-      (
-        await this.model.find({
-          category,
-          title: { $regex: search, $options: 'i' },
-          sex: [
-            validation.sexValues.MALE,
-            validation.sexValues.FEMALE,
-          ].includes(gender)
-            ? gender
-            : { $exists: true },
-          $or: [
-            startDate > endDate
-              ? {
-                  $or: [
-                    {
-                      date: {
-                        $gt: startDate,
-                      },
-                    },
-                    {
-                      date: {
-                        $lt: endDate,
-                      },
-                    },
-                  ],
-                }
-              : {
-                  date: {
-                    $gte: startDate,
-                    $lte: endDate,
-                  },
-                },
-          ],
-        })
-      ).length / limit
-    );
-  }
-  async getTotalPagesForMyNotices({
-    limit,
-    userId,
-    search,
-    gender,
-    fromTheDate,
-    toTheDate,
-  }) {
-    const startDate = NoticeHelper.isDate(fromTheDate)
-      ? new Date(fromTheDate)
-      : new Date('1800-01-01');
-    const endDate = NoticeHelper.isDate(toTheDate)
-      ? new Date(toTheDate)
-      : new Date();
+    const count = await this.model.countDocuments(query);
+    const totalPages = Math.ceil(count / limit);
 
-    return Math.ceil(
-      (
-        await this.model.find({
-          owner: userId,
-          title: { $regex: search, $options: 'i' },
-          sex: [
-            validation.sexValues.MALE,
-            validation.sexValues.FEMALE,
-          ].includes(gender)
-            ? gender
-            : { $exists: true },
-          $or: [
-            startDate > endDate
-              ? {
-                  $or: [
-                    {
-                      date: {
-                        $gt: startDate,
-                      },
-                    },
-                    {
-                      date: {
-                        $lt: endDate,
-                      },
-                    },
-                  ],
-                }
-              : {
-                  date: {
-                    $gte: startDate,
-                    $lte: endDate,
-                  },
-                },
-          ],
-        })
-      ).length / limit
-    );
-  }
-  async getTotalPagesForLikedNotices({
-    limit,
-    userId,
-    search,
-    gender,
-    fromTheDate,
-    toTheDate,
-  }) {
-    const startDate = NoticeHelper.isDate(fromTheDate)
-      ? new Date(fromTheDate)
-      : new Date('1800-01-01');
-    const endDate = NoticeHelper.isDate(toTheDate)
-      ? new Date(toTheDate)
-      : new Date();
-
-    return Math.ceil(
-      (
-        await this.model.find({
-          likedByUsers: userId,
-          title: { $regex: search, $options: 'i' },
-          sex: [
-            validation.sexValues.MALE,
-            validation.sexValues.FEMALE,
-          ].includes(gender)
-            ? gender
-            : { $exists: true },
-          $or: [
-            startDate > endDate
-              ? {
-                  $or: [
-                    {
-                      date: {
-                        $gt: startDate,
-                      },
-                    },
-                    {
-                      date: {
-                        $lt: endDate,
-                      },
-                    },
-                  ],
-                }
-              : {
-                  date: {
-                    $gte: startDate,
-                    $lte: endDate,
-                  },
-                },
-          ],
-        })
-      ).length / limit
-    );
+    return { notices, totalPages };
   }
 }
 module.exports = new Notices('Notice');

@@ -5,10 +5,15 @@ class Pets extends Provider {
     super(modelName);
   }
   async getAllPets({ owner, skip, limit }) {
-    return await this.model
+    const pets = await this.model
       .find({ owner }, { owner: 0 })
       .skip(skip)
       .limit(limit);
+
+    const count = await this.model.countDocuments({ owner });
+    const totalPages = Math.ceil(count / limit);
+
+    return { pets, totalPages };
   }
   async createPet(data) {
     return await this.model.create(data);
@@ -16,15 +21,6 @@ class Pets extends Provider {
   async removePet(petId) {
     const result = await this.model.findByIdAndRemove(petId);
     return result;
-  }
-  async getTotalPages({ owner, limit }) {
-    return Math.ceil(
-      (
-        await this.model.find({
-          owner,
-        })
-      ).length / limit
-    );
   }
 }
 
