@@ -1,10 +1,10 @@
-const { AuthHelper, HttpException } = require('../helpers');
+const { AuthHelper } = require('../helpers');
 
 class Authorization {
   static async baseAuth(req, res, next) {
     const { headers } = req;
     try {
-      const token = await AuthHelper.getTokenWithHeader(headers);
+      const token = await AuthHelper.extractTokenFromHeader(headers);
       //  tokenType could be 'access' or 'refresh' and  'token' by default
       const { id, email } = await AuthHelper.validateToken({
         tokenType: 'token',
@@ -19,7 +19,7 @@ class Authorization {
   static async accessTokenAuth(req, res, next) {
     const { headers } = req;
     try {
-      const accessToken = await AuthHelper.getTokenWithHeader(headers);
+      const accessToken = await AuthHelper.extractTokenFromHeader(headers);
       //  tokenType could be 'access' or 'refresh' and  'token' by default!
       const { id, email } = await AuthHelper.validateToken({
         tokenType: 'access',
@@ -52,7 +52,10 @@ class Authorization {
         return next();
       }
 
-      const token = await AuthHelper.getTokenWithHeader(headers);
+      const token = await AuthHelper.extractTokenFromHeader(headers);
+      if (!token) {
+        return next();
+      }
       //  tokenType could be 'access' or 'refresh' and  'token' by default
       const { id, email } = await AuthHelper.validateToken({
         tokenType: 'access',
